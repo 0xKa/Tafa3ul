@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="server/Tafa3ul.API/Tafa3ul.API.csproj" Id="408a4e4b-9d3d-4c71-a3f7-58e94cdb166e" />
+</Solution>
