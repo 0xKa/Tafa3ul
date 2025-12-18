@@ -1,6 +1,6 @@
 @Tafa3ul.API_HostAddress = http://localhost:5089
 
-GET {{Tafa3ul.API_HostAddress}}/weatherforecast/
+GET {{Tafa3ul.API_HostAddress}}/auth/
 Accept: application/json
 
 ###
