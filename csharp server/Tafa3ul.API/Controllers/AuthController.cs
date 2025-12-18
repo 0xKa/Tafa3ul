@@ -1,4 +1,3 @@
-﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -13,10 +12,16 @@ namespace Tafa3ul.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController(IOptions<JwtSettings> options) : ControllerBase
+    public class AuthController : ControllerBase
     {
-        private readonly JwtSettings _jwtSettings = options.Value;
+        private readonly AppSettings _appSettings;
 
+        public AuthController(IOptions<AppSettings> options)
+        {
+            _appSettings = options.Value;
+        }
+
+        // Demo-only in?memory user store
         public static User user = new User();
 
         [HttpPost("register")]
@@ -26,6 +31,7 @@ namespace Tafa3ul.API.Controllers
 
             user.Username = dto.Username;
             user.PasswordHash = hashPassword;
+
             return Ok(user);
         }
 
@@ -33,13 +39,20 @@ namespace Tafa3ul.API.Controllers
         public ActionResult Login(UserDto userDto)
         {
             if (user.Username != userDto.Username)
+            {
                 return Unauthorized("Invalid username");
+            }
 
-            if (new PasswordHasher<User>().VerifyHashedPassword(user, user.PasswordHash, userDto.Password) == PasswordVerificationResult.Failed)
+            var result = new PasswordHasher<User>()
+                .VerifyHashedPassword(user, user.PasswordHash, userDto.Password);
+
+            if (result == PasswordVerificationResult.Failed)
+            {
                 return Unauthorized("Invalid password");
+            }
 
-            string token = CreateToken(user);
-            return Ok(token);
+            var token = CreateToken(user);
+            return Ok(new { token });
         }
 
         private string CreateToken(User user)
@@ -49,21 +62,20 @@ namespace Tafa3ul.API.Controllers
                 new Claim(ClaimTypes.Name, user.Username)
             };
 
-            var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_jwtSettings.Token));
+            var keyBytes = Encoding.UTF8.GetBytes(_appSettings.JwtSettings.Token);
+            var key = new SymmetricSecurityKey(keyBytes);
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes);
+            var expires = DateTime.UtcNow.AddMinutes(_appSettings.JwtSettings.ExpirationMinutes);
 
-            var tokenDescriptor = new JwtSecurityToken(
-                issuer: _jwtSettings.Issuer,
-                audience: _jwtSettings.Audience,
+            var token = new JwtSecurityToken(
+                issuer: _appSettings.JwtSettings.Issuer,
+                audience: _appSettings.JwtSettings.Audience,
                 claims: claims,
                 expires: expires,
                 signingCredentials: creds);
 
-            return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
     }
 }
