@@ -6,8 +6,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Tafa3ul.API.Entities;
-using Tafa3ul.API.Models;
+using Tafa3ul.Application.DTOs;
+using Tafa3ul.Domain.Entities;
+using Tafa3ul.Infrastructure.Security;
 
 namespace Tafa3ul.API.Controllers
 {

@@ -1,4 +1,4 @@
-﻿namespace Tafa3ul.API.Entities
+﻿namespace Tafa3ul.Domain.Entities
 {
     public class User
     {

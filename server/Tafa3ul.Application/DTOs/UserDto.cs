@@ -1,4 +1,4 @@
-﻿namespace Tafa3ul.API.Models
+﻿namespace Tafa3ul.Application.DTOs
 {
     public class UserDto
     {

@@ -1,8 +1,8 @@
-﻿using Tafa3ul.API.Entities;
-using Tafa3ul.API.Models;
-using Tafa3ul.API.Services.Interfaces;
+﻿using Tafa3ul.Application.DTOs;
+using Tafa3ul.Application.Interfaces;
+using Tafa3ul.Domain.Entities;
 
-namespace Tafa3ul.API.Services
+namespace Tafa3ul.Infrastructure.Security
 {
     public class AuthService() : IAuthService
     {
@@ -15,5 +15,6 @@ namespace Tafa3ul.API.Services
         {
             throw new NotImplementedException();
         }
+
     }
 }

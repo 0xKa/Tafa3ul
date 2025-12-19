@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Tafa3ul.API.Entities;
+using Tafa3ul.Domain.Entities;
 
 namespace Tafa3ul.Infrastructure.Persistence
 {

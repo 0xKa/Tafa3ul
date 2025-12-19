@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Tafa3ul.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace Tafa3ul.API.Migrations
+namespace Tafa3ul.Infrastructure.Migrations
 {
     [DbContext(typeof(Tafa3ulDbContext))]
-    partial class Tafa3ulDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251219235025_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace Tafa3ul.API.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Tafa3ul.API.Entities.User", b =>
+            modelBuilder.Entity("Tafa3ul.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

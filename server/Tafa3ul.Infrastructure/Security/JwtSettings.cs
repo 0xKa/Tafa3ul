@@ -1,4 +1,4 @@
-﻿namespace Tafa3ul.API;
+﻿namespace Tafa3ul.Infrastructure.Security;
 
 public class JwtSettings
 {

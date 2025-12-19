@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Tafa3ul.API.Entities;
+using Tafa3ul.Domain.Entities;
 
-namespace Tafa3ul.API.Data.Configurations
+namespace Tafa3ul.Infrastructure.Persistence.Configurations
 {
     public class UserConfig : IEntityTypeConfiguration<User>
     {

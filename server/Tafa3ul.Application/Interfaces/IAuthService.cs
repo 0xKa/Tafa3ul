@@ -1,7 +1,7 @@
-﻿using Tafa3ul.API.Entities;
-using Tafa3ul.API.Models;
+﻿using Tafa3ul.Application.DTOs;
+using Tafa3ul.Domain.Entities;
 
-namespace Tafa3ul.API.Services.Interfaces
+namespace Tafa3ul.Application.Interfaces
 {
     public interface IAuthService
     {

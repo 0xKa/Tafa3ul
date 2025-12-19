@@ -4,7 +4,7 @@
     <File Path="README.md" />
   </Folder>
   <Project Path="server/Tafa3ul.API/Tafa3ul.API.csproj" Id="408a4e4b-9d3d-4c71-a3f7-58e94cdb166e" />
-  <Project Path="Tafa3ul.Application/Tafa3ul.Application.csproj" Id="b6ee43fa-7a0c-435e-8641-a4bec4301951" />
-  <Project Path="Tafa3ul.Domain/Tafa3ul.Domain.csproj" Id="75febfa8-93cb-4393-9a55-aa6d6f23f1c5" />
-  <Project Path="Tafa3ul.Infrastructure/Tafa3ul.Infrastructure.csproj" Id="27a2ea58-1a07-4213-9867-40ae87c5ac62" />
+  <Project Path="server/Tafa3ul.Application/Tafa3ul.Application.csproj" />
+  <Project Path="server/Tafa3ul.Domain/Tafa3ul.Domain.csproj" />
+  <Project Path="server/Tafa3ul.Infrastructure/Tafa3ul.Infrastructure.csproj" />
 </Solution>
