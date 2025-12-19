@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tafa3ul.API.Entities;
 
-namespace Tafa3ul.API.Data
+namespace Tafa3ul.Infrastructure.Persistence
 {
     public class Tafa3ulDbContext(DbContextOptions<Tafa3ulDbContext> options) : DbContext(options)
     {

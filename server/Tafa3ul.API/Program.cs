@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Tafa3ul.API;
-using Tafa3ul.API.Data;
+using Tafa3ul.Infrastructure.Persistence;
 var builder = WebApplication.CreateBuilder(args);
 
 
