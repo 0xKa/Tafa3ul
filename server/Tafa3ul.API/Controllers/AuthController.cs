@@ -50,8 +50,8 @@ namespace Tafa3ul.API.Controllers
             };
 
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_jwtSettings.Token));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                Encoding.UTF8.GetBytes(_jwtSettings.Key));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
             var expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes);
 
