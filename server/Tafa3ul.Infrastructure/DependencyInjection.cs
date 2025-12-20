@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Tafa3ul.Application.Interfaces;
 using Tafa3ul.Infrastructure.Persistence;
 using Tafa3ul.Infrastructure.Security;
 
@@ -15,6 +16,7 @@ public static class DependencyInjection
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
+        services.AddScoped<IAuthService, AuthService>();
 
         //services.AddScoped<IUserRepository, UserRepository>();
 

@@ -1,20 +1,76 @@
-﻿using Tafa3ul.Application.DTOs;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Tafa3ul.Application.DTOs;
 using Tafa3ul.Application.Interfaces;
 using Tafa3ul.Domain.Entities;
+using Tafa3ul.Infrastructure.Persistence;
 
 namespace Tafa3ul.Infrastructure.Security
 {
-    public class AuthService() : IAuthService
+    public class AuthService(Tafa3ulDbContext context, IOptions<JwtSettings> options) : IAuthService
     {
-        public Task<string> LoginAsync(UserDto userDto)
+        private readonly JwtSettings _jwtSettings = options.Value;
+
+        public async Task<User?> RegisterAsync(UserDto userDto)
         {
-            throw new NotImplementedException();
+            if (await context.Users.AnyAsync(u => u.Username == userDto.Username))
+                return null;
+
+            User user = new();
+            var hashPassword = new PasswordHasher<User>().HashPassword(user, userDto.Password);
+
+            user.Username = userDto.Username;
+            user.PasswordHash = hashPassword;
+
+            context.Users.Add(user);
+            await context.SaveChangesAsync();
+
+            return user;
         }
 
-        public Task<User?> RegisterAsync(UserDto userDto)
+        public async Task<string?> LoginAsync(UserDto userDto)
         {
-            throw new NotImplementedException();
+            User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == userDto.Username);
+            if (user is null)
+                return null;
+
+            if (new PasswordHasher<User>()
+                .VerifyHashedPassword(user, user.PasswordHash, userDto.Password)
+                == PasswordVerificationResult.Failed)
+                return null;
+
+            return CreateToken(user);
         }
+
+        private string CreateToken(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.Name, user.Username),
+                new(ClaimTypes.Name, user.Id.ToString())
+            };
+
+            var key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_jwtSettings.Key));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+
+            var expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes);
+
+            var tokenDescriptor = new JwtSecurityToken(
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                claims: claims,
+                expires: expires,
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
+        }
+
 
     }
 }
