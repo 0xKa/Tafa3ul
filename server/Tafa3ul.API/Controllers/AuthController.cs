@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Tafa3ul.Application.DTOs;
 using Tafa3ul.Application.Interfaces;
 using Tafa3ul.Domain.Entities;
@@ -34,7 +34,13 @@ namespace Tafa3ul.API.Controllers
             return Ok(token);
         }
 
-        
+        [Authorize]
+        [HttpGet("auth-only")]
+        public async Task<IActionResult> AuthOnly()
+        {
+            return Ok("Auth controller is working!");
+        }
+
 
     }
 }
