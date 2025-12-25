@@ -6,7 +6,7 @@ namespace Tafa3ul.Application.Interfaces
     public interface IAuthService
     {
         Task<User?> RegisterAsync(UserRegisterDto userDto);
-        Task<string?> LoginAsync(UserLoginDto userDto);
-
+        Task<TokenResponseDto?> LoginAsync(UserLoginDto userDto);
+        Task<TokenResponseDto?> RefreshTokensAsync(RefreshTokenRequestDto requestDto);
     }
 }

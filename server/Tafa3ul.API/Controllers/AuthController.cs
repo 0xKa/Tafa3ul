@@ -27,14 +27,23 @@ namespace Tafa3ul.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login(UserLoginDto userDto)
+        public async Task<ActionResult<TokenResponseDto>> Login(UserLoginDto userDto)
         {
-            var token = await authService.LoginAsync(userDto);
+            var result = await authService.LoginAsync(userDto);
 
-            if (token == null)
+            if (result == null)
                 return Unauthorized("Invalid username or password");
 
-            return Ok(token);
+            return Ok(result);
+        }
+
+        [HttpPost("refresh-token")]
+        public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto tokenRequest)
+        {
+            var result = await authService.RefreshTokensAsync(tokenRequest);
+            if (result == null || result.AccessToken == null || result.RefreshToken == null)
+                return Unauthorized("Invalid token");
+            return Ok(result);
         }
 
         [Authorize]

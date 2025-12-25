@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Tafa3ul.Application.DTOs;
 using Tafa3ul.Application.Interfaces;
@@ -35,7 +36,7 @@ namespace Tafa3ul.Infrastructure.Security
             return user;
         }
 
-        public async Task<string?> LoginAsync(UserLoginDto userDto)
+        public async Task<TokenResponseDto?> LoginAsync(UserLoginDto userDto)
         {
             User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == userDto.Username);
             if (user is null)
@@ -46,7 +47,58 @@ namespace Tafa3ul.Infrastructure.Security
                 == PasswordVerificationResult.Failed)
                 return null;
 
-            return CreateToken(user);
+            return await CreateTokenResponse(user);
+        }
+
+        public async Task<TokenResponseDto?> RefreshTokensAsync(RefreshTokenRequestDto requestDto)
+        {
+            User? user = await ValidateRefreshTokecnAsync(requestDto);
+            if (user is null)
+                return null;
+            return await CreateTokenResponse(user);
+        }
+        
+        private async Task<User?> ValidateRefreshTokecnAsync(RefreshTokenRequestDto requestDto)
+        {
+            User? user = await context.Users.FirstOrDefaultAsync(u => u.Id == requestDto.UserId);
+            if (user is null 
+                || user.RefreshToken != requestDto.RefreshToken
+                || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+                return null;
+         
+            return user;
+        }
+
+        private async Task<TokenResponseDto> CreateTokenResponse(User user)
+        {
+            TokenResponseDto tokenResponse = new()
+            {
+                AccessToken = CreateToken(user),
+                RefreshToken = await GenerateAndSaveRefreshTokenAsync(user),
+                AccessTokenExpiresAt = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes),
+                UserId = user.Id,
+                Username = user.Username
+            };
+            return tokenResponse;
+        }
+       
+        private static string CreateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+
+        }
+
+        private async Task<string> GenerateAndSaveRefreshTokenAsync(User user)
+        {
+            string refreshToken = CreateRefreshToken();
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays);
+            await context.SaveChangesAsync();
+
+            return refreshToken;
         }
 
         private string CreateToken(User user)
@@ -54,7 +106,7 @@ namespace Tafa3ul.Infrastructure.Security
             var claims = new List<Claim>
             {
                 new(ClaimTypes.Name, user.Username),
-                new(ClaimTypes.Name, user.Id.ToString()),
+                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new(ClaimTypes.Email, user.Email),
                 new(ClaimTypes.Role, user.Role.ToString()),
             };
@@ -74,7 +126,6 @@ namespace Tafa3ul.Infrastructure.Security
 
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }
-
 
     }
 }
