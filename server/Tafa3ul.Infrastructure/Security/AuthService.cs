@@ -16,7 +16,7 @@ namespace Tafa3ul.Infrastructure.Security
     {
         private readonly JwtSettings _jwtSettings = options.Value;
 
-        public async Task<User?> RegisterAsync(UserDto userDto)
+        public async Task<User?> RegisterAsync(UserRegisterDto userDto)
         {
             if (await context.Users.AnyAsync(u => u.Username == userDto.Username))
                 return null;
@@ -24,8 +24,10 @@ namespace Tafa3ul.Infrastructure.Security
             User user = new();
             var hashPassword = new PasswordHasher<User>().HashPassword(user, userDto.Password);
 
-            user.Username = userDto.Username;
+            user.Username = userDto.Username.Trim();
             user.PasswordHash = hashPassword;
+            user.Email = userDto.Email.Trim().ToLowerInvariant();
+            user.Role = userDto.Role;
 
             context.Users.Add(user);
             await context.SaveChangesAsync();
@@ -33,7 +35,7 @@ namespace Tafa3ul.Infrastructure.Security
             return user;
         }
 
-        public async Task<string?> LoginAsync(UserDto userDto)
+        public async Task<string?> LoginAsync(UserLoginDto userDto)
         {
             User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == userDto.Username);
             if (user is null)

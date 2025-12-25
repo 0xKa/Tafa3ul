@@ -12,8 +12,8 @@ using Tafa3ul.Infrastructure.Persistence;
 namespace Tafa3ul.Infrastructure.Migrations
 {
     [DbContext(typeof(Tafa3ulDbContext))]
-    [Migration("20251219235025_Initial")]
-    partial class Initial
+    [Migration("20251225003954_AddEmailMaxLength")]
+    partial class AddEmailMaxLength
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,9 +31,17 @@ namespace Tafa3ul.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Username")
                         .IsRequired()

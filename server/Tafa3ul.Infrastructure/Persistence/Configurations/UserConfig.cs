@@ -11,6 +11,8 @@ namespace Tafa3ul.Infrastructure.Persistence.Configurations
             builder.HasIndex(x => x.Username).IsUnique();
             builder.Property(x => x.Username).IsRequired().HasMaxLength(50);
             builder.Property(x => x.PasswordHash).IsRequired();
+            builder.Property(x => x.Email).IsRequired().HasMaxLength(100);
+
 
         }
     }

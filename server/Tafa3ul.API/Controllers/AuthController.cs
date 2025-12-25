@@ -13,8 +13,11 @@ namespace Tafa3ul.API.Controllers
 
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(UserDto dto)
+        public async Task<ActionResult<User>> Register(UserRegisterDto dto)
         {
+            if (!ModelState.IsValid) 
+                return Ok(ModelState);
+
             var user = await authService.RegisterAsync(dto);
 
             if (user == null)
@@ -24,7 +27,7 @@ namespace Tafa3ul.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login(UserDto userDto)
+        public async Task<ActionResult> Login(UserLoginDto userDto)
         {
             var token = await authService.LoginAsync(userDto);
 
