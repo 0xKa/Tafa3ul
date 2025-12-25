@@ -18,7 +18,7 @@ namespace Tafa3ul.Application.DTOs
         public string Email { get; set; } = string.Empty;
 
         [Required]
-        public UserRole Role { get; set; } 
+        public UserRole Role { get; set; } = UserRole.User;
 
 
     }

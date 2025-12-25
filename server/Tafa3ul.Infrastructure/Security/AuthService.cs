@@ -54,7 +54,9 @@ namespace Tafa3ul.Infrastructure.Security
             var claims = new List<Claim>
             {
                 new(ClaimTypes.Name, user.Username),
-                new(ClaimTypes.Name, user.Id.ToString())
+                new(ClaimTypes.Name, user.Id.ToString()),
+                new(ClaimTypes.Email, user.Email),
+                new(ClaimTypes.Role, user.Role.ToString()),
             };
 
             var key = new SymmetricSecurityKey(

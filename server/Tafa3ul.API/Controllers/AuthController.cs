@@ -44,6 +44,27 @@ namespace Tafa3ul.API.Controllers
             return Ok("Auth controller is working!");
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin-only")]
+        public async Task<IActionResult> AdminOnly()
+        {
+            return Ok("Admin controller is working!");
+        }
+
+        [Authorize(Roles = "Guest")]
+        [HttpGet("guest-only")]
+        public async Task<IActionResult> GuestOnly()
+        {
+            return Ok("Guest controller is working!");
+        }
+
+        [Authorize(Roles ="Admin,User")]
+        [HttpGet("user-and-admin")]
+        public async Task<IActionResult> UserAndAdmin()
+        {
+            return Ok("User and Admin controller is working!");
+        }
+
 
     }
 }
