@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Tafa3ul.Application.DTOs;
 using Tafa3ul.Application.Interfaces;
-using Tafa3ul.Domain.Entities;
 
 namespace Tafa3ul.API.Controllers
 {
@@ -14,17 +13,31 @@ namespace Tafa3ul.API.Controllers
         public IActionResult Get() => Ok("Auth controller is working!");
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(UserRegisterDto dto)
+        public async Task<ActionResult<UserRegisterResponseDto>> Register(UserRegisterRequestDto dto)
         {
-            if (!ModelState.IsValid)
-                return Ok(ModelState);
+            var response = await authService.RegisterAsync(dto);
 
-            var user = await authService.RegisterAsync(dto);
+            if (response.ConflictField == "Username")
+                return Conflict("Username already exists");
+            if (response.ConflictField == "Email")
+                return Conflict("Email already exists");
+            if (response.User == null)
+                return BadRequest("Registration failed");
 
-            if (user == null)
-                return BadRequest("Username already exists");
+            var user = response.User;
 
-            return Ok(user);
+            var responseDto = new UserRegisterResponseDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Role = user.Role.ToString(),
+                CreatedAt = user.CreatedAt
+            };
+            return CreatedAtAction(nameof(Register), new { id = user.Id }, responseDto);
+
         }
 
         [HttpPost("login")]
