@@ -10,12 +10,13 @@ namespace Tafa3ul.API.Controllers
     [ApiController]
     public class AuthController(IAuthService authService) : ControllerBase
     {
-
+        [HttpGet]
+        public IActionResult Get() => Ok("Auth controller is working!");
 
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserRegisterDto dto)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
                 return Ok(ModelState);
 
             var user = await authService.RegisterAsync(dto);
@@ -67,7 +68,7 @@ namespace Tafa3ul.API.Controllers
             return Ok("Guest controller is working!");
         }
 
-        [Authorize(Roles ="Admin,User")]
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("user-and-admin")]
         public async Task<IActionResult> UserAndAdmin()
         {
