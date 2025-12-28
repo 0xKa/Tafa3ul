@@ -26,6 +26,7 @@ namespace Tafa3ul.Application.DTOs
         public string LastName { get; set; } = string.Empty;
 
         [Required]
+        [EnumDataType(typeof(UserRole))]
         public UserRole Role { get; set; } = UserRole.User;
     }
 }
