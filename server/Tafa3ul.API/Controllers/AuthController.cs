@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Tafa3ul.Application.DTOs;
 using Tafa3ul.Application.Interfaces;
 
@@ -11,6 +12,19 @@ namespace Tafa3ul.API.Controllers
     {
         [HttpGet]
         public IActionResult Get() => Ok("Auth controller is working!");
+
+        [Authorize]
+        [HttpGet("me")]
+        public IActionResult Me()
+        {
+            return Ok(new
+            {
+                Id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+                Name = User.FindFirst(ClaimTypes.Name)?.Value,
+                Email = User.FindFirst(ClaimTypes.Email)?.Value,
+                Role = User.FindFirst(ClaimTypes.Role)?.Value
+            });
+        }
 
         [HttpPost("register")]
         public async Task<ActionResult<UserRegisterResponseDto>> Register(UserRegisterRequestDto dto)
