@@ -13,7 +13,7 @@ using Tafa3ul.Infrastructure.Persistence;
 
 namespace Tafa3ul.Infrastructure.Security;
 
-public class AuthService(Tafa3ulDbContext context, IOptions<JwtSettings> options) : IAuthService
+internal class AuthService(Tafa3ulDbContext context, IOptions<JwtSettings> options) : IAuthService
 {
     private readonly JwtSettings _jwtSettings = options.Value;
 
