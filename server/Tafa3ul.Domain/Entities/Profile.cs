@@ -23,10 +23,10 @@ public class Profile : BaseDomainObject
     [StringLength(500)]
     public string? Bio { get; set; }
 
-    //public SocialMediaAccounts? Social { get; set; }
+    public SocialMediaAccounts? Social { get; set; }
     public ICollection<ProfileSkill> Skills { get; set; } = [];
     public ICollection<Experience> Experiences { get; set; } = [];
-    //public ICollection<Education> Educations { get; set; } = [];
+    public ICollection<Education> Educations { get; set; } = [];
 
     public string FullName => $"{FirstName} {LastName}";
 }

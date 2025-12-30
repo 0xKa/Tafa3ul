@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Tafa3ul.Data.Persistence;
@@ -11,9 +12,11 @@ using Tafa3ul.Data.Persistence;
 namespace Tafa3ul.Data.Migrations
 {
     [DbContext(typeof(Tafa3ulDbContext))]
-    partial class Tafa3ulDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251230204441_AnnotateStringsInExistingEntities")]
+    partial class AnnotateStringsInExistingEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,56 +24,6 @@ namespace Tafa3ul.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Tafa3ul.Domain.Entities.Education", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Degree")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("FieldOfStudy")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Institution")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
-
-                    b.Property<bool>("IsCurrentlyStudyingHere")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid>("ProfileId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProfileId");
-
-                    b.ToTable("Educations");
-                });
 
             modelBuilder.Entity("Tafa3ul.Domain.Entities.Experience", b =>
                 {
@@ -216,57 +169,6 @@ namespace Tafa3ul.Data.Migrations
                     b.ToTable("Skills");
                 });
 
-            modelBuilder.Entity("Tafa3ul.Domain.Entities.SocialMediaAccounts", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Facebook")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("GitHub")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Instagram")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("LinkedIn")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<Guid>("ProfileId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("TikTok")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Twitter")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("YouTube")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProfileId")
-                        .IsUnique();
-
-                    b.ToTable("SocialMediaAccounts");
-                });
-
             modelBuilder.Entity("Tafa3ul.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -313,17 +215,6 @@ namespace Tafa3ul.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Tafa3ul.Domain.Entities.Education", b =>
-                {
-                    b.HasOne("Tafa3ul.Domain.Entities.Profile", "Profile")
-                        .WithMany("Educations")
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Profile");
-                });
-
             modelBuilder.Entity("Tafa3ul.Domain.Entities.Experience", b =>
                 {
                     b.HasOne("Tafa3ul.Domain.Entities.Profile", "Profile")
@@ -365,26 +256,11 @@ namespace Tafa3ul.Data.Migrations
                     b.Navigation("Skill");
                 });
 
-            modelBuilder.Entity("Tafa3ul.Domain.Entities.SocialMediaAccounts", b =>
-                {
-                    b.HasOne("Tafa3ul.Domain.Entities.Profile", "Profile")
-                        .WithOne("Social")
-                        .HasForeignKey("Tafa3ul.Domain.Entities.SocialMediaAccounts", "ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Profile");
-                });
-
             modelBuilder.Entity("Tafa3ul.Domain.Entities.Profile", b =>
                 {
-                    b.Navigation("Educations");
-
                     b.Navigation("Experiences");
 
                     b.Navigation("Skills");
-
-                    b.Navigation("Social");
                 });
 
             modelBuilder.Entity("Tafa3ul.Domain.Entities.Skill", b =>

@@ -11,6 +11,8 @@ public class Tafa3ulDbContext(DbContextOptions<Tafa3ulDbContext> options) : DbCo
     public DbSet<Skill> Skills { get; set; }
     public DbSet<ProfileSkill> ProfileSkills { get; set; }
     public DbSet<Experience> Experiences { get; set; }
+    public DbSet<Education> Educations { get; set; }
+    public DbSet<SocialMediaAccounts> SocialMediaAccounts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
