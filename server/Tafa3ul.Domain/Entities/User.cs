@@ -1,11 +1,14 @@
-﻿using Tafa3ul.Domain.Enums;
+﻿using System.ComponentModel.DataAnnotations;
+using Tafa3ul.Domain.Enums;
 
 namespace Tafa3ul.Domain.Entities;
 
 public class User : BaseDomainObject
 {
+    [StringLength(50)]
     public string Username { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
+    [StringLength(100)]
     public string Email { get; set; } = string.Empty;
     public UserRole Role { get; set; } = UserRole.User;
 
