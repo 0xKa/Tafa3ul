@@ -1,20 +1,19 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Text;
-using Tafa3ul.Application;
-using Tafa3ul.Infrastructure;
-using Tafa3ul.Infrastructure.Security;
+using Tafa3ul.Core;
+using Tafa3ul.Core.Security;
+using Tafa3ul.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-// Clean DI
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddCore(builder.Configuration);
+builder.Services.AddData(builder.Configuration);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -47,7 +46,7 @@ if (app.Environment.IsDevelopment())
     {
         options.Title = "Tafa3ul API Doc";
         options.Theme = ScalarTheme.BluePlanet;
-        
+
     });
 }
 

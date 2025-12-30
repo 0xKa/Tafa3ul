@@ -1,107 +1,104 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Tafa3ul.Application.DTOs;
-using Tafa3ul.Application.Interfaces;
+using Tafa3ul.Core.Security;
+using Tafa3ul.Domain.Dtos;
 
-namespace Tafa3ul.API.Controllers
+namespace Tafa3ul.Api.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class AuthController(AuthService authService) : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController(IAuthService authService) : ControllerBase
+    [HttpGet]
+    public IActionResult Get() => Ok("Auth controller is working!");
+
+    [Authorize]
+    [HttpGet("me")]
+    public IActionResult Me()
     {
-        [HttpGet]
-        public IActionResult Get() => Ok("Auth controller is working!");
-
-        [Authorize]
-        [HttpGet("me")]
-        public IActionResult Me()
+        return Ok(new
         {
-            return Ok(new
-            {
-                Id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
-                Name = User.FindFirst(ClaimTypes.Name)?.Value,
-                Email = User.FindFirst(ClaimTypes.Email)?.Value,
-                Role = User.FindFirst(ClaimTypes.Role)?.Value
-            });
-        }
+            Id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+            Name = User.FindFirst(ClaimTypes.Name)?.Value,
+            Email = User.FindFirst(ClaimTypes.Email)?.Value,
+            Role = User.FindFirst(ClaimTypes.Role)?.Value
+        });
+    }
 
-        [HttpPost("register")]
-        public async Task<ActionResult<UserRegisterResponseDto>> Register(UserRegisterRequestDto dto)
+    [HttpPost("register")]
+    public async Task<ActionResult<UserRegisterResponseDto>> Register(UserRegisterRequestDto dto)
+    {
+        var response = await authService.RegisterAsync(dto);
+
+        if (response.ConflictField == "Username")
+            return Conflict("Username already exists");
+        if (response.ConflictField == "Email")
+            return Conflict("Email already exists");
+        if (response.User == null)
+            return BadRequest("Registration failed");
+
+        var user = response.User;
+
+        var responseDto = new UserRegisterResponseDto
         {
-            var response = await authService.RegisterAsync(dto);
+            Id = user.Id,
+            Username = user.Username,
+            Email = user.Email,
+            FirstName = user.Profile.FirstName,
+            LastName = user.Profile.LastName,
+            Role = user.Role.ToString(),
+            CreatedAt = user.CreatedAt
+        };
+        return CreatedAtAction(nameof(Register), new { id = user.Id }, responseDto);
 
-            if (response.ConflictField == "Username")
-                return Conflict("Username already exists");
-            if (response.ConflictField == "Email")
-                return Conflict("Email already exists");
-            if (response.User == null)
-                return BadRequest("Registration failed");
+    }
 
-            var user = response.User;
+    [HttpPost("login")]
+    public async Task<ActionResult<TokenResponseDto>> Login(UserLoginDto userDto)
+    {
+        var result = await authService.LoginAsync(userDto);
 
-            var responseDto = new UserRegisterResponseDto
-            {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-                FirstName = user.Profile.FirstName,
-                LastName = user.Profile.LastName,
-                Role = user.Role.ToString(),
-                CreatedAt = user.CreatedAt
-            };
-            return CreatedAtAction(nameof(Register), new { id = user.Id }, responseDto);
+        if (result == null)
+            return Unauthorized("Invalid username or password");
 
-        }
+        return Ok(result);
+    }
 
-        [HttpPost("login")]
-        public async Task<ActionResult<TokenResponseDto>> Login(UserLoginDto userDto)
-        {
-            var result = await authService.LoginAsync(userDto);
+    [HttpPost("refresh-token")]
+    public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto tokenRequest)
+    {
+        var result = await authService.RefreshTokensAsync(tokenRequest);
+        if (result == null || result.AccessToken == null || result.RefreshToken == null)
+            return Unauthorized("Invalid token");
+        return Ok(result);
+    }
 
-            if (result == null)
-                return Unauthorized("Invalid username or password");
+    [Authorize]
+    [HttpGet("auth-only")]
+    public async Task<IActionResult> AuthOnly()
+    {
+        return Ok("Auth controller is working!");
+    }
 
-            return Ok(result);
-        }
+    [Authorize(Roles = "Admin")]
+    [HttpGet("admin-only")]
+    public async Task<IActionResult> AdminOnly()
+    {
+        return Ok("Admin controller is working!");
+    }
 
-        [HttpPost("refresh-token")]
-        public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto tokenRequest)
-        {
-            var result = await authService.RefreshTokensAsync(tokenRequest);
-            if (result == null || result.AccessToken == null || result.RefreshToken == null)
-                return Unauthorized("Invalid token");
-            return Ok(result);
-        }
+    [Authorize(Roles = "Guest")]
+    [HttpGet("guest-only")]
+    public async Task<IActionResult> GuestOnly()
+    {
+        return Ok("Guest controller is working!");
+    }
 
-        [Authorize]
-        [HttpGet("auth-only")]
-        public async Task<IActionResult> AuthOnly()
-        {
-            return Ok("Auth controller is working!");
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpGet("admin-only")]
-        public async Task<IActionResult> AdminOnly()
-        {
-            return Ok("Admin controller is working!");
-        }
-
-        [Authorize(Roles = "Guest")]
-        [HttpGet("guest-only")]
-        public async Task<IActionResult> GuestOnly()
-        {
-            return Ok("Guest controller is working!");
-        }
-
-        [Authorize(Roles = "Admin,User")]
-        [HttpGet("user-and-admin")]
-        public async Task<IActionResult> UserAndAdmin()
-        {
-            return Ok("User and Admin controller is working!");
-        }
-
-
+    [Authorize(Roles = "Admin,User")]
+    [HttpGet("user-and-admin")]
+    public async Task<IActionResult> UserAndAdmin()
+    {
+        return Ok("User and Admin controller is working!");
     }
 }

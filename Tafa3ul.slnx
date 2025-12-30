@@ -3,8 +3,8 @@
     <File Path=".gitignore" />
     <File Path="README.md" />
   </Folder>
-  <Project Path="server/Tafa3ul.API/Tafa3ul.API.csproj" Id="408a4e4b-9d3d-4c71-a3f7-58e94cdb166e" />
-  <Project Path="server/Tafa3ul.Application/Tafa3ul.Application.csproj" />
-  <Project Path="server/Tafa3ul.Domain/Tafa3ul.Domain.csproj" />
-  <Project Path="server/Tafa3ul.Infrastructure/Tafa3ul.Infrastructure.csproj" />
+  <Project Path="server/Tafa3ul.Api/Tafa3ul.Api.csproj" Id="9826b530-e79d-4732-a581-64571061034c" />
+  <Project Path="server/Tafa3ul.Core/Tafa3ul.Core.csproj" Id="516d92da-d796-4b06-b3c1-a935b4d7f9fd" />
+  <Project Path="server/Tafa3ul.Data/Tafa3ul.Data.csproj" Id="7c74115a-b790-4896-bf13-2a4b894a43e3" />
+  <Project Path="server/Tafa3ul.Domain/Tafa3ul.Domain.csproj" Id="55a39ede-d833-4ecb-9a94-5da2696be185" />
 </Solution>

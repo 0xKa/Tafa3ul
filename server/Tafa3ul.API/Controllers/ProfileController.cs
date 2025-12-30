@@ -2,7 +2,7 @@
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Tafa3ul.API.Controllers;
+namespace Tafa3ul.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

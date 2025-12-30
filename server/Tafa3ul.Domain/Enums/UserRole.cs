@@ -1,9 +1,8 @@
-﻿namespace Tafa3ul.Domain.Enums
+﻿namespace Tafa3ul.Domain.Enums;
+
+public enum UserRole
 {
-    public enum UserRole
-    {
-        Admin,
-        User,
-        Guest
-    }
+    Admin,
+    User,
+    Guest
 }
