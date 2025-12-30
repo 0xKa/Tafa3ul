@@ -45,8 +45,8 @@ namespace Tafa3ul.API.Controllers
                 Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                FirstName = user.Profile.FirstName,
+                LastName = user.Profile.LastName,
                 Role = user.Role.ToString(),
                 CreatedAt = user.CreatedAt
             };

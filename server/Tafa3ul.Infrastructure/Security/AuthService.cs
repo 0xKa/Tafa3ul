@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Tafa3ul.Application;
 using Tafa3ul.Application.DTOs;
 using Tafa3ul.Application.Interfaces;
 using Tafa3ul.Domain.Entities;
@@ -25,24 +26,33 @@ internal class AuthService(Tafa3ulDbContext context, IOptions<JwtSettings> optio
         if (await context.Users.AnyAsync(u => u.Email == userDto.Email))
             return new UserRegistrationResult { Success = false, ConflictField = "Email" };
 
-        User user = new();
-        var hashPassword = new PasswordHasher<User>().HashPassword(user, userDto.Password);
+        var user = new User
+        {
+            Username = userDto.Username.Trim(),
+            Email = userDto.Email.Trim().ToLowerInvariant(),
+            Role = userDto.Role
+        };
 
-        user.Username = userDto.Username.Trim();
-        user.PasswordHash = hashPassword;
-        user.Email = userDto.Email.Trim().ToLowerInvariant();
-        user.Role = userDto.Role;
+        user.PasswordHash =
+            new PasswordHasher<User>().HashPassword(user, userDto.Password);
 
         var firstName = userDto.FirstName.Trim();
-        user.FirstName = string.IsNullOrEmpty(firstName) ? firstName : char.ToUpper(firstName[0]) + firstName[1..].ToLower();
-
         var lastName = userDto.LastName.Trim();
-        user.LastName = string.IsNullOrEmpty(lastName) ? lastName : char.ToUpper(lastName[0]) + lastName[1..].ToLower();
+
+        user.Profile = new Profile
+        {
+            FirstName = Utils.Capitalize(firstName),
+            LastName = Utils.Capitalize(lastName)
+        };
 
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        return new UserRegistrationResult { Success = true, User = user };
+        return new UserRegistrationResult
+        {
+            Success = true,
+            User = user
+        };
     }
 
     public async Task<TokenResponseDto?> LoginAsync(UserLoginDto userDto)
