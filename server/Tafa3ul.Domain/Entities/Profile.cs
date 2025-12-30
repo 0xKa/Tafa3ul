@@ -15,6 +15,6 @@ public class Profile : BaseDomainObject
     public string? Bio { get; set; }
 
 
-    //public ICollection<Skill> Skills { get; set; } = [];
+    public ICollection<ProfileSkill> Skills { get; set; } = [];
     public string FullName => $"{FirstName} {LastName}";
 }
