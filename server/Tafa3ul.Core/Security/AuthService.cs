@@ -28,20 +28,14 @@ public class AuthService(Tafa3ulDbContext context, IOptions<JwtSettings> options
         {
             Username = userDto.Username.Trim(),
             Email = userDto.Email.Trim().ToLowerInvariant(),
-            Role = userDto.Role
+            Role = userDto.Role,
+            Profile = new Profile
+            {
+                FirstName = Utils.Capitalize(userDto.FirstName.Trim()),
+                LastName = Utils.Capitalize(userDto.LastName.Trim())
+            }
         };
-
-        user.PasswordHash =
-            new PasswordHasher<User>().HashPassword(user, userDto.Password);
-
-        var firstName = userDto.FirstName.Trim();
-        var lastName = userDto.LastName.Trim();
-
-        user.Profile = new Profile
-        {
-            FirstName = Utils.Capitalize(firstName),
-            LastName = Utils.Capitalize(lastName)
-        };
+        user.PasswordHash = new PasswordHasher<User>().HashPassword(user, userDto.Password);
 
         context.Users.Add(user);
         await context.SaveChangesAsync();
