@@ -25,7 +25,6 @@ public class ProfileController(UserProfileService profileService) : ControllerBa
         return Ok(ConvertToJsonResponse(profile));
     }
 
-
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> GetAllProfiles
@@ -198,6 +197,52 @@ public class ProfileController(UserProfileService profileService) : ControllerBa
             if (!deleted)
                 return NotFound("Education not found");
 
+            return NoContent();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
+    }
+
+    [HttpPut("skill")]
+    public async Task<IActionResult> AddOrUpdateSkill(ProfileSkillDto dto)
+    {
+        var userId = UserId;
+        if (userId == Guid.Empty)
+            return Unauthorized();
+        try
+        {
+            var profileSkill = await profileService.AddOrUpdateSkillAsync(userId, dto);
+            return Ok(new
+            {
+                profileSkill.Id,
+                profileSkill.SkillId,
+                skillName = profileSkill.Skill?.Name,
+                profileSkill.YearsOfExperience
+            });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
+    }
+
+    [HttpDelete("skill/{profile_skill_id}")]
+    public async Task<IActionResult> DeleteSkill(Guid profile_skill_id)
+    {
+        var userId = UserId;
+        if (userId == Guid.Empty)
+            return Unauthorized();
+        try
+        {
+            var deleted = await profileService.DeleteSkillAsync(userId, profile_skill_id);
+            if (!deleted)
+                return NotFound("Skill not found");
             return NoContent();
         }
         catch (UnauthorizedAccessException)

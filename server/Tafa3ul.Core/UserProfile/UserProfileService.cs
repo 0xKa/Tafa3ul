@@ -190,6 +190,67 @@ public class UserProfileService(Tafa3ulDbContext context)
         return true;
     }
 
+    public async Task<ProfileSkill> AddOrUpdateSkillAsync(Guid userId, ProfileSkillDto dto)
+    {
+        var profile = await context.Profiles
+            .Include(p => p.Skills)
+            .ThenInclude(ps => ps.Skill)
+            .FirstOrDefaultAsync(p => p.UserId == userId)
+            ?? throw new InvalidOperationException("Profile not found");
+
+        dto.SkillName = Utils.Capitalize(dto.SkillName.Trim());
+        Skill? skill = await context.Skills
+            .FirstOrDefaultAsync(s => s.Name == dto.SkillName);
+
+        if (skill == null)
+        {
+            skill = new Skill
+            {
+                Name = dto.SkillName.Trim()
+            };
+            context.Skills.Add(skill);
+            await context.SaveChangesAsync();
+        }
+
+        var profileSkill = profile.Skills
+            .FirstOrDefault(ps => ps.SkillId == skill.Id);
+
+        if (profileSkill == null)
+        {
+            profileSkill = new ProfileSkill
+            {
+                ProfileId = profile.Id,
+                SkillId = skill.Id,
+                YearsOfExperience = dto.YearsOfExperience
+            };
+            context.ProfileSkills.Add(profileSkill);
+        }
+        else
+        {
+            profileSkill.YearsOfExperience = dto.YearsOfExperience;
+        }
+        await context.SaveChangesAsync();
+        return profileSkill;
+    }
+
+    public async Task<bool> DeleteSkillAsync(Guid userId, Guid skill_id)
+    {
+        var profile = await context.Profiles
+            .Include(p => p.Skills)
+            .FirstOrDefaultAsync(p => p.UserId == userId)
+            ?? throw new InvalidOperationException("Profile not found");
+
+        var profileSkill = profile.Skills
+            .FirstOrDefault(ps => ps.SkillId == skill_id);
+
+        if (profileSkill == null)
+            return false;
+
+        context.ProfileSkills.Remove(profileSkill);
+        await context.SaveChangesAsync();
+        return true;
+    }
+
     private static void UpdateExperienceEntity(Experience entity, ExperienceDto dto)
     {
         entity.JobTitle = dto.JobTitle.Trim();
@@ -233,4 +294,6 @@ public class UserProfileService(Tafa3ulDbContext context)
         profile.Social.YouTube = socialDto.YouTube?.Trim();
         profile.Social.TikTok = socialDto.TikTok?.Trim();
     }
+
+
 }
