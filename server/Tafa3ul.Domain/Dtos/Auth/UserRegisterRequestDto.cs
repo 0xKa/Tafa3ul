@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Tafa3ul.Domain.Enums;
 
-namespace Tafa3ul.Domain.Dtos;
+namespace Tafa3ul.Domain.Dtos.Auth;
 
 public class UserRegisterRequestDto
 {

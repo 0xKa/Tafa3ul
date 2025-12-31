@@ -1,6 +1,6 @@
 ﻿using Tafa3ul.Domain.Entities;
 
-namespace Tafa3ul.Domain.Dtos
+namespace Tafa3ul.Domain.Dtos.Auth
 {
     public class UserRegistrationResult
     {

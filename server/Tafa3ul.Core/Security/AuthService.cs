@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Tafa3ul.Data.Persistence;
-using Tafa3ul.Domain.Dtos;
+using Tafa3ul.Domain.Dtos.Auth;
 using Tafa3ul.Domain.Entities;
 
 namespace Tafa3ul.Core.Security;

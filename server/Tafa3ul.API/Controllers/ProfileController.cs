@@ -1,42 +1,280 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Tafa3ul.Core.UserProfile;
+using Tafa3ul.Domain.Dtos.Profile;
+using Tafa3ul.Domain.Entities;
 
 namespace Tafa3ul.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ProfileController : ControllerBase
+//[Authorize]
+public class ProfileController(UserProfileService profileService) : ControllerBase
 {
-    // GET: api/<Profile>
-    [HttpGet]
-    public IEnumerable<string> Get()
-    {
-        return new string[] { "value1", "value2" };
-    }
+    private Guid UserId => GetAuthenticatedUserId();
 
-    // GET api/<Profile>/5
-    [HttpGet("{id}")]
-    public string Get(int id)
-    {
-        return "value";
-    }
-
-    // POST api/<Profile>
     [HttpPost]
-    public void Post([FromBody] string value)
+    public async Task<IActionResult> CreateOrUpdateProfile(CreateProfileDto dto)
     {
+        var userId = UserId;
+        if (userId == Guid.Empty)
+            return Unauthorized();
+
+        var profile = await profileService.CreateOrUpdateProfileAsync(userId, dto);
+        return Ok(ConvertToJsonResponse(profile));
     }
 
-    // PUT api/<Profile>/5
-    [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAllProfiles
+        ([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
+        if (page < 1) page = 1;
+        if (pageSize < 1 || pageSize > 100) pageSize = 10;
+
+        var (profiles, totalCount) = await profileService.GetAllProfilesAsync(page, pageSize);
+
+        return Ok(new
+        {
+            //apply given method to each profile, return enumerable with json objects
+            data = profiles.Select(ConvertToJsonResponse),
+            page,
+            pageSize,
+            totalCount,
+            totalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+        });
     }
 
-    // DELETE api/<Profile>/5
-    [HttpDelete("{id}")]
-    public void Delete(int id)
+    [HttpGet("me")]
+    public async Task<IActionResult> GetMyProfile()
     {
+        var userId = UserId;
+        if (userId == Guid.Empty)
+            return Unauthorized();
+
+        var profile = await profileService.GetProfileByUserIdAsync(userId);
+        if (profile == null)
+            return NotFound("Profile not found");
+
+        return Ok(ConvertToJsonResponse(profile));
     }
+
+    [HttpGet("user/{user_id}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetProfileByUserId(Guid user_id)
+    {
+        var profile = await profileService.GetProfileByUserIdAsync(user_id);
+        if (profile == null)
+            return NotFound("Profile not found");
+
+        return Ok(ConvertToJsonResponse(profile));
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteProfile()
+    {
+        var userId = UserId;
+        if (userId == Guid.Empty)
+            return Unauthorized();
+
+        var deleted = await profileService.DeleteProfileAsync(userId);
+        if (!deleted)
+            return NotFound("Profile not found");
+
+        return NoContent();
+    }
+
+    // (placeholder)
+    [HttpPost("upload")]
+    public async Task<IActionResult> UploadProfilePicture(IFormFile file)
+    {
+        var userId = UserId;
+        if (userId == Guid.Empty)
+            return Unauthorized();
+
+        if (file == null || file.Length == 0)
+            return BadRequest("No file uploaded");
+
+        await Task.CompletedTask;
+        return Ok(new { message = "File received, implementation pending", fileName = file.FileName });
+    }
+
+    [HttpPut("experience")]
+    public async Task<IActionResult> AddOrUpdateExperience(ExperienceDto dto)
+    {
+        var userId = UserId;
+        if (userId == Guid.Empty)
+            return Unauthorized();
+
+        try
+        {
+            var experience = await profileService.AddOrUpdateExperienceAsync(userId, dto);
+            return Ok(new
+            {
+                experience.Id,
+                experience.JobTitle,
+                experience.Company,
+                experience.StartDate,
+                experience.EndDate,
+                experience.IsCurrentlyWorkingHere,
+                experience.Description
+            });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
+    }
+
+    [HttpDelete("experience/{exp_id}")]
+    public async Task<IActionResult> DeleteExperience(Guid exp_id)
+    {
+        var userId = UserId;
+        if (userId == Guid.Empty)
+            return Unauthorized();
+
+        try
+        {
+            var deleted = await profileService.DeleteExperienceAsync(userId, exp_id);
+            if (!deleted)
+                return NotFound("Experience not found");
+
+            return NoContent();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
+    }
+
+    [HttpPut("education")]
+    public async Task<IActionResult> AddOrUpdateEducation(EducationDto dto)
+    {
+        var userId = UserId;
+        if (userId == Guid.Empty)
+            return Unauthorized();
+
+        try
+        {
+            var education = await profileService.AddOrUpdateEducationAsync(userId, dto);
+            return Ok(new
+            {
+                education.Id,
+                education.Institution,
+                education.Degree,
+                education.FieldOfStudy,
+                education.StartDate,
+                education.EndDate,
+                education.IsCurrentlyStudyingHere,
+                education.Description
+            });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
+    }
+
+    [HttpDelete("education/{edu_id}")]
+    public async Task<IActionResult> DeleteEducation(Guid edu_id)
+    {
+        var userId = UserId;
+        if (userId == Guid.Empty)
+            return Unauthorized();
+
+        try
+        {
+            var deleted = await profileService.DeleteEducationAsync(userId, edu_id);
+            if (!deleted)
+                return NotFound("Education not found");
+
+            return NoContent();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
+    }
+
+    private Guid GetAuthenticatedUserId()
+    {
+        return Guid.Parse("019b6dd3-30bd-77d4-a1f8-3f248ada5690"); //temp
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        return Guid.TryParse(userIdClaim, out var userId) ? userId : Guid.Empty;
+    }
+
+    private static object ConvertToJsonResponse(Profile profile)
+    {
+        return new
+        {
+            profile.Id,
+            profile.UserId,
+            profile.FirstName,
+            profile.LastName,
+            profile.FullName,
+            profile.Company,
+            profile.Website,
+            profile.Country,
+            profile.Location,
+            profile.Bio,
+            social = profile.Social != null ? new
+            {
+                profile.Social.LinkedIn,
+                profile.Social.GitHub,
+                profile.Social.Twitter,
+                profile.Social.Facebook,
+                profile.Social.Instagram,
+                profile.Social.YouTube,
+                profile.Social.TikTok
+            } : null,
+            skills = profile.Skills?.Select(ps => new
+            {
+                ps.Id,
+                ps.SkillId,
+                skillName = ps.Skill?.Name,
+                ps.YearsOfExperience
+            }).ToList(),
+            experiences = profile.Experiences?.Select(e => new
+            {
+                e.Id,
+                e.JobTitle,
+                e.Company,
+                e.StartDate,
+                e.EndDate,
+                e.IsCurrentlyWorkingHere,
+                e.Description
+            }).ToList(),
+            educations = profile.Educations?.Select(e => new
+            {
+                e.Id,
+                e.Institution,
+                e.Degree,
+                e.FieldOfStudy,
+                e.StartDate,
+                e.EndDate,
+                e.IsCurrentlyStudyingHere,
+                e.Description
+            }).ToList(),
+            user = profile.User != null ? new
+            {
+                profile.User.Id,
+                profile.User.Username,
+                profile.User.Email
+            } : null,
+            profile.CreatedAt,
+            profile.UpdatedAt
+        };
+    }
+
 }
+

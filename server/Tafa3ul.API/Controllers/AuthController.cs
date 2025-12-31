@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Tafa3ul.Core.Security;
-using Tafa3ul.Domain.Dtos;
+using Tafa3ul.Domain.Dtos.Auth;
 
 namespace Tafa3ul.Api.Controllers;
 

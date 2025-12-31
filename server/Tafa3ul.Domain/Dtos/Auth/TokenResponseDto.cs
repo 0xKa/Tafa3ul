@@ -1,4 +1,4 @@
-﻿namespace Tafa3ul.Domain.Dtos;
+﻿namespace Tafa3ul.Domain.Dtos.Auth;
 
 public class TokenResponseDto
 {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tafa3ul.Core.Security;
+using Tafa3ul.Core.UserProfile;
 
 namespace Tafa3ul.Core;
 
@@ -11,6 +12,7 @@ public static class DependencyInjection
     {
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
         services.AddScoped<AuthService>();
+        services.AddScoped<UserProfileService>();
 
         return services;
     }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Tafa3ul.Domain.Dtos;
+namespace Tafa3ul.Domain.Dtos.Auth;
 
 public class UserLoginDto
 {
