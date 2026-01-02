@@ -2,6 +2,7 @@
 using Tafa3ul.Data.Persistence;
 using Tafa3ul.Domain.Dtos.Profile;
 using Tafa3ul.Domain.Entities;
+using Toimik.UrlNormalization;
 
 namespace Tafa3ul.Core.UserProfile;
 
@@ -17,27 +18,13 @@ public class UserProfileService(Tafa3ulDbContext context)
         {
             profile = new Profile
             {
-                UserId = userId,
-                FirstName = dto.FirstName.Trim(),
-                LastName = dto.LastName.Trim(),
-                Company = dto.Company?.Trim(),
-                Website = dto.Website?.Trim(),
-                Country = dto.Country?.Trim(),
-                Location = dto.Location?.Trim(),
-                Bio = dto.Bio?.Trim()
+                UserId = userId
             };
+            UpdateProfileEntity(profile, dto);
             context.Profiles.Add(profile);
         }
         else
-        {
-            profile.FirstName = dto.FirstName.Trim();
-            profile.LastName = dto.LastName.Trim();
-            profile.Company = dto.Company?.Trim();
-            profile.Website = dto.Website?.Trim();
-            profile.Country = dto.Country?.Trim();
-            profile.Location = dto.Location?.Trim();
-            profile.Bio = dto.Bio?.Trim();
-        }
+            UpdateProfileEntity(profile, dto);
 
         UpdateSocialAccounts(profile, dto.Social);
         await context.SaveChangesAsync();
@@ -286,14 +273,48 @@ public class UserProfileService(Tafa3ulDbContext context)
             ProfileId = profile.Id
         };
 
-        profile.Social.LinkedIn = socialDto.LinkedIn?.Trim();
-        profile.Social.GitHub = socialDto.GitHub?.Trim();
-        profile.Social.Twitter = socialDto.Twitter?.Trim();
-        profile.Social.Facebook = socialDto.Facebook?.Trim();
-        profile.Social.Instagram = socialDto.Instagram?.Trim();
-        profile.Social.YouTube = socialDto.YouTube?.Trim();
-        profile.Social.TikTok = socialDto.TikTok?.Trim();
+        var normalizer = new HttpUrlNormalizer(
+            isAdjacentSlashesCollapsed: true,
+            preferredScheme: "https",
+            isFragmentIgnored: true,
+            isUserInfoIgnored: true);
+
+        profile.Social.LinkedIn = NormalizeSocialUrl(socialDto.LinkedIn);
+        profile.Social.GitHub = NormalizeSocialUrl(socialDto.GitHub);
+        profile.Social.Twitter = NormalizeSocialUrl(socialDto.Twitter);
+        profile.Social.Facebook = NormalizeSocialUrl(socialDto.Facebook);
+        profile.Social.Instagram = NormalizeSocialUrl(socialDto.Instagram);
+        profile.Social.YouTube = NormalizeSocialUrl(socialDto.YouTube);
+        profile.Social.TikTok = NormalizeSocialUrl(socialDto.TikTok);
+
+        string? NormalizeSocialUrl(string? value)
+        {
+            var trimmed = value?.Trim();
+            return string.IsNullOrWhiteSpace(trimmed)
+                ? null
+                : normalizer.Normalize(trimmed);
+        }
     }
 
+    private static void UpdateProfileEntity(Profile profile, CreateProfileDto dto)
+    {
+        var normalizer = new HttpUrlNormalizer(
+            isAdjacentSlashesCollapsed: true,
+            preferredScheme: "https",
+             isFragmentIgnored: true,
+            isUserInfoIgnored: true);
 
+        profile.FirstName = dto.FirstName.Trim();
+        profile.LastName = dto.LastName.Trim();
+        profile.Company = dto.Company?.Trim();
+
+        profile.Website =
+            dto.Website is not null && dto.Website.Trim().Length > 0
+            ? normalizer.Normalize(dto.Website.Trim())
+            : null;
+
+        profile.Country = dto.Country?.Trim();
+        profile.Location = dto.Location?.Trim();
+        profile.Bio = dto.Bio?.Trim();
+    }
 }

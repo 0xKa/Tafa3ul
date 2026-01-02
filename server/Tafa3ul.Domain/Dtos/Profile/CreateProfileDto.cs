@@ -13,6 +13,7 @@ public class CreateProfileDto
 
     [StringLength(100)]
     public string? Company { get; set; }
+    [Url]
     [StringLength(255)]
     public string? Website { get; set; }
     [StringLength(100)]
