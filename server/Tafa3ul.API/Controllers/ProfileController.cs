@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Tafa3ul.Core.UserProfile;
 using Tafa3ul.Domain.Dtos.Profile;
-using Tafa3ul.Domain.Entities;
 
 namespace Tafa3ul.Api.Controllers;
 
@@ -22,7 +21,7 @@ public class ProfileController(UserProfileService profileService) : ControllerBa
             return Unauthorized();
 
         var profile = await profileService.CreateOrUpdateProfileAsync(userId, dto);
-        return Ok(ConvertToJsonResponse(profile));
+        return Ok(ProfileResponseDto.FromEntity(profile));
     }
 
     [HttpGet]
@@ -38,7 +37,7 @@ public class ProfileController(UserProfileService profileService) : ControllerBa
         return Ok(new
         {
             //apply given method to each profile, return enumerable with json objects
-            data = profiles.Select(ConvertToJsonResponse),
+            data = profiles.Select(ProfileResponseDto.FromEntity),
             page,
             pageSize,
             totalCount,
@@ -57,7 +56,7 @@ public class ProfileController(UserProfileService profileService) : ControllerBa
         if (profile == null)
             return NotFound("Profile not found");
 
-        return Ok(ConvertToJsonResponse(profile));
+        return Ok(ProfileResponseDto.FromEntity(profile));
     }
 
     [HttpGet("user/{user_id}")]
@@ -68,7 +67,7 @@ public class ProfileController(UserProfileService profileService) : ControllerBa
         if (profile == null)
             return NotFound("Profile not found");
 
-        return Ok(ConvertToJsonResponse(profile));
+        return Ok(ProfileResponseDto.FromEntity(profile));
     }
 
     [HttpDelete]
@@ -258,68 +257,7 @@ public class ProfileController(UserProfileService profileService) : ControllerBa
         return Guid.TryParse(userIdClaim, out var userId) ? userId : Guid.Empty;
     }
 
-    private static object ConvertToJsonResponse(Profile profile)
-    {
-        return new
-        {
-            profile.Id,
-            profile.UserId,
-            profile.FirstName,
-            profile.LastName,
-            profile.FullName,
-            profile.Company,
-            profile.Website,
-            profile.Country,
-            profile.Location,
-            profile.Bio,
-            social = profile.Social != null ? new
-            {
-                profile.Social.LinkedIn,
-                profile.Social.GitHub,
-                profile.Social.Twitter,
-                profile.Social.Facebook,
-                profile.Social.Instagram,
-                profile.Social.YouTube,
-                profile.Social.TikTok
-            } : null,
-            skills = profile.Skills?.Select(ps => new
-            {
-                ps.Id,
-                ps.SkillId,
-                skillName = ps.Skill?.Name,
-                ps.YearsOfExperience
-            }).ToList(),
-            experiences = profile.Experiences?.Select(e => new
-            {
-                e.Id,
-                e.JobTitle,
-                e.Company,
-                e.StartDate,
-                e.EndDate,
-                e.IsCurrentlyWorkingHere,
-                e.Description
-            }).ToList(),
-            educations = profile.Educations?.Select(e => new
-            {
-                e.Id,
-                e.Institution,
-                e.Degree,
-                e.FieldOfStudy,
-                e.StartDate,
-                e.EndDate,
-                e.IsCurrentlyStudyingHere,
-                e.Description
-            }).ToList(),
-            user = profile.User != null ? new
-            {
-                profile.User.Id,
-                profile.User.Username,
-                profile.User.Email
-            } : null,
-            profile.CreatedAt,
-            profile.UpdatedAt
-        };
-    }
+
 
 }
 
