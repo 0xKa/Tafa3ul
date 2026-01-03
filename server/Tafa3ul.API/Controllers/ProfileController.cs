@@ -9,7 +9,8 @@ namespace Tafa3ul.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 //[Authorize]
-public class ProfileController(UserProfileService profileService) : ControllerBase
+public class ProfileController
+    (UserProfileService profileService, LocalFileStorageService fileStorageService) : ControllerBase
 {
     private Guid UserId => GetAuthenticatedUserId();
 
@@ -95,8 +96,18 @@ public class ProfileController(UserProfileService profileService) : ControllerBa
         if (file == null || file.Length == 0)
             return BadRequest("No file uploaded");
 
-        await Task.CompletedTask;
-        return Ok(new { message = "File received, implementation pending", fileName = file.FileName });
+        string[] allowedExtensions = [".jpg", ".jpeg", ".png"];
+        string extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+        if (!allowedExtensions.Contains(extension))
+            return BadRequest("Invalid file type");
+
+        var path = await profileService.UpdateProfileImageAsync(file.OpenReadStream(), extension, userId);
+
+        if (string.IsNullOrEmpty(path))
+            return StatusCode(500, "Error saving profile picture.");
+
+        return Ok(new { savedImageUrl = path });
     }
 
     [HttpPut("experience")]

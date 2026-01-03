@@ -6,7 +6,7 @@ using Toimik.UrlNormalization;
 
 namespace Tafa3ul.Core.UserProfile;
 
-public class UserProfileService(Tafa3ulDbContext context)
+public class UserProfileService(Tafa3ulDbContext context, LocalFileStorageService fileStorageService)
 {
     public async Task<Profile> CreateOrUpdateProfileAsync(Guid userId, CreateProfileDto dto)
     {
@@ -74,6 +74,23 @@ public class UserProfileService(Tafa3ulDbContext context)
         context.Profiles.Remove(profile);
         await context.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<string?> UpdateProfileImageAsync(Stream file, string extension, Guid userId)
+    {
+        string imageUrl = await fileStorageService.SaveProfileImageAsync(file, extension, userId);
+
+        if (imageUrl == null)
+            return null;
+
+        var profile = await context.Profiles
+            .Include(p => p.User)
+            .FirstOrDefaultAsync(p => p.UserId == userId);
+
+        profile?.ImageUrl = imageUrl;
+
+        await context.SaveChangesAsync();
+        return imageUrl;
     }
 
     public async Task<Experience> AddOrUpdateExperienceAsync(Guid userId, ExperienceDto dto)

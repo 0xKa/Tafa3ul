@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Tafa3ul.Data\Tafa3ul.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\profile-images\" />
+  </ItemGroup>
+
 </Project>

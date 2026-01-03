@@ -12,7 +12,9 @@ public static class DependencyInjection
     {
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
         services.AddScoped<AuthService>();
+
         services.AddScoped<UserProfileService>();
+        services.AddScoped<LocalFileStorageService>();
 
         return services;
     }
