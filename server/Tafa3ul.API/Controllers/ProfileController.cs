@@ -8,9 +8,9 @@ namespace Tafa3ul.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class ProfileController
-    (UserProfileService profileService, LocalFileStorageService fileStorageService) : ControllerBase
+    (UserProfileService profileService) : ControllerBase
 {
     private Guid UserId => GetAuthenticatedUserId();
 
@@ -85,7 +85,6 @@ public class ProfileController
         return NoContent();
     }
 
-    // (placeholder)
     [HttpPost("upload")]
     public async Task<IActionResult> UploadProfilePicture(IFormFile file)
     {
@@ -263,7 +262,7 @@ public class ProfileController
 
     private Guid GetAuthenticatedUserId()
     {
-        return Guid.Parse("019b6dd3-30bd-77d4-a1f8-3f248ada5690"); //temp
+        //return Guid.Parse("019b6dd3-30bd-77d4-a1f8-3f248ada5690"); //temp
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return Guid.TryParse(userIdClaim, out var userId) ? userId : Guid.Empty;
     }
