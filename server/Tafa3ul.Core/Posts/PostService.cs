@@ -51,6 +51,31 @@ public class PostService(Tafa3ulDbContext context, LocalFileStorageService fileS
         return (posts, totalCount);
     }
 
+    public async Task<(List<Post> Posts, int TotalCount)> GetPostsByUserIdAsync(Guid userId, int page, int pageSize)
+    {
+        var posts = await context.Posts
+            .Include(p => p.User)
+            .Include(p => p.Likes).ThenInclude(l => l.User)
+            .Include(p => p.Comments).ThenInclude(c => c.User)
+            .Where(p => p.UserId == userId)
+            .OrderByDescending(p => p.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        var totalCount = await context.Posts.CountAsync(p => p.UserId == userId);
+        return (posts, totalCount);
+    }
+
+    public async Task<(List<Post> Posts, int TotalCount)> GetPostsByProfileIdAsync(Guid profileId, int page, int pageSize)
+    {
+        var profile = await context.Profiles.FindAsync(profileId);
+        if (profile == null)
+            return ([], 0);
+
+        return await GetPostsByUserIdAsync(profile.UserId, page, pageSize);
+    }
+
     public async Task<bool> DeletePostAsync(Guid userId, Guid postId)
     {
         var post = await context.Posts

@@ -69,7 +69,7 @@ namespace Tafa3ul.Data.Migrations
 
                     b.HasIndex("ProfileId");
 
-                    b.ToTable("Educations");
+                    b.ToTable("Educations", (string)null);
                 });
 
             modelBuilder.Entity("Tafa3ul.Domain.Entities.Experience", b =>
@@ -114,7 +114,7 @@ namespace Tafa3ul.Data.Migrations
 
                     b.HasIndex("ProfileId");
 
-                    b.ToTable("Experiences");
+                    b.ToTable("Experiences", (string)null);
                 });
 
             modelBuilder.Entity("Tafa3ul.Domain.Entities.Post", b =>
@@ -151,7 +151,7 @@ namespace Tafa3ul.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("Tafa3ul.Domain.Entities.PostComment", b =>
@@ -183,7 +183,7 @@ namespace Tafa3ul.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PostComments");
+                    b.ToTable("PostComments", (string)null);
                 });
 
             modelBuilder.Entity("Tafa3ul.Domain.Entities.PostLike", b =>
@@ -207,7 +207,7 @@ namespace Tafa3ul.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PostLikes");
+                    b.ToTable("PostLikes", (string)null);
                 });
 
             modelBuilder.Entity("Tafa3ul.Domain.Entities.Profile", b =>
@@ -264,7 +264,7 @@ namespace Tafa3ul.Data.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Profiles");
+                    b.ToTable("Profiles", (string)null);
                 });
 
             modelBuilder.Entity("Tafa3ul.Domain.Entities.ProfileSkill", b =>
@@ -288,7 +288,7 @@ namespace Tafa3ul.Data.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("ProfileSkills");
+                    b.ToTable("ProfileSkills", (string)null);
                 });
 
             modelBuilder.Entity("Tafa3ul.Domain.Entities.Skill", b =>
@@ -310,7 +310,7 @@ namespace Tafa3ul.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Skills");
+                    b.ToTable("Skills", (string)null);
                 });
 
             modelBuilder.Entity("Tafa3ul.Domain.Entities.SocialMediaAccounts", b =>
@@ -361,7 +361,7 @@ namespace Tafa3ul.Data.Migrations
                     b.HasIndex("ProfileId")
                         .IsUnique();
 
-                    b.ToTable("SocialMediaAccounts");
+                    b.ToTable("SocialMediaAccounts", (string)null);
                 });
 
             modelBuilder.Entity("Tafa3ul.Domain.Entities.User", b =>
@@ -407,7 +407,7 @@ namespace Tafa3ul.Data.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Tafa3ul.Domain.Entities.Education", b =>

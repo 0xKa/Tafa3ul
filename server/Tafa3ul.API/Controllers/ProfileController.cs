@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Tafa3ul.Core.Posts;
 using Tafa3ul.Core.UserProfile;
+using Tafa3ul.Domain.Dtos.Post;
 using Tafa3ul.Domain.Dtos.Profile;
 
 namespace Tafa3ul.Api.Controllers;
@@ -10,7 +12,7 @@ namespace Tafa3ul.Api.Controllers;
 [ApiController]
 [Authorize]
 public class ProfileController
-    (UserProfileService profileService) : ControllerBase
+    (UserProfileService profileService, PostService postService) : ControllerBase
 {
     private Guid UserId => GetAuthenticatedUserId();
 
@@ -69,6 +71,44 @@ public class ProfileController
             return NotFound("Profile not found");
 
         return Ok(ProfileResponseDto.FromEntity(profile));
+    }
+
+    [HttpGet("user/{user_id}/posts")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetPostsByUserId(Guid user_id, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        if (page < 1) page = 1;
+        if (pageSize < 1 || pageSize > 100) pageSize = 10;
+
+        var (posts, totalCount) = await postService.GetPostsByUserIdAsync(user_id, page, pageSize);
+
+        return Ok(new
+        {
+            data = posts.Select(PostResponseDto.FromEntity),
+            page,
+            pageSize,
+            totalCount,
+            totalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+        });
+    }
+
+    [HttpGet("{profile_id}/posts")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetPostsByProfileId(Guid profile_id, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        if (page < 1) page = 1;
+        if (pageSize < 1 || pageSize > 100) pageSize = 10;
+
+        var (posts, totalCount) = await postService.GetPostsByProfileIdAsync(profile_id, page, pageSize);
+
+        return Ok(new
+        {
+            data = posts.Select(PostResponseDto.FromEntity),
+            page,
+            pageSize,
+            totalCount,
+            totalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+        });
     }
 
     [HttpDelete]
@@ -266,8 +306,6 @@ public class ProfileController
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return Guid.TryParse(userIdClaim, out var userId) ? userId : Guid.Empty;
     }
-
-
 
 }
 
