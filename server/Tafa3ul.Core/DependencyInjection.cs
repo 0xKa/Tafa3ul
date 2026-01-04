@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Tafa3ul.Core.Posts;
 using Tafa3ul.Core.Security;
 using Tafa3ul.Core.UserProfile;
 
@@ -15,6 +16,7 @@ public static class DependencyInjection
 
         services.AddScoped<UserProfileService>();
         services.AddScoped<LocalFileStorageService>();
+        services.AddScoped<PostService>();
 
         return services;
     }
