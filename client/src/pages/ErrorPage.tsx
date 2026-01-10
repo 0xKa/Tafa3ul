@@ -2,7 +2,7 @@ import { isRouteErrorResponse, Link, useRouteError } from "react-router";
 import { Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function ErrorPage() {
+const ErrorPage = () => {
   const error = useRouteError();
 
   const getErrorMessages = () => {
@@ -53,4 +53,6 @@ export default function ErrorPage() {
       </div>
     </div>
   );
-}
+};
+
+export default ErrorPage;
