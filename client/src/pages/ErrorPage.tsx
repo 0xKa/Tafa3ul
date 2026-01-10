@@ -17,7 +17,7 @@ export default function ErrorPage() {
       } else {
         return {
           h1Message: error.status.toString(),
-          h2Message: error.statusText,
+          h2Message: error.statusText || "An error occurred",
           pMessage: "An unexpected error has occurred. Please try again later.",
         };
       }
