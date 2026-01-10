@@ -55,10 +55,14 @@ const Navbar = () => {
         {/* right side actions */}
         <div className="flex flex-1 items-center justify-end space-x-4">
           <ModeToggleButton />
-          <Button variant="outline" className="hidden lg:inline-flex">
-            Log In
-          </Button>
-          <Button className="hidden lg:inline-flex">Sign Up</Button>
+          <Link to="/login">
+            <Button variant="outline" className="hidden lg:inline-flex">
+              Log In
+            </Button>
+          </Link>
+          <Link to="/register">
+            <Button className="hidden lg:inline-flex">Sign Up</Button>
+          </Link>
 
           {/* mobile nav menu */}
           <DropdownMenu>
