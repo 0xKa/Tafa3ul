@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import RootLayout from "./components/layout/RootLayout";
 import ErrorPage from "./pages/ErrorPage";
+import LandingPage from "./pages/LandingPage";
 
 export const router = createBrowserRouter([
   {
@@ -8,7 +9,7 @@ export const router = createBrowserRouter([
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <h1>LandingPage</h1> },
+      { index: true, element: <LandingPage /> },
       { path: "about", element: <h1>AboutPage</h1> },
 
       // error testing routes
