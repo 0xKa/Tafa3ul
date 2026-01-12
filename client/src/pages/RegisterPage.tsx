@@ -1,10 +1,12 @@
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useRegister } from "@/features/auth/hooks/useRegister";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle } from "lucide-react";
+import axios from "axios";
+import { AlertCircle, Check } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { z } from "zod";
 
 const registerSchema = z
@@ -24,27 +26,23 @@ const registerSchema = z
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 const RegisterPage = () => {
-  const navigate = useNavigate();
+  const registerMutation = useRegister();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<RegisterFormData>({ resolver: zodResolver(registerSchema) });
 
-  const onSubmit = async (data: RegisterFormData) => {
-    try {
-      // TODO: Replace with real API call
-      console.log("Register attempt:", {
-        name: data.firstName + " " + data.lastName,
-        email: data.email,
-        password: data.password,
-      });
-
-      navigate("/login?registered=true");
-    } catch (error) {
-      console.error(error);
-    }
+  const onSubmit = (data: RegisterFormData) => {
+    registerMutation.mutate({
+      username: data.username,
+      password: data.password,
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      role: 1,
+    });
   };
 
   return (
@@ -57,13 +55,6 @@ const RegisterPage = () => {
 
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {errors.root && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{errors.root.message}</AlertDescription>
-              </Alert>
-            )}
-
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {/* Left Column */}
               <div className="space-y-4">
@@ -76,9 +67,10 @@ const RegisterPage = () => {
                     id="firstName"
                     type="text"
                     placeholder="Reda"
+                    disabled={registerMutation.isPending}
                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   />
-                  {errors.firstName && <p className="text-sm text-red-400">{errors.firstName?.message}</p>}
+                  {errors.firstName && <p className="text-sm text-red-400">{errors.firstName.message}</p>}
                 </div>
 
                 <div className="space-y-2">
@@ -90,9 +82,10 @@ const RegisterPage = () => {
                     id="lastName"
                     type="text"
                     placeholder="Hilal"
+                    disabled={registerMutation.isPending}
                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   />
-                  {errors.lastName && <p className="text-sm text-red-400">{errors.lastName?.message}</p>}
+                  {errors.lastName && <p className="text-sm text-red-400">{errors.lastName.message}</p>}
                 </div>
 
                 <div className="space-y-2">
@@ -101,6 +94,7 @@ const RegisterPage = () => {
                     {...register("email")}
                     type="email"
                     placeholder="you@example.com"
+                    disabled={registerMutation.isPending}
                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   />
                   {errors.email && <p className="text-sm text-red-400">{errors.email.message}</p>}
@@ -115,6 +109,7 @@ const RegisterPage = () => {
                     {...register("username")}
                     type="text"
                     placeholder="profile unique username"
+                    disabled={registerMutation.isPending}
                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   />
                   {errors.username && <p className="text-sm text-red-400">{errors.username.message}</p>}
@@ -125,6 +120,7 @@ const RegisterPage = () => {
                   <input
                     {...register("password")}
                     type="password"
+                    disabled={registerMutation.isPending}
                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   />
                   {errors.password && <p className="text-sm text-red-400">{errors.password.message}</p>}
@@ -135,6 +131,7 @@ const RegisterPage = () => {
                   <input
                     {...register("confirmPassword")}
                     type="password"
+                    disabled={registerMutation.isPending}
                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   />
                   {errors.confirmPassword && <p className="text-sm text-red-400">{errors.confirmPassword.message}</p>}
@@ -142,9 +139,35 @@ const RegisterPage = () => {
               </div>
             </div>
 
-            <Button type="submit" className="w-full mt-6" disabled={isSubmitting}>
-              {isSubmitting ? "Creating account..." : "Create Account"}
+            <Button type="submit" className="w-full mt-6" disabled={registerMutation.isPending}>
+              {registerMutation.isPending ? "Creating account..." : "Create Account"}
             </Button>
+
+            {registerMutation.isError && (
+              <Alert className="border-red-500 bg-red-50 text-red-700 dark:bg-red-950/20 dark:text-red-400">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>
+                  {axios.isAxiosError(registerMutation.error)
+                    ? registerMutation.error.response?.data?.message ?? "Registration failed"
+                    : "Something went wrong"}
+                </AlertTitle>
+                <AlertDescription className="inline">Please try again later.</AlertDescription>
+              </Alert>
+            )}
+
+            {registerMutation.isSuccess && (
+              <Alert className="border-green-500 bg-green-50 text-green-700 dark:bg-green-950/20 dark:text-green-400">
+                <Check className="h-4 w-4 shrink-0" />
+                <AlertTitle>Account created successfully!</AlertTitle>
+                <AlertDescription className="inline">
+                  You can now{" "}
+                  <Link to="/login" className="font-medium underline">
+                    login here
+                  </Link>
+                  .
+                </AlertDescription>
+              </Alert>
+            )}
           </form>
 
           <div className="mt-6 text-center text-sm">
