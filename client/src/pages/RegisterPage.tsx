@@ -1,9 +1,9 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { USER_ROLES } from "@/features/auth/constants";
 import { useRegister } from "@/features/auth/hooks/useRegister";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { AlertCircle, Check } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
@@ -31,18 +31,26 @@ const RegisterPage = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<RegisterFormData>({ resolver: zodResolver(registerSchema) });
 
   const onSubmit = (data: RegisterFormData) => {
-    registerMutation.mutate({
-      username: data.username,
-      password: data.password,
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      role: 1,
-    });
+    registerMutation.mutate(
+      {
+        username: data.username,
+        password: data.password,
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        role: USER_ROLES.USER,
+      },
+      {
+        onSuccess: () => {
+          reset();
+        },
+      }
+    );
   };
 
   return (
@@ -146,12 +154,8 @@ const RegisterPage = () => {
             {registerMutation.isError && (
               <Alert className="border-red-500 bg-red-50 text-red-700 dark:bg-red-950/20 dark:text-red-400">
                 <AlertCircle className="h-4 w-4" />
-                <AlertTitle>
-                  {axios.isAxiosError(registerMutation.error)
-                    ? registerMutation.error.response?.data?.message ?? "Registration failed"
-                    : "Something went wrong"}
-                </AlertTitle>
-                <AlertDescription className="inline">Please try again later.</AlertDescription>
+                <AlertTitle>Registration Failed</AlertTitle>
+                <AlertDescription className="inline">{registerMutation.error.message}</AlertDescription>
               </Alert>
             )}
 
