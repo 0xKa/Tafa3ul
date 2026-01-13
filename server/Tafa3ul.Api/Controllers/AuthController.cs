@@ -32,11 +32,11 @@ public class AuthController(AuthService authService) : ControllerBase
         var response = await authService.RegisterAsync(dto);
 
         if (response.ConflictField == "Username")
-            return Conflict("Username already exists");
+            return Conflict(new { message = "Username already exists" });
         if (response.ConflictField == "Email")
-            return Conflict("Email already exists");
+            return Conflict(new { message = "Email already exists" });
         if (response.User == null)
-            return BadRequest("Registration failed");
+            return BadRequest(new { message = "Registration failed" });
 
         var user = response.User;
 
@@ -60,7 +60,7 @@ public class AuthController(AuthService authService) : ControllerBase
         var result = await authService.LoginAsync(userDto);
 
         if (result == null)
-            return Unauthorized("Invalid username or password");
+            return Unauthorized(new { message = "Invalid username or password" });
 
         return Ok(result);
     }
@@ -70,7 +70,7 @@ public class AuthController(AuthService authService) : ControllerBase
     {
         var result = await authService.RefreshTokensAsync(tokenRequest);
         if (result == null || result.AccessToken == null || result.RefreshToken == null)
-            return Unauthorized("Invalid token");
+            return Unauthorized(new { message = "Invalid token" });
         return Ok(result);
     }
 

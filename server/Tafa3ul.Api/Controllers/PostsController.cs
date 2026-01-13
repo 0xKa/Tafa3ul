@@ -20,7 +20,7 @@ public class PostsController(PostService postService) : ControllerBase
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
 
         Stream? imageStream = null;
         string? imageExtension = null;
@@ -31,7 +31,7 @@ public class PostsController(PostService postService) : ControllerBase
             imageExtension = Path.GetExtension(request.Image.FileName).ToLowerInvariant();
 
             if (!allowedExtensions.Contains(imageExtension))
-                return BadRequest("Invalid image file type. Allowed: " + string.Join(", ", allowedExtensions));
+                return BadRequest(new { message = "Invalid image file type. Allowed: " + string.Join(", ", allowedExtensions) });
 
             imageStream = request.Image.OpenReadStream();
         }
@@ -47,7 +47,7 @@ public class PostsController(PostService postService) : ControllerBase
     {
         var post = await postService.GetPostByIdAsync(id);
         if (post == null)
-            return NotFound("Post not found");
+            return NotFound(new { message = "Post not found" });
 
         return Ok(PostResponseDto.FromEntity(post));
     }
@@ -76,13 +76,13 @@ public class PostsController(PostService postService) : ControllerBase
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
 
         try
         {
             var deleted = await postService.DeletePostAsync(userId, id);
             if (!deleted)
-                return NotFound("Post not found");
+                return NotFound(new { message = "Post not found" });
 
             return NoContent();
         }
@@ -97,7 +97,7 @@ public class PostsController(PostService postService) : ControllerBase
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
 
         try
         {
@@ -106,7 +106,7 @@ public class PostsController(PostService postService) : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new { message = ex.Message });
         }
     }
 
@@ -115,7 +115,7 @@ public class PostsController(PostService postService) : ControllerBase
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
 
         try
         {
@@ -124,7 +124,7 @@ public class PostsController(PostService postService) : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new { message = ex.Message });
         }
     }
 
@@ -133,7 +133,7 @@ public class PostsController(PostService postService) : ControllerBase
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
 
         try
         {
@@ -142,7 +142,7 @@ public class PostsController(PostService postService) : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new { message = ex.Message });
         }
     }
 
@@ -151,13 +151,13 @@ public class PostsController(PostService postService) : ControllerBase
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
 
         try
         {
             var deleted = await postService.DeleteCommentAsync(userId, post_id, comment_id);
             if (!deleted)
-                return NotFound("Comment not found");
+                return NotFound(new { message = "Comment not found" });
 
             return NoContent();
         }

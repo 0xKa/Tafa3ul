@@ -21,7 +21,7 @@ public class ProfileController
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
 
         var profile = await profileService.CreateOrUpdateProfileAsync(userId, dto);
         return Ok(ProfileResponseDto.FromEntity(profile));
@@ -53,11 +53,11 @@ public class ProfileController
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
 
         var profile = await profileService.GetProfileByUserIdAsync(userId);
         if (profile == null)
-            return NotFound("Profile not found");
+            return NotFound(new { message = "Profile not found" });
 
         return Ok(ProfileResponseDto.FromEntity(profile));
     }
@@ -68,7 +68,7 @@ public class ProfileController
     {
         var profile = await profileService.GetProfileByUserIdAsync(user_id);
         if (profile == null)
-            return NotFound("Profile not found");
+            return NotFound(new { message = "Profile not found" });
 
         return Ok(ProfileResponseDto.FromEntity(profile));
     }
@@ -116,11 +116,11 @@ public class ProfileController
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
 
         var deleted = await profileService.DeleteProfileAsync(userId);
         if (!deleted)
-            return NotFound("Profile not found");
+            return NotFound(new { message = "Profile not found" });
 
         return NoContent();
     }
@@ -130,21 +130,21 @@ public class ProfileController
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
 
         if (file == null || file.Length == 0)
-            return BadRequest("No file uploaded");
+            return BadRequest(new { message = "No file uploaded" });
 
         string[] allowedExtensions = [".jpg", ".jpeg", ".png"];
         string extension = Path.GetExtension(file.FileName).ToLowerInvariant();
 
         if (!allowedExtensions.Contains(extension))
-            return BadRequest("Invalid file type");
+            return BadRequest(new { message = "Invalid file type" });
 
         var path = await profileService.UpdateProfileImageAsync(file.OpenReadStream(), extension, userId);
 
         if (string.IsNullOrEmpty(path))
-            return StatusCode(500, "Error saving profile picture.");
+            return StatusCode(500, new { message = "Error saving profile picture." });
 
         return Ok(new { savedImageUrl = path });
     }
@@ -154,7 +154,7 @@ public class ProfileController
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
 
         try
         {
@@ -172,7 +172,7 @@ public class ProfileController
         }
         catch (InvalidOperationException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new { message = ex.Message });
         }
         catch (UnauthorizedAccessException)
         {
@@ -185,13 +185,13 @@ public class ProfileController
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
 
         try
         {
             var deleted = await profileService.DeleteExperienceAsync(userId, exp_id);
             if (!deleted)
-                return NotFound("Experience not found");
+                return NotFound(new { message = "Experience not found" });
 
             return NoContent();
         }
@@ -206,7 +206,7 @@ public class ProfileController
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
 
         try
         {
@@ -225,7 +225,7 @@ public class ProfileController
         }
         catch (InvalidOperationException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new { message = ex.Message });
         }
         catch (UnauthorizedAccessException)
         {
@@ -238,13 +238,13 @@ public class ProfileController
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
 
         try
         {
             var deleted = await profileService.DeleteEducationAsync(userId, edu_id);
             if (!deleted)
-                return NotFound("Education not found");
+                return NotFound(new { message = "Education not found" });
 
             return NoContent();
         }
@@ -259,7 +259,7 @@ public class ProfileController
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
         try
         {
             var profileSkill = await profileService.AddOrUpdateSkillAsync(userId, dto);
@@ -273,7 +273,7 @@ public class ProfileController
         }
         catch (InvalidOperationException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new { message = ex.Message });
         }
         catch (UnauthorizedAccessException)
         {
@@ -286,12 +286,12 @@ public class ProfileController
     {
         var userId = UserId;
         if (userId == Guid.Empty)
-            return Unauthorized();
+            return Unauthorized(new { message = "User not authenticated" });
         try
         {
             var deleted = await profileService.DeleteSkillAsync(userId, profile_skill_id);
             if (!deleted)
-                return NotFound("Skill not found");
+                return NotFound(new { message = "Skill not found" });
             return NoContent();
         }
         catch (UnauthorizedAccessException)
