@@ -2,9 +2,9 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Check } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { z } from "zod";
 
 const loginSchema = z.object({
@@ -16,6 +16,8 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const registeredSuccess = location.state?.registered === true;
 
   const {
     register,
@@ -43,6 +45,13 @@ const LoginPage = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {registeredSuccess && (
+              <Alert className="border-green-500 bg-green-50 text-green-700 dark:bg-green-950/20 dark:text-green-400">
+                <Check className="h-4 w-4" />
+                <AlertDescription>Account created successfully! Please login.</AlertDescription>
+              </Alert>
+            )}
+
             {errors.root && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />

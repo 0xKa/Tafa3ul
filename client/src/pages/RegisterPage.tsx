@@ -4,9 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { USER_ROLES } from "@/features/auth/constants";
 import { useRegister } from "@/features/auth/hooks/useRegister";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, Check } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { z } from "zod";
 
 const registerSchema = z
@@ -26,6 +26,7 @@ const registerSchema = z
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
   const registerMutation = useRegister();
 
   const {
@@ -48,6 +49,7 @@ const RegisterPage = () => {
       {
         onSuccess: () => {
           reset();
+          navigate("/login", { state: { registered: true } });
         },
       }
     );
@@ -156,20 +158,6 @@ const RegisterPage = () => {
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>Registration Failed</AlertTitle>
                 <AlertDescription className="inline">{registerMutation.error.message}</AlertDescription>
-              </Alert>
-            )}
-
-            {registerMutation.isSuccess && (
-              <Alert className="border-green-500 bg-green-50 text-green-700 dark:bg-green-950/20 dark:text-green-400">
-                <Check className="h-4 w-4 shrink-0" />
-                <AlertTitle>Account created successfully!</AlertTitle>
-                <AlertDescription className="inline">
-                  You can now{" "}
-                  <Link to="/login" className="font-medium underline">
-                    login here
-                  </Link>
-                  .
-                </AlertDescription>
               </Alert>
             )}
           </form>
