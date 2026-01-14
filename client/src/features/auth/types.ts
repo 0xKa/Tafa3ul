@@ -24,3 +24,16 @@ export type RegisterResponse = {
   role: UserRole;
   createdAt: string;
 };
+
+export type LoginRequest = {
+  username: string;
+  password: string;
+};
+
+export type LoginResponse = {
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpiresAt: string;
+  userId: string;
+  username: string;
+};
