@@ -65,6 +65,22 @@ public class AuthController(AuthService authService) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout(RefreshTokenRequestDto tokenRequest)
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized();
+
+        var success = await authService.RevokeRefreshTokenAsync(tokenRequest.RefreshToken, userId);
+
+        if (!success)
+            return BadRequest(new { message = "Logout failed" });
+
+        return Ok(new { message = "Logged out successfully" });
+    }
+
     [HttpPost("refresh-token")]
     public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto tokenRequest)
     {
@@ -101,4 +117,5 @@ public class AuthController(AuthService authService) : ControllerBase
     {
         return Ok("User and Admin controller is working!");
     }
+
 }

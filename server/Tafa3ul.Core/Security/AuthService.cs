@@ -138,5 +138,20 @@ public class AuthService(Tafa3ulDbContext context, IOptions<JwtSettings> options
         return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
     }
 
+    public async Task<bool> RevokeRefreshTokenAsync(string refreshToken, string userId)
+    {
+        if (!Guid.TryParse(userId, out var userGuid))
+            return false;
+
+        var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userGuid);
+        if (user is null || user.RefreshToken != refreshToken)
+            return false;
+
+        user.RefreshToken = null;
+        user.RefreshTokenExpiryTime = null;
+
+        return await context.SaveChangesAsync() > 0;
+    }
+
 }
 
