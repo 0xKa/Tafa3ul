@@ -1,8 +1,8 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { USER_ROLES } from "@/features/auth/constants";
 import { useRegister } from "@/features/auth/hooks/useRegister";
+import { USER_ROLES } from "@/features/auth/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
