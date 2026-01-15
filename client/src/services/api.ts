@@ -8,7 +8,7 @@ export const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // include cookies in requests
+  withCredentials: true, // include cookies in requests, backend must allow it
 });
 
 // req interceptor: automatically adds JWT access token to Authorization header
