@@ -21,6 +21,10 @@ const LoginPage = () => {
   const registeredSuccess = location.state?.registered === true;
   const loginMutation = useLogin();
 
+  // Get the page user was trying to access before being redirected to login
+  // This is set by ProtectedRoute when redirecting unauthenticated users
+  const from = location.state?.from?.pathname || "/dashboard";
+
   const {
     register,
     handleSubmit,
@@ -35,7 +39,8 @@ const LoginPage = () => {
       },
       {
         onSuccess: () => {
-          navigate("/dashboard");
+          // Redirect to the originally requested page, or dashboard by default
+          navigate(from, { replace: true });
         },
       }
     );
