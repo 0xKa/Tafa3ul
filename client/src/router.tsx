@@ -4,6 +4,9 @@ import ErrorPage from "./pages/ErrorPage";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import DashboardPage from "./pages/DashboardPage";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import PublicOnlyRoute from "./components/auth/PublicOnlyRoute";
 
 export const router = createBrowserRouter([
   {
@@ -11,12 +14,30 @@ export const router = createBrowserRouter([
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [
+      // Public Routes - Anyone can access
       { index: true, element: <LandingPage /> },
       { path: "about", element: <h1>AboutPage</h1> },
-      { path: "login", element: <LoginPage /> },
-      { path: "register", element: <RegisterPage /> },
 
-      // error testing routes
+      // Public-Only Routes - Only non-authenticated users
+      {
+        element: <PublicOnlyRoute />,
+        children: [
+          { path: "login", element: <LoginPage /> },
+          { path: "register", element: <RegisterPage /> },
+        ],
+      },
+
+      // Protected Routes - Only authenticated users
+      {
+        element: <ProtectedRoute />,
+        children: [
+          { path: "dashboard", element: <DashboardPage /> },
+          { path: "profile", element: <h1>ProfilePage</h1> },
+          { path: "settings", element: <h1>SettingsPage</h1> },
+        ],
+      },
+
+      // Error testing routes (dev only)
       {
         path: "test",
         children: [
