@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router";
 import { useIsAuthenticated, useIsHydrated } from "@/features/auth/authStore";
+import { CustomSpinner } from "@/components/ui/spinner";
 
 const PublicOnlyRoute = () => {
   const isAuthenticated = useIsAuthenticated();
@@ -7,11 +8,7 @@ const PublicOnlyRoute = () => {
 
   // Show loading while Zustand loads from localStorage
   if (!isHydrated) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
+    return <CustomSpinner />;
   }
 
   // If user is already logged in, redirect to dashboard
