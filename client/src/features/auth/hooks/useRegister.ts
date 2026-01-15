@@ -1,7 +1,26 @@
 import { handleApiError } from "@/lib/error-handler";
 import { api } from "@/services/api";
 import { useMutation } from "@tanstack/react-query";
-import type { RegisterRequest, RegisterResponse } from "../types";
+import type { UserRole } from "../types";
+
+type RegisterRequest = {
+  username: string;
+  password: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: UserRole;
+};
+
+type RegisterResponse = {
+  id: string;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: UserRole;
+  createdAt: string;
+};
 
 const registerUser = async (data: RegisterRequest): Promise<RegisterResponse> => {
   try {

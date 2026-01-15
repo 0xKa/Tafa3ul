@@ -5,35 +5,3 @@ export const USER_ROLES = {
 } as const;
 
 export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
-
-export type RegisterRequest = {
-  username: string;
-  password: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
-};
-
-export type RegisterResponse = {
-  id: string;
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
-  createdAt: string;
-};
-
-export type LoginRequest = {
-  username: string;
-  password: string;
-};
-
-export type LoginResponse = {
-  accessToken: string;
-  refreshToken: string;
-  accessTokenExpiresAt: string;
-  userId: string;
-  username: string;
-};

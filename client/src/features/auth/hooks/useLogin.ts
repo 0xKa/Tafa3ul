@@ -1,8 +1,20 @@
 import { handleApiError } from "@/lib/error-handler";
 import { api } from "@/services/api";
 import { useMutation } from "@tanstack/react-query";
-import type { LoginRequest, LoginResponse } from "../types";
 import { useAuthStore } from "../authStore";
+
+type LoginRequest = {
+  username: string;
+  password: string;
+};
+
+type LoginResponse = {
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpiresAt: string;
+  userId: string;
+  username: string;
+};
 
 const loginUser = async (data: LoginRequest): Promise<LoginResponse> => {
   try {
