@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router";
+import ProtectedRoute from "./layout/auth/ProtectedRoute";
+import PublicOnlyRoute from "./layout/auth/PublicOnlyRoute";
 import RootLayout from "./layout/RootLayout";
+import DashboardPage from "./pages/DashboardPage";
 import ErrorPage from "./pages/ErrorPage";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import DashboardPage from "./pages/DashboardPage";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
-import PublicOnlyRoute from "./components/auth/PublicOnlyRoute";
 
 export const router = createBrowserRouter([
   {
