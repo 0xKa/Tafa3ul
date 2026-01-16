@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useProfile } from "@/features/profile/hooks/useProfile";
 import type { Experience, Education, Skill, SocialMedia } from "@/features/profile/types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,6 +25,7 @@ import {
 } from "lucide-react";
 
 import { SiYoutube, SiX, SiFacebook, SiLinkedin, SiInstagram, SiGithub, SiTiktok } from "react-icons/si";
+import { Separator } from "@/components/ui/separator";
 
 const formatDate = (dateString: string | null) => {
   if (!dateString) return "N/A";
@@ -181,6 +183,13 @@ const EducationList = ({ educations }: { educations: Education[] }) => {
 
 const ProfilePage = () => {
   const { data: profile, isLoading, isError, error, refetch, isRefetching } = useProfile();
+  const [idCopied, setIdCopied] = useState(false);
+
+  const handleCopyId = () => {
+    navigator.clipboard.writeText(profile!.user.id);
+    setIdCopied(true);
+    setTimeout(() => setIdCopied(false), 2000);
+  };
 
   if (isLoading) {
     return <CustomSpinner />;
@@ -380,6 +389,21 @@ const ProfilePage = () => {
                       <p className="font-medium">{formatDate(profile?.updatedAt ?? null)}</p>
                     </div>
                   </div>
+                </div>
+                <Separator />
+
+                {/* for debugging */}
+                <div className="text-xs text-muted-foreground flex items-center gap-2">
+                  <span>User ID: </span>
+                  <code
+                    className="bg-muted px-1 py-0.5 rounded hover:cursor-pointer hover:bg-muted/5"
+                    onClick={handleCopyId}
+                  >
+                    {profile?.user.id}
+                  </code>
+                  {idCopied && (
+                    <span className="text-green-600 dark:text-green-600 animate-in fade-in duration-200">Copied!</span>
+                  )}
                 </div>
               </CardContent>
             </Card>
