@@ -1,22 +1,34 @@
-import { Link, NavLink } from "react-router";
-import { Menu, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { ModeToggleButton } from "@/components/theme/mode-toggle";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useIsAuthenticated } from "@/features/auth/authStore";
+import { useLogout } from "@/features/auth/hooks/useLogout";
 import { cn } from "@/lib/utils";
+import { LogOut, Menu, Sparkles, User, UserRound } from "lucide-react";
+import { Link, NavLink } from "react-router";
 
-const navLinks = [
+const publicNavLinks = [
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+];
+
+const authenticatedNavLinks = [
   { href: "/", label: "Home" },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/about", label: "About" },
 ];
 
 const Navbar = () => {
+  const isAuthenticated = useIsAuthenticated();
+  const { logout } = useLogout();
+  const navLinks = isAuthenticated ? authenticatedNavLinks : publicNavLinks;
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/40">
       <div className="container mx-auto flex h-16 items-center px-4">
@@ -55,14 +67,31 @@ const Navbar = () => {
         {/* right side actions */}
         <div className="flex flex-1 items-center justify-end space-x-4">
           <ModeToggleButton />
-          <Link to="/login">
-            <Button variant="outline" className="hidden lg:inline-flex">
-              Log In
-            </Button>
-          </Link>
-          <Link to="/register">
-            <Button className="hidden lg:inline-flex">Sign Up</Button>
-          </Link>
+
+          {isAuthenticated ? (
+            <>
+              <Link to="/profile">
+                <Button variant="outline" className="hidden lg:inline-flex">
+                  <User className="size-4" />
+                </Button>
+              </Link>
+              <Button variant="ghost" className="hidden lg:inline-flex" onClick={() => logout()}>
+                <LogOut className="size-4 mr-1" />
+                Log Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">
+                <Button variant="outline" className="hidden lg:inline-flex">
+                  Log In
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button className="hidden lg:inline-flex">Sign Up</Button>
+              </Link>
+            </>
+          )}
 
           {/* mobile nav menu */}
           <DropdownMenu>
@@ -78,12 +107,30 @@ const Navbar = () => {
                   <Link to={link.href}>{link.label}</Link>
                 </DropdownMenuItem>
               ))}
-              <DropdownMenuItem asChild>
-                <Link to="/register">Sign Up</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/login">Log In</Link>
-              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              {isAuthenticated ? (
+                <>
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile">
+                      <UserRound className="h-4 w-4 mr-2" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => logout()}>
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Log Out
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <>
+                  <DropdownMenuItem asChild>
+                    <Link to="/login">Log In</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/register">Sign Up</Link>
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
