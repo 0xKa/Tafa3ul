@@ -29,7 +29,7 @@ public class ProfileController
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> GetAllProfiles
+    public async Task<ActionResult> GetAllProfiles
         ([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
         if (page < 1) page = 1;
@@ -49,7 +49,7 @@ public class ProfileController
     }
 
     [HttpGet("me")]
-    public async Task<IActionResult> GetMyProfile()
+    public async Task<ActionResult<ProfileResponseDto>> GetMyProfile()
     {
         var userId = UserId;
         if (userId == Guid.Empty)
@@ -64,7 +64,7 @@ public class ProfileController
 
     [HttpGet("user/{user_id}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetProfileByUserId(Guid user_id)
+    public async Task<ActionResult<ProfileResponseDto>> GetProfileByUserId(Guid user_id)
     {
         var profile = await profileService.GetProfileByUserIdAsync(user_id);
         if (profile == null)
