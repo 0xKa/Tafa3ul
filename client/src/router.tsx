@@ -7,6 +7,7 @@ import ErrorPage from "./pages/ErrorPage";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ProfilePage from "./pages/ProfilePage";
 
 export const router = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           { path: "dashboard", element: <DashboardPage /> },
-          { path: "profile", element: <h1>ProfilePage</h1> },
+          { path: "profile", element: <ProfilePage /> },
           { path: "settings", element: <h1>SettingsPage</h1> },
         ],
       },
