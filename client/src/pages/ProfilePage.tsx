@@ -5,9 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { CustomSpinner } from "@/components/ui/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import SkillsList from "@/features/profile/components/SkillsList";
+import SocialLinks from "@/features/profile/components/SocialLinks";
 import { useProfile } from "@/features/profile/hooks/useProfile";
-import type { Education, Experience, Skill, SocialMedia } from "@/features/profile/types";
+import type { Education, Experience } from "@/features/profile/types";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
 import { formatDate, formatDateShort, getInitials } from "@/lib/utils";
 import {
@@ -22,66 +23,9 @@ import {
   MapPin,
   Pencil,
   RefreshCw,
-  Sparkles,
   User,
 } from "lucide-react";
-import { SiFacebook, SiGithub, SiInstagram, SiLinkedin, SiTiktok, SiX, SiYoutube } from "react-icons/si";
-
-// Social Media Links Component
-const SocialLinks = ({ social }: { social: SocialMedia }) => {
-  const socialLinks = [
-    { key: "youTube", icon: SiYoutube, label: "YouTube", url: social.youTube },
-    { key: "twitter", icon: SiX, label: "Twitter", url: social.twitter },
-    { key: "facebook", icon: SiFacebook, label: "Facebook", url: social.facebook },
-    { key: "linkedIn", icon: SiLinkedin, label: "LinkedIn", url: social.linkedIn },
-    { key: "instagram", icon: SiInstagram, label: "Instagram", url: social.instagram },
-    { key: "gitHub", icon: SiGithub, label: "GitHub", url: social.gitHub },
-    { key: "tikTok", icon: SiTiktok, label: "TikTok", url: social.tikTok },
-  ].filter((link) => link.url);
-
-  if (socialLinks.length === 0) return null;
-
-  return (
-    <TooltipProvider>
-      <div className="flex flex-wrap gap-2">
-        {socialLinks.map(({ key, icon: Icon, label, url }) => (
-          <Tooltip key={key}>
-            <TooltipTrigger asChild>
-              <a
-                href={url!}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-muted hover:bg-muted/80 transition-colors"
-              >
-                <Icon className="h-5 w-5" />
-              </a>
-            </TooltipTrigger>
-            <TooltipContent>{label}</TooltipContent>
-          </Tooltip>
-        ))}
-      </div>
-    </TooltipProvider>
-  );
-};
-
-// Skills Component
-const SkillsList = ({ skills }: { skills: Skill[] }) => {
-  if (skills.length === 0) {
-    return <p className="text-muted-foreground text-sm">No skills added yet.</p>;
-  }
-
-  return (
-    <div className="flex flex-wrap gap-2">
-      {skills.map((skill) => (
-        <Badge key={skill.id} variant="secondary" className="px-3 py-1">
-          <Sparkles className="h-3 w-3 mr-1" />
-          {skill.skillName || "Unnamed Skill"}
-          {skill.yearsOfExperience && <span className="ml-1 text-muted-foreground">({skill.yearsOfExperience}y)</span>}
-        </Badge>
-      ))}
-    </div>
-  );
-};
+import { FaTools } from "react-icons/fa";
 
 // Experience Component
 const ExperienceList = ({ experiences }: { experiences: Experience[] }) => {
@@ -267,7 +211,7 @@ const ProfilePage = () => {
               About
             </TabsTrigger>
             <TabsTrigger value="skills">
-              <Sparkles className="h-4 w-4 mr-2" />
+              <FaTools className="h-4 w-4 mr-2" />
               Skills
             </TabsTrigger>
             <TabsTrigger value="experience">
