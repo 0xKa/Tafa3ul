@@ -1,9 +1,8 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getInitials } from "@/lib/utils";
 import { Building2, FileText, Link2, Mail, MapPin, Pencil, RefreshCw } from "lucide-react";
 import type { Profile } from "../types";
+import ProfilePicture from "./ProfilePicture";
 import SocialLinks from "./SocialLinks";
 
 interface ProfileHeaderProps {
@@ -18,11 +17,7 @@ const ProfileHeaderCard = ({ profile, isRefetching, onRefetch }: ProfileHeaderPr
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4 ">
-            <Avatar className="size-20">
-              <AvatarFallback className="text-xl bg-primary/20 text-primary ">
-                {getInitials(profile?.fullName ?? null, profile?.user.username ?? "")}
-              </AvatarFallback>
-            </Avatar>
+            <ProfilePicture imgUrl={undefined} fullName={profile?.fullName} />
             <div>
               <CardTitle className="text-2xl">{profile?.fullName || profile?.user.username}</CardTitle>
               <CardDescription className="flex items-center gap-1">
