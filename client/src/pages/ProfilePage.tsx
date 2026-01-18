@@ -16,7 +16,7 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="container min-h-[calc(100vh-4rem)] max-w-4xl mx-auto px-4 py-8 space-y-6">
+    <div className="container max-w-4xl mx-auto px-4 py-8 space-y-6">
       <ProfileHeaderCard profile={profile!} isRefetching={isRefetching} onRefetch={() => refetch()} />
       <AccountInfoTab profile={profile!} />
     </div>
