@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router";
 import ProtectedRoute from "./layout/auth/ProtectedRoute";
 import PublicOnlyRoute from "./layout/auth/PublicOnlyRoute";
 import RootLayout from "./layout/RootLayout";
-import { DashboardPage, ErrorPage, LandingPage, LoginPage, ProfilePage, RegisterPage } from "./pages";
+import { AboutPage, DashboardPage, ErrorPage, LandingPage, LoginPage, ProfilePage, RegisterPage } from "./pages";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -11,7 +11,7 @@ export const router = createBrowserRouter([
     children: [
       // Public Routes
       { index: true, element: <LandingPage /> },
-      { path: "about", element: <h1>AboutPage</h1> },
+      { path: "about", element: <AboutPage /> },
 
       // Public-Only Routes
       {

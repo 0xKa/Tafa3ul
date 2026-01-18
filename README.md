@@ -2,4 +2,4 @@
 
 Tafa3ul is a social media app built exclusively for developers to share posts and connect with peers.
 
-![Landing Page](./showcase/landing.png)
+![About Page](./showcase/about.png)
