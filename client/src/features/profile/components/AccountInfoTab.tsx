@@ -8,7 +8,7 @@ import { FaTools } from "react-icons/fa";
 import EducationList from "./EducationList";
 import ExperienceList from "./ExperienceList";
 import SkillsList from "./SkillsList";
-import useCopyToClipboard from "@/hooks/useCopyToClipboard";
+import useCopyToClipboard from "@/shared/hooks/useCopyToClipboard";
 
 interface AccountInfoTabProps {
   profile: Profile;

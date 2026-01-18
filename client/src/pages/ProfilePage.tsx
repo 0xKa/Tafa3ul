@@ -1,4 +1,4 @@
-import ErrorState from "@/components/ErrorState";
+import ErrorState from "@/shared/components/ErrorState";
 import { CustomSpinner } from "@/components/ui/spinner";
 import AccountInfoTab from "@/features/profile/components/AccountInfoTab";
 import ProfileHeaderCard from "@/features/profile/components/ProfileHeaderCard";

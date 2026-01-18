@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router";
-import ProtectedRoute from "./layout/auth/ProtectedRoute";
-import PublicOnlyRoute from "./layout/auth/PublicOnlyRoute";
-import RootLayout from "./layout/RootLayout";
+import ProtectedRoute from "./layouts/ProtectedRoute";
+import PublicOnlyRoute from "./layouts/PublicOnlyRoute";
+import RootLayout from "./layouts/RootLayout";
 import { AboutPage, DashboardPage, ErrorPage, LandingPage, LoginPage, ProfilePage, RegisterPage } from "./pages";
 export const router = createBrowserRouter([
   {
