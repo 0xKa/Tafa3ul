@@ -1,60 +1,31 @@
-import { useState } from "react";
-import { useProfile } from "@/features/profile/hooks/useProfile";
-import type { Experience, Education, Skill, SocialMedia } from "@/features/profile/types";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { CustomSpinner } from "@/components/ui/spinner";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { CustomSpinner } from "@/components/ui/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useProfile } from "@/features/profile/hooks/useProfile";
+import type { Education, Experience, Skill, SocialMedia } from "@/features/profile/types";
+import { formatDate, formatDateShort, getInitials } from "@/lib/utils";
 import {
-  User,
-  Mail,
-  Calendar,
-  RefreshCw,
-  Pencil,
-  MapPin,
-  Building2,
-  Globe,
-  FileText,
   Briefcase,
+  Building2,
+  Calendar,
+  FileText,
+  Globe,
   GraduationCap,
-  Sparkles,
   Link2,
+  Mail,
+  MapPin,
+  Pencil,
+  RefreshCw,
+  Sparkles,
+  User,
 } from "lucide-react";
-
-import { SiYoutube, SiX, SiFacebook, SiLinkedin, SiInstagram, SiGithub, SiTiktok } from "react-icons/si";
-import { Separator } from "@/components/ui/separator";
-
-const formatDate = (dateString: string | null) => {
-  if (!dateString) return "N/A";
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-};
-
-const formatDateShort = (dateString: string | null) => {
-  if (!dateString) return "Present";
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-  });
-};
-
-const getInitials = (fullName: string | null, username: string) => {
-  if (fullName) {
-    return fullName
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  }
-  return username.slice(0, 2).toUpperCase();
-};
+import { useState } from "react";
+import { SiFacebook, SiGithub, SiInstagram, SiLinkedin, SiTiktok, SiX, SiYoutube } from "react-icons/si";
 
 // Social Media Links Component
 const SocialLinks = ({ social }: { social: SocialMedia }) => {

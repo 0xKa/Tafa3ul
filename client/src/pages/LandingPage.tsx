@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import FeaturesGrid from "@/components/landing/FeaturesGrid";
+import FeaturesGrid from "@/features/landing/FeaturesGrid";
 
 const LandingPage = () => {
   return (
@@ -14,8 +14,8 @@ const LandingPage = () => {
               Welcome to <span className="text-primary">Tafa3ul</span>
             </h1>
             <p className="mt-6 text-lg text-muted-foreground md:text-xl">
-              Tafa3ul is a social media app built exclusively for developers to
-              share posts, showcase projects, and connect with peers.
+              Tafa3ul is a social media app built exclusively for developers to share posts, showcase projects, and
+              connect with peers.
             </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Button size="lg" asChild>
@@ -38,12 +38,9 @@ const LandingPage = () => {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Ready to join the conversation?
-            </h2>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Ready to join the conversation?</h2>
             <p className="mt-4 text-muted-foreground">
-              Be part of a focused space where developers share, learn, and grow
-              together.
+              Be part of a focused space where developers share, learn, and grow together.
             </p>
             <div className="mt-8">
               <Button size="lg" asChild>
