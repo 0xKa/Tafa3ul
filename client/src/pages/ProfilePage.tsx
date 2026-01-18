@@ -1,16 +1,16 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { CustomSpinner } from "@/components/ui/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import EducationList from "@/features/profile/components/EducationList";
+import ExperienceList from "@/features/profile/components/ExperienceList";
 import SkillsList from "@/features/profile/components/SkillsList";
 import SocialLinks from "@/features/profile/components/SocialLinks";
 import { useProfile } from "@/features/profile/hooks/useProfile";
-import type { Education, Experience } from "@/features/profile/types";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
-import { formatDate, formatDateShort, getInitials } from "@/lib/utils";
+import { formatDate, getInitials } from "@/lib/utils";
 import {
   Briefcase,
   Building2,
@@ -26,75 +26,6 @@ import {
   User,
 } from "lucide-react";
 import { FaTools } from "react-icons/fa";
-
-// Experience Component
-const ExperienceList = ({ experiences }: { experiences: Experience[] }) => {
-  if (experiences.length === 0) {
-    return <p className="text-muted-foreground text-sm">No experience added yet.</p>;
-  }
-
-  return (
-    <div className="space-y-4">
-      {experiences.map((exp) => (
-        <div key={exp.id} className="p-4 rounded-lg border bg-card">
-          <div className="flex items-start justify-between">
-            <div>
-              <h4 className="font-semibold">{exp.jobTitle}</h4>
-              <p className="text-sm text-muted-foreground flex items-center gap-1">
-                <Building2 className="h-3 w-3" />
-                {exp.company}
-              </p>
-            </div>
-            {exp.isCurrentlyWorkingHere && (
-              <Badge variant="default" className="text-xs">
-                Current
-              </Badge>
-            )}
-          </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            {formatDateShort(exp.startDate)} - {exp.isCurrentlyWorkingHere ? "Present" : formatDateShort(exp.endDate)}
-          </p>
-          {exp.description && <p className="text-sm mt-2">{exp.description}</p>}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-// Education Component
-const EducationList = ({ educations }: { educations: Education[] }) => {
-  if (educations.length === 0) {
-    return <p className="text-muted-foreground text-sm">No education added yet.</p>;
-  }
-
-  return (
-    <div className="space-y-4">
-      {educations.map((edu) => (
-        <div key={edu.id} className="p-4 rounded-lg border bg-card">
-          <div className="flex items-start justify-between">
-            <div>
-              <h4 className="font-semibold">{edu.degree}</h4>
-              <p className="text-sm text-muted-foreground">{edu.fieldOfStudy}</p>
-              <p className="text-sm text-muted-foreground flex items-center gap-1">
-                <GraduationCap className="h-3 w-3" />
-                {edu.institution}
-              </p>
-            </div>
-            {edu.isCurrentlyStudyingHere && (
-              <Badge variant="default" className="text-xs">
-                Current
-              </Badge>
-            )}
-          </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            {formatDateShort(edu.startDate)} - {edu.isCurrentlyStudyingHere ? "Present" : formatDateShort(edu.endDate)}
-          </p>
-          {edu.description && <p className="text-sm mt-2">{edu.description}</p>}
-        </div>
-      ))}
-    </div>
-  );
-};
 
 const ProfilePage = () => {
   const { data: profile, isLoading, isError, error, refetch, isRefetching } = useProfile();
