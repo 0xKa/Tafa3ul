@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FeaturesGrid from "@/features/landing/FeaturesGrid";
+import CtaSection from "@/features/landing/CtaSection";
 
 const LandingPage = () => {
   return (
@@ -34,25 +35,7 @@ const LandingPage = () => {
 
       <FeaturesGrid />
 
-      {/* CTA Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Ready to join the conversation?</h2>
-            <p className="mt-4 text-muted-foreground">
-              Be part of a focused space where developers share, learn, and grow together.
-            </p>
-            <div className="mt-8">
-              <Button size="lg" asChild>
-                <Link to="/login">
-                  Get started with Tafa3ul
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CtaSection />
     </div>
   );
 };
