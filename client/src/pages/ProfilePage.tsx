@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useProfile } from "@/features/profile/hooks/useProfile";
 import type { Education, Experience, Skill, SocialMedia } from "@/features/profile/types";
+import useCopyToClipboard from "@/hooks/useCopyToClipboard";
 import { formatDate, formatDateShort, getInitials } from "@/lib/utils";
 import {
   Briefcase,
@@ -24,7 +25,6 @@ import {
   Sparkles,
   User,
 } from "lucide-react";
-import { useState } from "react";
 import { SiFacebook, SiGithub, SiInstagram, SiLinkedin, SiTiktok, SiX, SiYoutube } from "react-icons/si";
 
 // Social Media Links Component
@@ -154,13 +154,7 @@ const EducationList = ({ educations }: { educations: Education[] }) => {
 
 const ProfilePage = () => {
   const { data: profile, isLoading, isError, error, refetch, isRefetching } = useProfile();
-  const [idCopied, setIdCopied] = useState(false);
-
-  const handleCopyId = () => {
-    navigator.clipboard.writeText(profile!.user.id);
-    setIdCopied(true);
-    setTimeout(() => setIdCopied(false), 2000);
-  };
+  const { copyNotificationTimeout, copyToClipboard } = useCopyToClipboard(profile?.user.id!);
 
   if (isLoading) {
     return <CustomSpinner />;
@@ -368,11 +362,11 @@ const ProfilePage = () => {
                   <span>User ID: </span>
                   <code
                     className="bg-muted px-1 py-0.5 rounded hover:cursor-pointer hover:bg-muted/5"
-                    onClick={handleCopyId}
+                    onClick={copyToClipboard}
                   >
                     {profile?.user.id}
                   </code>
-                  {idCopied && (
+                  {copyNotificationTimeout && (
                     <span className="text-green-600 dark:text-green-600 animate-in fade-in duration-200">Copied!</span>
                   )}
                 </div>
