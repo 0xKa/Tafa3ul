@@ -24,7 +24,7 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // res interceptor: Automatic Token Refresh
@@ -82,10 +82,10 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
 
-      const { tokens, logout, setTokens } = useAuthStore.getState();
+      const { tokens, logout, setTokens, user } = useAuthStore.getState();
 
       // if no refresh token, logout immediately
-      if (!tokens?.refreshToken) {
+      if (!tokens?.refreshToken || !user?.id) {
         logout();
         isRefreshing = false;
         return Promise.reject(error);
@@ -95,6 +95,7 @@ api.interceptors.response.use(
         // call refresh endpoint
         // note: using axios directly to avoid interceptor loop
         const response = await axios.post(`${baseURL}/Auth/refresh-token`, {
+          userId: user.id,
           refreshToken: tokens.refreshToken,
         });
 
@@ -125,5 +126,5 @@ api.interceptors.response.use(
 
     // For non-401 errors, just reject
     return Promise.reject(error);
-  }
+  },
 );
