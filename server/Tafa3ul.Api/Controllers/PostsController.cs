@@ -23,22 +23,36 @@ public class PostsController(PostService postService) : ControllerBase
             return Unauthorized(new { message = "User not authenticated" });
 
         Stream? imageStream = null;
-        string? imageExtension = null;
 
         if (request.Image != null && request.Image.Length > 0)
         {
-            string[] allowedExtensions = [".jpg", ".jpeg", ".png", ".gif"];
-            imageExtension = Path.GetExtension(request.Image.FileName).ToLowerInvariant();
+            // MIME-type validation (better than extension)
+            var allowedTypes = new[]
+            {
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "image/gif"
+        };
 
-            if (!allowedExtensions.Contains(imageExtension))
-                return BadRequest(new { message = "Invalid image file type. Allowed: " + string.Join(", ", allowedExtensions) });
+            if (!allowedTypes.Contains(request.Image.ContentType))
+                return BadRequest(new { message = "Invalid image type" });
 
             imageStream = request.Image.OpenReadStream();
         }
 
-        var dto = new CreatePostDto { Content = request.Content };
-        var post = await postService.CreatePostAsync(userId, dto, imageStream, imageExtension);
-        return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, PostResponseDto.FromEntity(post));
+        var dto = new CreatePostDto
+        {
+            Content = request.Content.Trim()
+        };
+
+        var post = await postService.CreatePostAsync(userId, dto, imageStream);
+
+        return CreatedAtAction(
+            nameof(GetPostById),
+            new { id = post.Id },
+            PostResponseDto.FromEntity(post)
+        );
     }
 
     [HttpGet("{id}")]

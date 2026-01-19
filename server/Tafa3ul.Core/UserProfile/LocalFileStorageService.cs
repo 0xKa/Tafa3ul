@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.Processing;
 
@@ -38,24 +39,30 @@ public class LocalFileStorageService(IWebHostEnvironment env)
         return $"/{folderName}/{fileName}";
     }
 
-    public async Task<string> SavePostImageAsync(
-        Stream fileStream,
-        string extension,
-        Guid postId)
+    public async Task<string> SavePostImageAsync(Stream fileStream, Guid postId)
     {
         if (string.IsNullOrEmpty(_env.WebRootPath))
             throw new InvalidOperationException("wwwroot is not configured.");
 
         var folder = Path.Combine(_env.WebRootPath, "post-images");
+        Directory.CreateDirectory(folder);
 
-        if (!Directory.Exists(folder))
-            Directory.CreateDirectory(folder);
-
-        var fileName = $"{postId}{extension}";
+        var fileName = $"{postId}.jpg";
         var path = Path.Combine(folder, fileName);
 
-        using var fs = new FileStream(path, FileMode.Create);
-        await fileStream.CopyToAsync(fs);
+        using var image = await Image.LoadAsync(fileStream);
+
+        // Resize only if too large (keep aspect ratio)
+        image.Mutate(x => x.Resize(new ResizeOptions
+        {
+            Mode = ResizeMode.Max,
+            Size = new Size(1080, 1080)
+        }));
+
+        await image.SaveAsync(path, new JpegEncoder
+        {
+            Quality = 85
+        });
 
         return $"/post-images/{fileName}";
     }

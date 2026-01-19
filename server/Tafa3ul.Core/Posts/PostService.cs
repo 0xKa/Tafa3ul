@@ -7,20 +7,25 @@ namespace Tafa3ul.Core.Posts;
 
 public class PostService(Tafa3ulDbContext context, LocalFileStorageService fileStorageService)
 {
-    public async Task<Post> CreatePostAsync(Guid userId, CreatePostDto dto, Stream? imageStream = null, string? imageExtension = null)
+    public async Task<Post> CreatePostAsync(
+        Guid userId,
+        CreatePostDto dto,
+        Stream? imageStream = null)
     {
         var post = new Post
         {
             UserId = userId,
-            Content = dto.Content.Trim()
+            Content = dto.Content
         };
 
         context.Posts.Add(post);
         await context.SaveChangesAsync();
 
-        if (imageStream != null && !string.IsNullOrEmpty(imageExtension))
+        if (imageStream != null)
         {
-            post.ImageUrl = await fileStorageService.SavePostImageAsync(imageStream, imageExtension, post.Id);
+            post.ImageUrl = await fileStorageService
+                .SavePostImageAsync(imageStream, post.Id);
+
             await context.SaveChangesAsync();
         }
 
