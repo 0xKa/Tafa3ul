@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Building2, FileText, Link2, Mail, MapPin, Pencil, RefreshCw } from "lucide-react";
+import { Building2, FileText, Link2, Mail, MapPin, RefreshCw } from "lucide-react";
 import type { Profile } from "../types";
+import EditProfileDialogButton from "./EditProfileDialogButton";
 import ProfilePicture from "./ProfilePicture";
 import SocialLinks from "./SocialLinks";
 
@@ -40,27 +41,7 @@ const ProfileHeaderCard = ({ profile, isRefetching, onRefetch }: ProfileHeaderPr
             <Button variant="ghost" size="icon" onClick={() => onRefetch()} disabled={isRefetching}>
               <RefreshCw className={`size-4 ${isRefetching ? "animate-spin" : ""}`} />
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                alert("Edit Profile feature is not implemented yet");
-              }}
-              className="hidden sm:flex"
-            >
-              <Pencil className="size-4 mr-2" />
-              Edit Profile
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => {
-                alert("Edit Profile feature is not implemented yet");
-              }}
-              className="sm:hidden"
-            >
-              <Pencil className="size-4" />
-            </Button>
+            <EditProfileDialogButton profile={profile} />
           </div>
         </div>
       </CardHeader>
