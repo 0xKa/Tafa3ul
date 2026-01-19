@@ -21,6 +21,7 @@ const ProfileHeaderCard = ({ profile, isRefetching, onRefetch }: ProfileHeaderPr
             <ProfilePicture
               imgUrl={`${import.meta.env.VITE_PROFILE_PIC_BASE_URL}/${profile.user.id}.webp`}
               fullName={profile?.fullName}
+              allowEdit
             />
             <div>
               <CardTitle className="text-2xl">{profile?.fullName || profile?.user.username}</CardTitle>
