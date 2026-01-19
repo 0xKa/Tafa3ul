@@ -7,7 +7,13 @@ import { ThemeProvider } from "./components/theme/theme-provider.tsx";
 import "./index.css";
 import { router } from "./router.tsx";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+    },
+  },
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -17,5 +23,5 @@ createRoot(document.getElementById("root")!).render(
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </ThemeProvider>
-  </StrictMode>
+  </StrictMode>,
 );
