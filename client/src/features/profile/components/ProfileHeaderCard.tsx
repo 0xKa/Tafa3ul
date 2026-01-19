@@ -36,7 +36,7 @@ const ProfileHeaderCard = ({ profile, isRefetching, onRefetch }: ProfileHeaderPr
               )}
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 self-start">
             <Button variant="ghost" size="icon" onClick={() => onRefetch()} disabled={isRefetching}>
               <RefreshCw className={`size-4 ${isRefetching ? "animate-spin" : ""}`} />
             </Button>
@@ -46,9 +46,20 @@ const ProfileHeaderCard = ({ profile, isRefetching, onRefetch }: ProfileHeaderPr
               onClick={() => {
                 alert("Edit Profile feature is not implemented yet");
               }}
+              className="hidden sm:flex"
             >
               <Pencil className="size-4 mr-2" />
               Edit Profile
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => {
+                alert("Edit Profile feature is not implemented yet");
+              }}
+              className="sm:hidden"
+            >
+              <Pencil className="size-4" />
             </Button>
           </div>
         </div>
