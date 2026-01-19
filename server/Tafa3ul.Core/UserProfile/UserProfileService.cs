@@ -76,21 +76,9 @@ public class UserProfileService(Tafa3ulDbContext context, LocalFileStorageServic
         return true;
     }
 
-    public async Task<string?> UpdateProfileImageAsync(Stream file, string extension, Guid userId)
+    public async Task<string> UpdateProfileImageAsync(Stream file, Guid userId)
     {
-        string imageUrl = await fileStorageService.SaveProfileImageAsync(file, extension, userId);
-
-        if (imageUrl == null)
-            return null;
-
-        var profile = await context.Profiles
-            .Include(p => p.User)
-            .FirstOrDefaultAsync(p => p.UserId == userId);
-
-        profile?.ImageUrl = imageUrl;
-
-        await context.SaveChangesAsync();
-        return imageUrl;
+        return await fileStorageService.SaveProfileImageAsync(file, userId);
     }
 
     public async Task<Experience> AddOrUpdateExperienceAsync(Guid userId, ExperienceDto dto)

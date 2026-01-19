@@ -135,18 +135,31 @@ public class ProfileController
         if (file == null || file.Length == 0)
             return BadRequest(new { message = "No file uploaded" });
 
-        string[] allowedExtensions = [".jpg", ".jpeg", ".png"];
-        string extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+        // Validate MIME type (more secure than extension)
+        var allowedMimeTypes = new[]
+        {
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+        };
 
-        if (!allowedExtensions.Contains(extension))
+        if (!allowedMimeTypes.Contains(file.ContentType))
             return BadRequest(new { message = "Invalid file type" });
 
-        var path = await profileService.UpdateProfileImageAsync(file.OpenReadStream(), extension, userId);
 
-        if (string.IsNullOrEmpty(path))
+        if (file.Length > 5 * 1024 * 1024)
+            return BadRequest(new { message = "Max file size is 5MB" });
+
+
+        var imageUrl = await profileService.UpdateProfileImageAsync(
+            file.OpenReadStream(),
+            userId
+        );
+
+        if (string.IsNullOrEmpty(imageUrl))
             return StatusCode(500, new { message = "Error saving profile picture." });
 
-        return Ok(new { savedImageUrl = path });
+        return Ok(new { savedImageUrl = imageUrl });
     }
 
     [HttpPut("experience")]

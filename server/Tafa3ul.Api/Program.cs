@@ -72,5 +72,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseStaticFiles(); // serve wwwroot folder
+
 app.Run();
 
