@@ -14,7 +14,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Building2, Globe, MapPin, Pencil } from "lucide-react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useEditProfile } from "../hooks/useEditProfile";
 import { editProfileSchema, type EditProfileFormData } from "../schemas/editProfileSchema";
 import type { Profile } from "../types";
 import CountriesCombobox from "./CountriesCombobox";
@@ -25,6 +27,9 @@ interface EditProfileDialogButtonProps {
 }
 
 const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
+  const [open, setOpen] = useState(false);
+  const editMutation = useEditProfile();
+
   const profileToDefaultValues = (p: Profile): EditProfileFormData => ({
     firstName: p?.firstName ?? "",
     lastName: p?.lastName ?? "",
@@ -55,14 +60,14 @@ const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
     defaultValues: profileToDefaultValues(profile),
   });
 
-  const onSubmit = (data: EditProfileFormData) => {
-    alert("Profile updated. Check console for submitted data.");
-    console.log("Updated profile data:", data);
-    // TODO: Add API call to update profile
+  const onSubmit = async (data: EditProfileFormData) => {
+    const updatedProfile = await editMutation.mutateAsync(data);
+    reset(profileToDefaultValues(updatedProfile));
+    setOpen(false);
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm" className="hidden sm:flex">
           <Pencil className="size-4 mr-2" />
@@ -176,6 +181,8 @@ const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
           </div>
 
           <DialogFooter className="gap-2">
+            {editMutation.error && <p className="w-full text-sm text-destructive">{editMutation.error.message}</p>}
+
             <Button
               className="mr-auto"
               type="button"
