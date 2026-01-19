@@ -17,7 +17,10 @@ const ProfileHeaderCard = ({ profile, isRefetching, onRefetch }: ProfileHeaderPr
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4 ">
-            <ProfilePicture imgUrl={undefined} fullName={profile?.fullName} />
+            <ProfilePicture
+              imgUrl={`${import.meta.env.VITE_PROFILE_PIC_BASE_URL}/${profile.user.id}.webp`}
+              fullName={profile?.fullName}
+            />
             <div>
               <CardTitle className="text-2xl">{profile?.fullName || profile?.user.username}</CardTitle>
               <CardDescription className="flex items-center gap-1">

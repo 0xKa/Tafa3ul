@@ -124,7 +124,7 @@ const AccountInfoTab = ({ profile }: AccountInfoTabProps) => {
                 {profile?.user.id}
               </code>
               {copyNotificationTimeout && (
-                <span className="text-green-600 dark:text-green-600 animate-in fade-in duration-200">Copied!</span>
+                <span className="text-green-600 dark:text-green-600 animate-in fade-in duration-200">✌️ Copied!</span>
               )}
             </div>
           </CardContent>

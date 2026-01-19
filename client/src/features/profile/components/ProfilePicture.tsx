@@ -9,8 +9,8 @@ interface ProfilePictureProps {
 const ProfilePicture = ({ imgUrl, fullName }: ProfilePictureProps) => {
   return (
     <Avatar className="size-20">
-      <AvatarImage src={imgUrl || undefined} alt="Profile Picture" />
-      <AvatarFallback className="text-xl bg-primary/20 text-primary ">
+      <AvatarImage src={imgUrl || undefined} alt="Profile Picture" className="object-fill" />
+      <AvatarFallback className="text-xl bg-primary/20 text-primary">
         {getInitials(fullName ?? null, "User")}
       </AvatarFallback>
     </Avatar>
