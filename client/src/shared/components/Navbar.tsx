@@ -1,4 +1,15 @@
 import { ModeToggleButton } from "@/components/theme/mode-toggle";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useIsAuthenticated } from "@/features/auth/authStore";
+import LogoutButton from "@/features/auth/components/LogoutButton";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { cn } from "@/lib/utils";
 import { LogOut, Menu, Sparkles, User, UserRound } from "lucide-react";
@@ -55,7 +67,7 @@ const Navbar = () => {
               className={({ isActive }) =>
                 cn(
                   "text-sm font-medium transition-colors hover:text-primary",
-                  isActive ? "text-primary" : "text-muted-foreground"
+                  isActive ? "text-primary" : "text-muted-foreground",
                 )
               }
             >
@@ -75,10 +87,28 @@ const Navbar = () => {
                   <User className="size-4" />
                 </Button>
               </Link>
-              <Button variant="ghost" className="hidden lg:inline-flex" onClick={() => logout()}>
-                <LogOut className="size-4 mr-1" />
-                Log Out
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger className="hidden lg:inline-flex">
+                  <Button variant="ghost">
+                    <LogOut className="size-4 mr-1" />
+                    Log Out
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Any unsaved changes will be lost. You can log back in at any time.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction>
+                      <LogoutButton />
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </>
           ) : (
             <>

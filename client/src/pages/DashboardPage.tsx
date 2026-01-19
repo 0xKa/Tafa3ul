@@ -1,11 +1,9 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useUser } from "@/features/auth/authStore";
-import { useLogout } from "@/features/auth/hooks/useLogout";
+import LogoutButton from "@/features/auth/components/LogoutButton";
 
 const DashboardPage = () => {
   const user = useUser();
-  const { logout, isPending } = useLogout();
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -32,10 +30,7 @@ const DashboardPage = () => {
             <span className="text-sm text-muted-foreground">Authenticated</span>
           </div>
 
-          {/* Logout button with loading state */}
-          <Button variant="destructive" onClick={() => logout("/login")} disabled={isPending} className="w-full">
-            {isPending ? "Logging out..." : "Logout"}
-          </Button>
+          <LogoutButton variant="destructive" className="w-full"></LogoutButton>
         </CardContent>
       </Card>
     </div>
