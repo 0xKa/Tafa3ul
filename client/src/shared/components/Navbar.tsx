@@ -88,7 +88,7 @@ const Navbar = () => {
                 </Button>
               </Link>
               <AlertDialog>
-                <AlertDialogTrigger className="hidden lg:inline-flex">
+                <AlertDialogTrigger className="hidden lg:inline-flex" asChild>
                   <Button variant="ghost">
                     <LogOut className="size-4 mr-1" />
                     Log Out
@@ -103,7 +103,7 @@ const Navbar = () => {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>
+                    <AlertDialogAction asChild>
                       <LogoutButton />
                     </AlertDialogAction>
                   </AlertDialogFooter>
