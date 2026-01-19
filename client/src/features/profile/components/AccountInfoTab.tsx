@@ -1,21 +1,20 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { Profile } from "../types";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { formatDate } from "@/lib/utils";
+import CopyableLabel from "@/shared/components/CopyableLabel";
 import { Separator } from "@radix-ui/react-separator";
-import { User, Briefcase, GraduationCap, Mail, Globe, MapPin, Calendar } from "lucide-react";
+import { Briefcase, Calendar, Globe, GraduationCap, Mail, MapPin, User } from "lucide-react";
 import { FaTools } from "react-icons/fa";
+import InfoField from "../../../shared/components/InfoField";
+import type { Profile } from "../types";
 import EducationList from "./EducationList";
 import ExperienceList from "./ExperienceList";
 import SkillsList from "./SkillsList";
-import useCopyToClipboard from "@/shared/hooks/useCopyToClipboard";
 
 interface AccountInfoTabProps {
   profile: Profile;
 }
 const AccountInfoTab = ({ profile }: AccountInfoTabProps) => {
-  const { copyNotificationTimeout, copyToClipboard } = useCopyToClipboard(profile?.user.id!);
-
   return (
     <Tabs defaultValue="about" className="w-full">
       <TabsList className="grid w-full grid-cols-4">
@@ -44,89 +43,19 @@ const AccountInfoTab = ({ profile }: AccountInfoTabProps) => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
-                <User className="size-5 text-muted-foreground" />
-                <div>
-                  <p className="text-sm text-muted-foreground">Username</p>
-                  <p className="font-medium">{profile?.user.username}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
-                <Mail className="size-5 text-muted-foreground" />
-                <div>
-                  <p className="text-sm text-muted-foreground">Email</p>
-                  <p className="font-medium">{profile?.user.email}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
-                <User className="size-5 text-muted-foreground" />
-                <div>
-                  <p className="text-sm text-muted-foreground">First Name</p>
-                  <p className="font-medium">{profile?.firstName || "Not set"}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
-                <User className="size-5 text-muted-foreground" />
-                <div>
-                  <p className="text-sm text-muted-foreground">Last Name</p>
-                  <p className="font-medium">{profile?.lastName || "Not set"}</p>
-                </div>
-              </div>
-
-              {profile?.country && (
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
-                  <Globe className="size-5 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm text-muted-foreground">Country</p>
-                    <p className="font-medium">{profile.country}</p>
-                  </div>
-                </div>
-              )}
-
-              {profile?.location && (
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
-                  <MapPin className="size-5 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm text-muted-foreground">Location</p>
-                    <p className="font-medium">{profile.location}</p>
-                  </div>
-                </div>
-              )}
-
-              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
-                <Calendar className="size-5 text-muted-foreground" />
-                <div>
-                  <p className="text-sm text-muted-foreground">Member Since</p>
-                  <p className="font-medium">{formatDate(profile?.createdAt ?? null)}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
-                <Calendar className="size-5 text-muted-foreground" />
-                <div>
-                  <p className="text-sm text-muted-foreground">Last Updated</p>
-                  <p className="font-medium">{formatDate(profile?.updatedAt ?? null)}</p>
-                </div>
-              </div>
+              <InfoField icon={User} label="Username" value={profile.user.username} />
+              <InfoField icon={Mail} label="Email" value={profile.user.email} />
+              <InfoField icon={User} label="First Name" value={profile.firstName} />
+              <InfoField icon={User} label="Last Name" value={profile.lastName} />
+              <InfoField icon={Globe} label="Country" value={profile.country || "Not set ❗"} />
+              <InfoField icon={MapPin} label="Location" value={profile.location || "Not set ❗"} />
+              <InfoField icon={Calendar} label="Member Since" value={formatDate(profile.createdAt ?? null)} />
+              <InfoField icon={Calendar} label="Last Updated" value={formatDate(profile.updatedAt ?? null)} />
             </div>
             <Separator />
 
             {/* for debugging */}
-            <div className="text-xs text-muted-foreground flex items-center gap-2">
-              <span>User ID: </span>
-              <code
-                className="bg-muted px-1 py-0.5 rounded hover:cursor-pointer hover:bg-muted/5"
-                onClick={copyToClipboard}
-              >
-                {profile?.user.id}
-              </code>
-              {copyNotificationTimeout && (
-                <span className="text-green-600 dark:text-green-600 animate-in fade-in duration-200">✌️ Copied!</span>
-              )}
-            </div>
+            <CopyableLabel label="User ID" text={profile.user.id} />
           </CardContent>
         </Card>
       </TabsContent>
