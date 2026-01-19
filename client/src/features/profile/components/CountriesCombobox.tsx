@@ -4,8 +4,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
+import { countries } from "countries-list";
 
-const countries: string[] = ["Oman", "United Arab Emirates", "Jordan", "Saudi Arabia", "Syria"];
+const countryList: string[] = Object.values(countries).map((country) => country.name);
 
 interface CountriesComboboxProps {
   value: string;
@@ -15,6 +16,7 @@ interface CountriesComboboxProps {
 
 const CountriesCombobox = ({ value, onChange, disabled }: CountriesComboboxProps) => {
   const [open, setOpen] = useState(false);
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -25,17 +27,25 @@ const CountriesCombobox = ({ value, onChange, disabled }: CountriesComboboxProps
           className="w-full justify-between"
           disabled={disabled}
         >
-          {value ? countries.find((country) => country === value) : "Select country..."}
+          {value ? countryList.find((country) => country === value) : "Select country..."}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-(--radix-popover-trigger-width) p-0">
+
+      <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
         <Command>
           <CommandInput placeholder="Search country..." className="h-9" />
-          <CommandList>
+
+          <CommandList
+            className="max-h-64 overflow-y-auto overscroll-contain"
+            onWheelCapture={(e) => {
+              // Ensure the list consumes wheel scrolling even inside Dialog/Popover
+              e.stopPropagation();
+            }}
+          >
             <CommandEmpty>No country found.</CommandEmpty>
             <CommandGroup>
-              {countries.map((country) => (
+              {countryList.map((country) => (
                 <CommandItem
                   key={country}
                   value={country}
