@@ -25,31 +25,34 @@ interface EditProfileDialogButtonProps {
 }
 
 const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
+  const profileToDefaultValues = (p: Profile): EditProfileFormData => ({
+    firstName: p?.firstName ?? "",
+    lastName: p?.lastName ?? "",
+    bio: p?.bio ?? "",
+    company: p?.company ?? "",
+    website: p?.website ?? "",
+    country: p?.country ?? "",
+    location: p?.location ?? "",
+    social: {
+      twitter: p?.social?.twitter ?? "",
+      linkedIn: p?.social?.linkedIn ?? "",
+      gitHub: p?.social?.gitHub ?? "",
+      youTube: p?.social?.youTube ?? "",
+      facebook: p?.social?.facebook ?? "",
+      instagram: p?.social?.instagram ?? "",
+      tikTok: p?.social?.tikTok ?? "",
+    },
+  });
+
   const {
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<EditProfileFormData>({
     resolver: zodResolver(editProfileSchema),
-    defaultValues: {
-      firstName: profile?.firstName ?? "",
-      lastName: profile?.lastName ?? "",
-      bio: profile?.bio ?? "",
-      company: profile?.company ?? "",
-      website: profile?.website ?? "",
-      country: profile?.country ?? "",
-      location: profile?.location ?? "",
-      social: {
-        twitter: profile?.social?.twitter ?? "",
-        linkedIn: profile?.social?.linkedIn ?? "",
-        gitHub: profile?.social?.gitHub ?? "",
-        youTube: profile?.social?.youTube ?? "",
-        facebook: profile?.social?.facebook ?? "",
-        instagram: profile?.social?.instagram ?? "",
-        tikTok: profile?.social?.tikTok ?? "",
-      },
-    },
+    defaultValues: profileToDefaultValues(profile),
   });
 
   const onSubmit = (data: EditProfileFormData) => {
@@ -71,6 +74,7 @@ const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
           <Pencil className="size-4" />
         </Button>
       </DialogTrigger>
+
       <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-2xl">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
@@ -172,11 +176,22 @@ const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
           </div>
 
           <DialogFooter className="gap-2">
+            <Button
+              className="mr-auto"
+              type="button"
+              variant="secondary"
+              disabled={isSubmitting}
+              onClick={() => reset(profileToDefaultValues(profile))}
+            >
+              Reset original values
+            </Button>
+
             <DialogClose asChild>
               <Button type="button" variant="outline">
                 Cancel
               </Button>
             </DialogClose>
+
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? "Saving..." : "Save changes"}
             </Button>
