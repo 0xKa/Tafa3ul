@@ -26,7 +26,7 @@ const SocialLinksDialog = ({ register, errors, disabled }: SocialLinksDialogProp
   return (
     <Dialog modal={false}>
       <DialogTrigger asChild>
-        <Button type="button" variant="outline">
+        <Button type="button" variant="outline" className="w-50">
           Edit social links
         </Button>
       </DialogTrigger>
@@ -53,7 +53,7 @@ const SocialLinksDialog = ({ register, errors, disabled }: SocialLinksDialogProp
                 disabled={disabled}
                 {...register("social.twitter")}
               />
-              {errors.social?.twitter && <p className="text-sm text-destructive">{errors.social.twitter.message}</p>}
+              <p className="text-sm text-destructive min-h-5">{errors.social?.twitter?.message}</p>
             </div>
 
             <div className="grid gap-2">
@@ -68,7 +68,7 @@ const SocialLinksDialog = ({ register, errors, disabled }: SocialLinksDialogProp
                 disabled={disabled}
                 {...register("social.linkedIn")}
               />
-              {errors.social?.linkedIn && <p className="text-sm text-destructive">{errors.social.linkedIn.message}</p>}
+              <p className="text-sm text-destructive min-h-5">{errors.social?.linkedIn?.message}</p>
             </div>
           </div>
 
@@ -85,7 +85,7 @@ const SocialLinksDialog = ({ register, errors, disabled }: SocialLinksDialogProp
                 disabled={disabled}
                 {...register("social.gitHub")}
               />
-              {errors.social?.gitHub && <p className="text-sm text-destructive">{errors.social.gitHub.message}</p>}
+              <p className="text-sm text-destructive min-h-5">{errors.social?.gitHub?.message}</p>
             </div>
 
             <div className="grid gap-2">
@@ -100,7 +100,7 @@ const SocialLinksDialog = ({ register, errors, disabled }: SocialLinksDialogProp
                 disabled={disabled}
                 {...register("social.youTube")}
               />
-              {errors.social?.youTube && <p className="text-sm text-destructive">{errors.social.youTube.message}</p>}
+              <p className="text-sm text-destructive min-h-5">{errors.social?.youTube?.message}</p>
             </div>
           </div>
 
@@ -117,7 +117,7 @@ const SocialLinksDialog = ({ register, errors, disabled }: SocialLinksDialogProp
                 disabled={disabled}
                 {...register("social.facebook")}
               />
-              {errors.social?.facebook && <p className="text-sm text-destructive">{errors.social.facebook.message}</p>}
+              <p className="text-sm text-destructive min-h-5">{errors.social?.facebook?.message}</p>
             </div>
 
             <div className="grid gap-2">
@@ -132,9 +132,7 @@ const SocialLinksDialog = ({ register, errors, disabled }: SocialLinksDialogProp
                 disabled={disabled}
                 {...register("social.instagram")}
               />
-              {errors.social?.instagram && (
-                <p className="text-sm text-destructive">{errors.social.instagram.message}</p>
-              )}
+              <p className="text-sm text-destructive min-h-5">{errors.social?.instagram?.message}</p>
             </div>
           </div>
 
@@ -151,7 +149,7 @@ const SocialLinksDialog = ({ register, errors, disabled }: SocialLinksDialogProp
                 disabled={disabled}
                 {...register("social.tikTok")}
               />
-              {errors.social?.tikTok && <p className="text-sm text-destructive">{errors.social.tikTok.message}</p>}
+              <p className="text-sm text-destructive min-h-5">{errors.social?.tikTok?.message}</p>
             </div>
           </div>
         </div>

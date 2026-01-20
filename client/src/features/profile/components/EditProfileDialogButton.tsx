@@ -21,6 +21,7 @@ import { editProfileSchema, type EditProfileFormData } from "../schemas/editProf
 import type { Profile } from "../types";
 import CountriesCombobox from "./CountriesCombobox";
 import SocialLinksDialog from "./SocialLinksDialog";
+import { toast } from "sonner";
 
 interface EditProfileDialogButtonProps {
   profile: Profile;
@@ -61,7 +62,14 @@ const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
   });
 
   const onSubmit = async (data: EditProfileFormData) => {
-    const updatedProfile = await editMutation.mutateAsync(data);
+    const updatedProfile = await editMutation.mutateAsync(data, {
+      onSuccess: () => {
+        toast.success("Profile has been updated successfully.");
+      },
+      onError: () => {
+        toast.error("Failed to update profile");
+      },
+    });
     reset(profileToDefaultValues(updatedProfile));
     setOpen(false);
   };
@@ -95,12 +103,12 @@ const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
                 <div className="grid gap-2">
                   <Label htmlFor="firstName">First Name</Label>
                   <Input id="firstName" placeholder="Reda" {...register("firstName")} />
-                  {errors.firstName && <p className="text-sm text-destructive">{errors.firstName.message}</p>}
+                  <p className="text-sm text-destructive min-h-5">{errors.firstName?.message}</p>
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="lastName">Last Name</Label>
                   <Input id="lastName" placeholder="Hilal" {...register("lastName")} />
-                  {errors.lastName && <p className="text-sm text-destructive">{errors.lastName.message}</p>}
+                  <p className="text-sm text-destructive min-h-5">{errors.lastName?.message}</p>
                 </div>
               </div>
 
@@ -112,7 +120,7 @@ const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
                   className="min-h-24 max-h-40 overflow-y-auto resize-none"
                   {...register("bio")}
                 />
-                {errors.bio && <p className="text-sm text-destructive">{errors.bio.message}</p>}
+                <p className="text-sm text-destructive min-h-5">{errors.bio?.message}</p>
               </div>
             </div>
 
@@ -126,7 +134,7 @@ const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
                     Company
                   </Label>
                   <Input id="company" placeholder="Acme Inc." {...register("company")} />
-                  {errors.company && <p className="text-sm text-destructive">{errors.company.message}</p>}
+                  <p className="text-sm text-destructive min-h-5">{errors.company?.message}</p>
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="website" className="flex items-center gap-2">
@@ -134,7 +142,7 @@ const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
                     Website
                   </Label>
                   <Input id="website" type="url" placeholder="https://example.com" {...register("website")} />
-                  {errors.website && <p className="text-sm text-destructive">{errors.website.message}</p>}
+                  <p className="text-sm text-destructive min-h-5">{errors.website?.message}</p>
                 </div>
               </div>
 
@@ -155,7 +163,7 @@ const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
                       />
                     )}
                   />
-                  {errors.country && <p className="text-sm text-destructive">{errors.country.message}</p>}
+                  <p className="text-sm text-destructive min-h-5">{errors.country?.message}</p>
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="location" className="flex items-center gap-2">
@@ -163,7 +171,7 @@ const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
                     City / Location
                   </Label>
                   <Input id="location" placeholder="San Francisco, CA" {...register("location")} />
-                  {errors.location && <p className="text-sm text-destructive">{errors.location.message}</p>}
+                  <p className="text-sm text-destructive min-h-5">{errors.location?.message}</p>
                 </div>
               </div>
             </div>
@@ -173,7 +181,15 @@ const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <h3 className="text-sm font-medium text-muted-foreground">Social Links</h3>
-                  <p className="text-sm text-muted-foreground">Manage your social profiles in a separate dialog.</p>
+                  {errors.social ? (
+                    <p className="text-sm text-destructive min-h-5">
+                      {errors.social && "Please fix errors in social links."}
+                    </p>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      Click on "Edit social links" to manage your social media links.
+                    </p>
+                  )}
                 </div>
                 <SocialLinksDialog register={register} errors={errors} disabled={isSubmitting} />
               </div>
@@ -181,8 +197,6 @@ const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
           </div>
 
           <DialogFooter className="gap-2">
-            {editMutation.error && <p className="w-full text-sm text-destructive">{editMutation.error.message}</p>}
-
             <Button
               className="mr-auto"
               type="button"
