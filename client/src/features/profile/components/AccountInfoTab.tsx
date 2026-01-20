@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatDateTime } from "@/lib/utils";
 import CopyableLabel from "@/shared/components/CopyableLabel";
 import { Separator } from "@radix-ui/react-separator";
 import { Briefcase, Calendar, Globe, GraduationCap, Mail, MapPin, User } from "lucide-react";
@@ -11,6 +11,7 @@ import AddSkillDialog from "./AddSkillDialog";
 import EducationList from "./EducationList";
 import ExperienceList from "./ExperienceList";
 import SkillsList from "./SkillsList";
+import { BsAt } from "react-icons/bs";
 
 interface AccountInfoTabProps {
   profile: Profile;
@@ -44,14 +45,14 @@ const AccountInfoTab = ({ profile }: AccountInfoTabProps) => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
-              <InfoField icon={User} label="Username" value={profile.user.username} />
+              <InfoField icon={BsAt} label="Username" value={profile.user.username} />
               <InfoField icon={Mail} label="Email" value={profile.user.email} />
               <InfoField icon={User} label="First Name" value={profile.firstName} />
               <InfoField icon={User} label="Last Name" value={profile.lastName} />
               <InfoField icon={Globe} label="Country" value={profile.country || "Not set ❗"} />
               <InfoField icon={MapPin} label="Location" value={profile.location || "Not set ❗"} />
               <InfoField icon={Calendar} label="Member Since" value={formatDate(profile.createdAt ?? null)} />
-              <InfoField icon={Calendar} label="Last Updated" value={formatDate(profile.updatedAt ?? null)} />
+              <InfoField icon={Calendar} label="Last Updated" value={formatDateTime(profile.updatedAt ?? null)} />
             </div>
             <Separator />
 

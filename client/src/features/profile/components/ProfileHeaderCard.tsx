@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Building2, FileText, Link2, Mail, MapPin, RefreshCw } from "lucide-react";
+import { BsAt } from "react-icons/bs";
 import type { Profile } from "../types";
 import EditProfileDialogButton from "./EditProfileDialogButton";
 import ProfilePicture from "./ProfilePicture";
@@ -25,17 +26,22 @@ const ProfileHeaderCard = ({ profile, isRefetching, onRefetch }: ProfileHeaderPr
             />
             <div>
               <CardTitle className="text-2xl">{profile?.fullName || profile?.user.username}</CardTitle>
-              <CardDescription className="flex items-center gap-1">
-                <Mail className="size-3" />
-                {profile?.user.email}
-              </CardDescription>
-              {profile?.location && (
-                <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
-                  <MapPin className="size-3" />
-                  {profile.location}
-                  {profile.country && `, ${profile.country}`}
-                </p>
-              )}
+              <div>
+                <CardDescription className="text-muted-foreground flex items-center gap-1">
+                  <BsAt className="size-3.5" />
+                  {profile?.user.username}
+                </CardDescription>
+                <CardDescription className="text-muted-foreground flex items-center gap-1 mt-0.5">
+                  <Mail className="size-3.5" />
+                  {profile?.user.email}
+                </CardDescription>
+                {profile?.location && (
+                  <CardDescription className="text-muted-foreground flex items-center gap-1 mt-0.5">
+                    <MapPin className="size-3.5" />
+                    {profile.location}
+                  </CardDescription>
+                )}
+              </div>
             </div>
           </div>
           <div className="flex gap-2 self-start">
@@ -50,11 +56,11 @@ const ProfileHeaderCard = ({ profile, isRefetching, onRefetch }: ProfileHeaderPr
         {/* Bio */}
         {profile?.bio && (
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm font-medium">
+            <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
               <FileText className="size-4" />
-              About
+              Bio
             </div>
-            <p className="text-muted-foreground">{profile.bio}</p>
+            <p className="indent-4 leading-7 text-muted-foreground">{profile.bio}</p>
           </div>
         )}
 
