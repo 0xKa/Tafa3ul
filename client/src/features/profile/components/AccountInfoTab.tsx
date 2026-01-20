@@ -7,6 +7,7 @@ import { Briefcase, Calendar, Globe, GraduationCap, Mail, MapPin, User } from "l
 import { FaTools } from "react-icons/fa";
 import InfoField from "../../../shared/components/InfoField";
 import type { Profile } from "../types";
+import AddSkillDialog from "./AddSkillDialog";
 import EducationList from "./EducationList";
 import ExperienceList from "./ExperienceList";
 import SkillsList from "./SkillsList";
@@ -62,9 +63,12 @@ const AccountInfoTab = ({ profile }: AccountInfoTabProps) => {
 
       <TabsContent value="skills">
         <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Skills</CardTitle>
-            <CardDescription>Your professional skills and expertise</CardDescription>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle className="text-lg">Skills</CardTitle>
+              <CardDescription>Your professional skills and expertise</CardDescription>
+            </div>
+            <AddSkillDialog />
           </CardHeader>
           <CardContent>
             <SkillsList skills={profile?.skills ?? []} />

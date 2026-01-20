@@ -14,12 +14,18 @@ const SkillsList = ({ skills }: SkillsListProps) => {
   return (
     <div className="flex flex-wrap gap-2">
       {skills.map((skill) => (
-        <Badge key={skill.id} variant="secondary" className="px-3 py-1 text-sm">
+        <Badge
+          key={skill.id}
+          variant="secondary"
+          className="px-3 py-1 text-sm hover:scale-110 transition-transform hover:cursor-default"
+        >
           <span className="mr-1 text-md">
             <GoTools />
           </span>
           {skill.skillName}
-          {skill.yearsOfExperience && <span className="ml-1 text-muted-foreground">({skill.yearsOfExperience}y)</span>}
+          <span className="ml-1 text-muted-foreground">
+            ({skill.yearsOfExperience === 0 ? "<1y" : `${skill.yearsOfExperience}y`})
+          </span>
         </Badge>
       ))}
     </div>
