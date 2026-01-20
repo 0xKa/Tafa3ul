@@ -37,7 +37,7 @@ export interface SocialMedia {
 export interface Skill {
   id: string;
   skillId: string;
-  skillName: string | null;
+  skillName: string;
   yearsOfExperience: number | null;
 }
 
