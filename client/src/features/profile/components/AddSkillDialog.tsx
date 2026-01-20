@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -48,7 +47,7 @@ const AddSkillDialog = () => {
   const onSubmit = async (data: AddSkillFormData) => {
     await addSkillMutation.mutateAsync(data);
     reset();
-    setOpen(false);
+    // setOpen(false);
   };
 
   return (
@@ -93,13 +92,7 @@ const AddSkillDialog = () => {
               <p className="w-full text-sm text-destructive">{addSkillMutation.error.message}</p>
             )}
 
-            <DialogClose asChild>
-              <Button type="button" variant="outline">
-                Cancel
-              </Button>
-            </DialogClose>
-
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting} className="w-full">
               {isSubmitting ? "Adding..." : "Add Skill"}
             </Button>
           </DialogFooter>
