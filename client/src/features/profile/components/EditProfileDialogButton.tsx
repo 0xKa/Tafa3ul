@@ -148,7 +148,7 @@ const EditProfileDialogButton = ({ profile }: EditProfileDialogButtonProps) => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="country" className="flex items-center gap-2">
+                  <Label className="flex items-center gap-2">
                     <Globe className="size-4 text-muted-foreground" />
                     Country
                   </Label>
