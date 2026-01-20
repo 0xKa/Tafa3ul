@@ -3,6 +3,7 @@ import type { Skill } from "../types";
 import { Badge } from "@/components/ui/badge";
 import { CgRemoveR } from "react-icons/cg";
 import { useDeleteSkill } from "../hooks/useDeleteSkill";
+import { toast } from "sonner";
 
 interface SkillsListProps {
   skills: Skill[];
@@ -33,7 +34,17 @@ const SkillsList = ({ skills }: SkillsListProps) => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              deleteSkill({ skillId });
+              deleteSkill(
+                { skillId },
+                {
+                  onSuccess: () => {
+                    toast.success("Skill has been removed from your skills.");
+                  },
+                  onError: () => {
+                    toast.error("Failed to delete skill", { duration: 5000 });
+                  },
+                },
+              );
             }}
             className="ml-1 text-muted-foreground hover:text-destructive transition-colors"
             aria-label={`Remove ${skillName}`}
