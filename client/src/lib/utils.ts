@@ -5,6 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function GetDefaultDate() {
+  return new Date().toISOString().split("T")[0];
+}
+
 export function getInitials(fullName: string | null, username: string): string {
   if (fullName) {
     return fullName
