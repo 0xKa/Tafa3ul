@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { MdAdd } from "react-icons/md";
 import { z } from "zod";
 import { useAddSkill } from "../../hooks/useAddSkill";
+import { toast } from "sonner";
 
 const addSkillSchema = z.object({
   skillName: z.string().min(1, "Skill name is required").max(50, "Skill name must be 50 characters or less"),
@@ -45,7 +46,14 @@ const AddSkillDialog = () => {
   });
 
   const onSubmit = async (data: AddSkillFormData) => {
-    await addSkillMutation.mutateAsync(data);
+    await addSkillMutation.mutateAsync(data, {
+      onSuccess: () => {
+        toast.success("Skill has been added successfully.");
+      },
+      onError: () => {
+        toast.error("Failed to add skill");
+      },
+    });
     reset();
     // setOpen(false);
   };
