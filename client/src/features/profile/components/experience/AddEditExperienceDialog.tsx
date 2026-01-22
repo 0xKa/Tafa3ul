@@ -17,22 +17,35 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdAdd } from "react-icons/md";
 import { z } from "zod";
+import { useAddEditExperience } from "../../hooks/useAddEditExperience";
+import { toast } from "sonner";
 
-const addEditExperienceSchema = z.object({
-  id: z.string().optional().nullable(),
-  jobTitle: z.string().min(1, "Job title is required").max(100, "Job title must be 100 characters or less"),
-  company: z.string().min(1, "Company name is required").max(100, "Company name must be 100 characters or less"),
-  startDate: z.string().min(1, "Start date is required"),
-  endDate: z
-    .string()
-    .nullable()
-    .transform((val) => val ?? null),
-  description: z
-    .string()
-    .max(1000, "Description must be 1000 characters or less")
-    .nullable()
-    .transform((val) => val ?? null),
-});
+const addEditExperienceSchema = z
+  .object({
+    id: z.string().nullable(),
+    jobTitle: z.string().min(1, "Job title is required").max(100, "Job title must be 100 characters or less"),
+    company: z.string().min(1, "Company name is required").max(100, "Company name must be 100 characters or less"),
+    startDate: z.string().min(1, "Start date is required"),
+    endDate: z
+      .string()
+      .nullable()
+      .transform((val) => val ?? null),
+    description: z
+      .string()
+      .max(1000, "Description must be 1000 characters or less")
+      .nullable()
+      .transform((val) => val ?? null),
+  })
+  .refine(
+    (data) => {
+      if (!data.endDate) return true;
+      return new Date(data.endDate) >= new Date(data.startDate);
+    },
+    {
+      message: "Invalid end date",
+      path: ["endDate"],
+    },
+  );
 
 type AddEditExperienceFormData = z.infer<typeof addEditExperienceSchema>;
 
@@ -43,7 +56,7 @@ interface AddEditExperienceDialogProps {
 const AddEditExperienceDialog = ({ experienceId }: AddEditExperienceDialogProps) => {
   const [open, setOpen] = useState(false);
   const [isCurrent, setIsCurrent] = useState(false);
-  // const addExperienceMutation = useAddExperience();
+  const addEditExperienceMutation = useAddEditExperience();
 
   const {
     register,
@@ -54,7 +67,7 @@ const AddEditExperienceDialog = ({ experienceId }: AddEditExperienceDialogProps)
   } = useForm<AddEditExperienceFormData>({
     resolver: zodResolver(addEditExperienceSchema),
     defaultValues: {
-      id: null,
+      id: experienceId ?? null,
       startDate: GetDefaultDate(),
       endDate: GetDefaultDate(),
       description: null,
@@ -70,8 +83,14 @@ const AddEditExperienceDialog = ({ experienceId }: AddEditExperienceDialogProps)
   }, [isCurrent, setValue]);
 
   const onSubmit = async (data: AddEditExperienceFormData) => {
-    // await addExperienceMutation.mutateAsync(data);
-    console.log(data, experienceId);
+    await addEditExperienceMutation.mutateAsync(data, {
+      onSuccess: () => {
+        toast.success("Profile has been updated successfully.");
+      },
+      onError: () => {
+        toast.error("Failed to update profile");
+      },
+    });
     reset();
     setOpen(false);
   };
