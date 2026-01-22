@@ -2,10 +2,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Briefcase, GraduationCap, User } from "lucide-react";
 import { FaTools } from "react-icons/fa";
 import type { Profile } from "../types";
-import ProfileEducationCard from "./ProfileEducationCard";
-import ProfileExperienceCard from "./ProfileExperienceCard";
+import ProfileEducationCard from "./education/ProfileEducationCard";
+import ProfileExperienceCard from "./experience/ProfileExperienceCard";
 import ProfileInfoCard from "./ProfileInfoCard";
-import ProfileSkillsCard from "./ProfileSkillsCard";
+import ProfileSkillsCard from "./skills/ProfileSkillsCard";
 
 interface AccountInfoTabProps {
   profile: Profile;

@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import ExperienceList from "./ExperienceList";
-import type { Experience } from "../types";
+import type { Experience } from "../../types";
 
 interface ProfileExperienceCardProps {
   experiences: Experience[];

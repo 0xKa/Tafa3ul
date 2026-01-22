@@ -1,9 +1,9 @@
-import { GoTools } from "react-icons/go";
-import type { Skill } from "../types";
 import { Badge } from "@/components/ui/badge";
 import { CgRemoveR } from "react-icons/cg";
-import { useDeleteSkill } from "../hooks/useDeleteSkill";
+import { GoTools } from "react-icons/go";
 import { toast } from "sonner";
+import { useDeleteSkill } from "../../hooks/useDeleteSkill";
+import type { Skill } from "../../types";
 
 interface SkillsListProps {
   skills: Skill[];

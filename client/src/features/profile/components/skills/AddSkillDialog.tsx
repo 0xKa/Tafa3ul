@@ -15,7 +15,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdAdd } from "react-icons/md";
 import { z } from "zod";
-import { useAddSkill } from "../hooks/useAddSkill";
+import { useAddSkill } from "../../hooks/useAddSkill";
 
 const addSkillSchema = z.object({
   skillName: z.string().min(1, "Skill name is required").max(50, "Skill name must be 50 characters or less"),

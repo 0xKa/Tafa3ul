@@ -1,6 +1,6 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { SiFacebook, SiGithub, SiInstagram, SiLinkedin, SiTiktok, SiX, SiYoutube } from "react-icons/si";
-import type { SocialMedia } from "../types";
+import type { SocialMedia } from "../../types";
 
 interface SocialLinksProps {
   social: SocialMedia;

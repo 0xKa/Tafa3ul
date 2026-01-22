@@ -20,7 +20,7 @@ import { useEditProfile } from "../hooks/useEditProfile";
 import { editProfileSchema, type EditProfileFormData } from "../schemas/editProfileSchema";
 import type { Profile } from "../types";
 import CountriesCombobox from "./CountriesCombobox";
-import SocialLinksDialog from "./SocialLinksDialog";
+import SocialLinksDialog from "./social/SocialLinksDialog";
 import { toast } from "sonner";
 
 interface EditProfileDialogButtonProps {

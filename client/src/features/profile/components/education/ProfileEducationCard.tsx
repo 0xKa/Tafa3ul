@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import type { Education } from "../types";
+import type { Education } from "../../types";
 import EducationList from "./EducationList";
 
 interface ProfileEducationCardProps {

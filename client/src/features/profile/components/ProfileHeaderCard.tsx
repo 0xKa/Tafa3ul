@@ -5,7 +5,7 @@ import { BsAt } from "react-icons/bs";
 import type { Profile } from "../types";
 import EditProfileDialogButton from "./EditProfileDialogButton";
 import ProfilePicture from "./ProfilePicture";
-import SocialLinks from "./SocialLinks";
+import SocialLinks from "./social/SocialLinks";
 
 interface ProfileHeaderProps {
   profile: Profile;

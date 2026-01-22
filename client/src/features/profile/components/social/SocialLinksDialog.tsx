@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import { SiFacebook, SiGithub, SiInstagram, SiLinkedin, SiTiktok, SiX, SiYoutube } from "react-icons/si";
 
-import type { EditProfileFormData } from "../schemas/editProfileSchema";
+import type { EditProfileFormData } from "../../schemas/editProfileSchema";
 
 interface SocialLinksDialogProps {
   register: UseFormRegister<EditProfileFormData>;

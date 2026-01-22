@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import AddSkillDialog from "./AddSkillDialog";
 import SkillsList from "./SkillsList";
-import type { Skill } from "../types";
+import type { Skill } from "../../types";
 
 interface ProfileSkillsCardProps {
   skills: Skill[];

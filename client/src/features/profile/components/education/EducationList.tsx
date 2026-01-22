@@ -1,5 +1,5 @@
 import { GraduationCap } from "lucide-react";
-import type { Education } from "../types";
+import type { Education } from "../../types";
 import { Badge } from "@/components/ui/badge";
 import { formatDateShort, sortByDate } from "@/lib/utils";
 

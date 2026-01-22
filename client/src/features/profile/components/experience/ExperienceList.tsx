@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { formatDateShort, sortByDate } from "@/lib/utils";
 import { Building2 } from "lucide-react";
-import type { Experience } from "../types";
+import type { Experience } from "../../types";
 
 interface ExperienceListProps {
   experiences: Experience[];
