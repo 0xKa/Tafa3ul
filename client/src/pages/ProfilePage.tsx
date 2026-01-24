@@ -3,13 +3,11 @@ import { CustomSpinner } from "@/components/ui/spinner";
 import AccountInfoTab from "@/features/profile/components/AccountInfoTab";
 import ProfileHeaderCard from "@/features/profile/components/ProfileHeaderCard";
 import { useProfile } from "@/features/profile/hooks/useProfile";
+import { useParams } from "react-router";
 
-interface ProfilePageProps {
-  userId?: string;
-}
-
-const ProfilePage = ({ userId }: ProfilePageProps) => {
-  const { data: profile, isLoading, isError, error, refetch, isRefetching } = useProfile(userId);
+const ProfilePage = () => {
+  const { id } = useParams();
+  const { data: profile, isLoading, isError, error, refetch, isRefetching } = useProfile(id);
 
   if (isLoading) {
     return <CustomSpinner />;
@@ -21,8 +19,13 @@ const ProfilePage = ({ userId }: ProfilePageProps) => {
 
   return (
     <div className="container max-w-4xl mx-auto px-4 py-8 space-y-6">
-      <ProfileHeaderCard profile={profile!} isRefetching={isRefetching} onRefetch={() => refetch()} />
-      <AccountInfoTab profile={profile!} />
+      <ProfileHeaderCard
+        profile={profile!}
+        isRefetching={isRefetching}
+        onRefetch={() => refetch()}
+        editDisabled={!!id}
+      />
+      <AccountInfoTab profile={profile!} editDisabled={!!id} />
     </div>
   );
 };

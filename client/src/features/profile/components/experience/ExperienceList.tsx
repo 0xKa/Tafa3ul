@@ -8,9 +8,10 @@ import type { Experience } from "../../types";
 
 interface ExperienceListProps {
   experiences: Experience[];
+  editDisabled?: boolean;
 }
 
-const ExperienceList = ({ experiences }: ExperienceListProps) => {
+const ExperienceList = ({ experiences, editDisabled }: ExperienceListProps) => {
   const { mutate: deleteExperience } = useDeleteExperience();
 
   if (experiences.length === 0) {
@@ -46,26 +47,29 @@ const ExperienceList = ({ experiences }: ExperienceListProps) => {
             {formatDateShort(exp.startDate)} - {exp.isCurrentlyWorkingHere ? "Present" : formatDateShort(exp.endDate)}
           </p>
           {exp.description && <p className="text-sm mt-2">{exp.description}</p>}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              deleteExperience(
-                { experienceId: exp.id },
-                {
-                  onSuccess: () => {
-                    toast.success("Experience has been removed from your profile.");
+
+          {!editDisabled && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteExperience(
+                  { experienceId: exp.id },
+                  {
+                    onSuccess: () => {
+                      toast.success("Experience has been removed from your profile.");
+                    },
+                    onError: () => {
+                      toast.error("Failed to delete experience", { duration: 5000 });
+                    },
                   },
-                  onError: () => {
-                    toast.error("Failed to delete experience", { duration: 5000 });
-                  },
-                },
-              );
-            }}
-            className="absolute bottom-2 right-2 text-muted-foreground hover:text-destructive transition-colors"
-            aria-label={`Remove ${exp.jobTitle}`}
-          >
-            <CgRemoveR className="size-5" />
-          </button>
+                );
+              }}
+              className="absolute bottom-2 right-2 text-muted-foreground hover:text-destructive transition-colors"
+              aria-label={`Remove ${exp.jobTitle}`}
+            >
+              <CgRemoveR className="size-5" />
+            </button>
+          )}
         </div>
       ))}
     </div>

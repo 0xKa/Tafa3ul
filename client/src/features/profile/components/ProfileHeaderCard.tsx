@@ -11,9 +11,10 @@ interface ProfileHeaderProps {
   profile: Profile;
   isRefetching: boolean;
   onRefetch: () => void;
+  editDisabled?: boolean;
 }
 
-const ProfileHeaderCard = ({ profile, isRefetching, onRefetch }: ProfileHeaderProps) => {
+const ProfileHeaderCard = ({ profile, isRefetching, onRefetch, editDisabled }: ProfileHeaderProps) => {
   return (
     <Card>
       <CardHeader>
@@ -22,7 +23,7 @@ const ProfileHeaderCard = ({ profile, isRefetching, onRefetch }: ProfileHeaderPr
             <ProfilePicture
               imgUrl={`${import.meta.env.VITE_PROFILE_PIC_BASE_URL}/${profile.user.id}.webp`}
               fullName={profile?.fullName}
-              allowEdit
+              allowEdit={!editDisabled}
             />
             <div>
               <CardTitle className="text-2xl">{profile?.fullName || profile?.user.username}</CardTitle>
@@ -48,7 +49,7 @@ const ProfileHeaderCard = ({ profile, isRefetching, onRefetch }: ProfileHeaderPr
             <Button variant="ghost" size="icon" onClick={() => onRefetch()} disabled={isRefetching}>
               <RefreshCw className={`size-4 ${isRefetching ? "animate-spin" : ""}`} />
             </Button>
-            <EditProfileDialogButton profile={profile} />
+            {!editDisabled && <EditProfileDialogButton profile={profile} />}
           </div>
         </div>
       </CardHeader>

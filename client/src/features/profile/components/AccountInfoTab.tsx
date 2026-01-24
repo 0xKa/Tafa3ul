@@ -9,8 +9,9 @@ import ProfileSkillsCard from "./skills/ProfileSkillsCard";
 
 interface AccountInfoTabProps {
   profile: Profile;
+  editDisabled?: boolean;
 }
-const AccountInfoTab = ({ profile }: AccountInfoTabProps) => {
+const AccountInfoTab = ({ profile, editDisabled }: AccountInfoTabProps) => {
   return (
     <Tabs defaultValue="about" className="w-full">
       <TabsList className="grid w-full grid-cols-4">
@@ -37,15 +38,15 @@ const AccountInfoTab = ({ profile }: AccountInfoTabProps) => {
       </TabsContent>
 
       <TabsContent value="skills">
-        <ProfileSkillsCard skills={profile.skills} />
+        <ProfileSkillsCard skills={profile.skills} editDisabled={editDisabled} />
       </TabsContent>
 
       <TabsContent value="experience">
-        <ProfileExperienceCard experiences={profile.experiences} />
+        <ProfileExperienceCard experiences={profile.experiences} editDisabled={editDisabled} />
       </TabsContent>
 
       <TabsContent value="education">
-        <ProfileEducationCard educations={profile.educations} />
+        <ProfileEducationCard educations={profile.educations} editDisabled={editDisabled} />
       </TabsContent>
     </Tabs>
   );

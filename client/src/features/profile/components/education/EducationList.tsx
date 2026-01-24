@@ -8,9 +8,10 @@ import type { Education } from "../../types";
 
 interface EducationListProps {
   educations: Education[];
+  editDisabled?: boolean;
 }
 
-const EducationList = ({ educations }: EducationListProps) => {
+const EducationList = ({ educations, editDisabled }: EducationListProps) => {
   const { mutate: deleteEducation } = useDeleteEducation();
 
   if (educations.length === 0) {
@@ -47,26 +48,28 @@ const EducationList = ({ educations }: EducationListProps) => {
             {formatDateShort(edu.startDate)} - {edu.isCurrentlyStudyingHere ? "Present" : formatDateShort(edu.endDate)}
           </p>
           {edu.description && <p className="text-sm mt-2">{edu.description}</p>}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              deleteEducation(
-                { educationId: edu.id },
-                {
-                  onSuccess: () => {
-                    toast.success("Education has been removed from your profile.");
+          {!editDisabled && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteEducation(
+                  { educationId: edu.id },
+                  {
+                    onSuccess: () => {
+                      toast.success("Education has been removed from your profile.");
+                    },
+                    onError: () => {
+                      toast.error("Failed to delete education", { duration: 5000 });
+                    },
                   },
-                  onError: () => {
-                    toast.error("Failed to delete education", { duration: 5000 });
-                  },
-                },
-              );
-            }}
-            className="absolute bottom-2 right-2 text-muted-foreground hover:text-destructive transition-colors"
-            aria-label={`Remove ${edu.degree}`}
-          >
-            <CgRemoveR className="size-5" />
-          </button>
+                );
+              }}
+              className="absolute bottom-2 right-2 text-muted-foreground hover:text-destructive transition-colors"
+              aria-label={`Remove ${edu.degree}`}
+            >
+              <CgRemoveR className="size-5" />
+            </button>
+          )}
         </div>
       ))}
     </div>

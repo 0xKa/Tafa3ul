@@ -6,9 +6,10 @@ import type { Skill } from "../../types";
 interface ProfileSkillsCardProps {
   skills: Skill[];
   sortBy?: "name" | "experience";
+  editDisabled?: boolean;
 }
 
-const ProfileSkillsCard = ({ skills, sortBy = "experience" }: ProfileSkillsCardProps) => {
+const ProfileSkillsCard = ({ skills, sortBy = "experience", editDisabled }: ProfileSkillsCardProps) => {
   const sortedSkills =
     sortBy === "experience"
       ? [...skills].sort((a, b) => (b.yearsOfExperience ?? 0) - (a.yearsOfExperience ?? 0))
@@ -21,10 +22,10 @@ const ProfileSkillsCard = ({ skills, sortBy = "experience" }: ProfileSkillsCardP
           <CardTitle className="text-lg">Skills</CardTitle>
           <CardDescription>Your professional skills and expertise</CardDescription>
         </div>
-        <AddSkillDialog />
+        {!editDisabled && <AddSkillDialog />}
       </CardHeader>
       <CardContent>
-        <SkillsList skills={sortedSkills} />
+        <SkillsList skills={sortedSkills} editDisabled={editDisabled} />
       </CardContent>
     </Card>
   );

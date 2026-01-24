@@ -5,8 +5,9 @@ import EducationList from "./EducationList";
 
 interface ProfileEducationCardProps {
   educations: Education[];
+  editDisabled?: boolean;
 }
-const ProfileEducationCard = ({ educations }: ProfileEducationCardProps) => {
+const ProfileEducationCard = ({ educations, editDisabled }: ProfileEducationCardProps) => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -14,10 +15,10 @@ const ProfileEducationCard = ({ educations }: ProfileEducationCardProps) => {
           <CardTitle className="text-lg">Education</CardTitle>
           <CardDescription>Your educational background</CardDescription>
         </div>
-        <AddEditEducationDialog />
+        {!editDisabled && <AddEditEducationDialog />}
       </CardHeader>
       <CardContent>
-        <EducationList educations={educations} />
+        <EducationList educations={educations} editDisabled={editDisabled} />
       </CardContent>
     </Card>
   );

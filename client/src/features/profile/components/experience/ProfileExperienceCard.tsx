@@ -5,9 +5,10 @@ import AddExperienceDialog from "./AddEditExperienceDialog";
 
 interface ProfileExperienceCardProps {
   experiences: Experience[];
+  editDisabled?: boolean;
 }
 
-const ProfileExperienceCard = ({ experiences }: ProfileExperienceCardProps) => {
+const ProfileExperienceCard = ({ experiences, editDisabled }: ProfileExperienceCardProps) => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -15,10 +16,10 @@ const ProfileExperienceCard = ({ experiences }: ProfileExperienceCardProps) => {
           <CardTitle className="text-lg">Work Experience</CardTitle>
           <CardDescription>Your professional experience</CardDescription>
         </div>
-        <AddExperienceDialog />
+        {!editDisabled && <AddExperienceDialog />}
       </CardHeader>
       <CardContent>
-        <ExperienceList experiences={experiences} />
+        <ExperienceList experiences={experiences} editDisabled={editDisabled} />
       </CardContent>
     </Card>
   );

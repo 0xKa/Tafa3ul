@@ -7,9 +7,10 @@ import type { Skill } from "../../types";
 
 interface SkillsListProps {
   skills: Skill[];
+  editDisabled?: boolean;
 }
 
-const SkillsList = ({ skills }: SkillsListProps) => {
+const SkillsList = ({ skills, editDisabled }: SkillsListProps) => {
   const { mutate: deleteSkill } = useDeleteSkill();
 
   if (skills.length === 0) {
@@ -31,26 +32,28 @@ const SkillsList = ({ skills }: SkillsListProps) => {
           <span className="ml-1 text-muted-foreground">
             ({yearsOfExperience === 0 ? "<1y" : `${yearsOfExperience}y`})
           </span>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              deleteSkill(
-                { skillId },
-                {
-                  onSuccess: () => {
-                    toast.success("Skill has been removed from your skills.");
+          {!editDisabled && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteSkill(
+                  { skillId },
+                  {
+                    onSuccess: () => {
+                      toast.success("Skill has been removed from your skills.");
+                    },
+                    onError: () => {
+                      toast.error("Failed to delete skill", { duration: 5000 });
+                    },
                   },
-                  onError: () => {
-                    toast.error("Failed to delete skill", { duration: 5000 });
-                  },
-                },
-              );
-            }}
-            className="ml-1 text-muted-foreground hover:text-destructive transition-colors"
-            aria-label={`Remove ${skillName}`}
-          >
-            <CgRemoveR className="h-4 w-4" />
-          </button>
+                );
+              }}
+              className="ml-1 text-muted-foreground hover:text-destructive transition-colors"
+              aria-label={`Remove ${skillName}`}
+            >
+              <CgRemoveR className="h-4 w-4" />
+            </button>
+          )}
         </Badge>
       ))}
     </div>
