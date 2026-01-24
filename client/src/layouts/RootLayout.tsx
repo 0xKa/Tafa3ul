@@ -2,12 +2,13 @@ import { Outlet, useLocation } from "react-router";
 import Footer from "../shared/components/Footer";
 import Navbar from "../shared/components/Navbar";
 import { Toaster } from "@/components/ui/sonner";
+import { paths } from "@/paths";
 
 const RootLayout = () => {
   const location = useLocation();
 
-  const hideFooterPaths = ["/profile", "/dashboard"];
-  const shouldHideFooter = hideFooterPaths.includes(location.pathname);
+  const showFooterPaths: string[] = [paths.root, ...Object.values(paths.public)];
+  const shouldShowFooter = showFooterPaths.includes(location.pathname);
 
   return (
     <div className="relative flex min-h-svh flex-col">
@@ -16,7 +17,7 @@ const RootLayout = () => {
         <Toaster position="top-center" duration={4000} />
         <Outlet />
       </main>
-      {shouldHideFooter || <Footer />}
+      {shouldShowFooter && <Footer />}
     </div>
   );
 };

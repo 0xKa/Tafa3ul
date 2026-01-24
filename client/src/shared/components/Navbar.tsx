@@ -22,18 +22,20 @@ import { useIsAuthenticated } from "@/features/auth/authStore";
 import LogoutButton from "@/features/auth/components/LogoutButton";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { cn } from "@/lib/utils";
+import { paths } from "@/paths";
 import { LogOut, Menu, Sparkles, User, UserRound } from "lucide-react";
 import { Link, NavLink } from "react-router";
 
 const publicNavLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
+  { href: paths.root, label: "Home" },
+  { href: paths.public.about, label: "About" },
 ];
 
 const authenticatedNavLinks = [
-  { href: "/", label: "Home" },
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/about", label: "About" },
+  { href: paths.root, label: "Home" },
+  { href: paths.protected.dashboard, label: "Dashboard" },
+  { href: paths.protected.feed, label: "Feed" },
+  { href: paths.protected.settings, label: "Settings" },
 ];
 
 const Navbar = () => {
@@ -47,7 +49,7 @@ const Navbar = () => {
         {/* logo */}
         <div className="flex flex-1">
           <Link
-            to="/"
+            to={paths.root}
             className="flex items-center space-x-2"
             onClick={() => {
               window.scrollTo({ top: 0, behavior: "smooth" });
@@ -82,7 +84,7 @@ const Navbar = () => {
 
           {isAuthenticated ? (
             <>
-              <Link to="/profile">
+              <Link to={paths.protected.profile}>
                 <Button variant="outline" className="hidden lg:inline-flex">
                   <User className="size-4" />
                 </Button>
@@ -112,12 +114,12 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link to="/login">
+              <Link to={paths.auth.login}>
                 <Button variant="outline" className="hidden lg:inline-flex">
                   Log In
                 </Button>
               </Link>
-              <Link to="/register">
+              <Link to={paths.auth.register}>
                 <Button className="hidden lg:inline-flex">Sign Up</Button>
               </Link>
             </>
@@ -141,7 +143,7 @@ const Navbar = () => {
               {isAuthenticated ? (
                 <>
                   <DropdownMenuItem asChild>
-                    <Link to="/profile">
+                    <Link to={paths.protected.profile}>
                       <UserRound className="h-4 w-4 mr-2" />
                       Profile
                     </Link>
@@ -154,10 +156,10 @@ const Navbar = () => {
               ) : (
                 <>
                   <DropdownMenuItem asChild>
-                    <Link to="/login">Log In</Link>
+                    <Link to={paths.auth.login}>Log In</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/register">Sign Up</Link>
+                    <Link to={paths.auth.register}>Sign Up</Link>
                   </DropdownMenuItem>
                 </>
               )}

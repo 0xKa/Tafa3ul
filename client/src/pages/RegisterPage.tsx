@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRegister } from "@/features/auth/hooks/useRegister";
 import { USER_ROLES } from "@/features/auth/types";
+import { paths } from "@/paths";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -49,14 +50,14 @@ const RegisterPage = () => {
       {
         onSuccess: () => {
           reset();
-          navigate("/login", { state: { registered: true } });
+          navigate(paths.auth.login, { state: { registered: true } });
         },
-      }
+      },
     );
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12">
+    <div className="flex min-h-[calc(90vh)] items-center justify-center px-4 py-12">
       <Card className="w-full max-w-md md:max-w-2xl">
         <CardHeader className="space-y-2 text-center">
           <CardTitle className="text-2xl">Create Account</CardTitle>
@@ -164,7 +165,7 @@ const RegisterPage = () => {
 
           <div className="mt-6 text-center text-sm">
             <span className="text-muted-foreground">Already have an account? </span>
-            <Link to="/login" className="font-medium text-primary hover:underline">
+            <Link to={paths.auth.login} className="font-medium text-primary hover:underline">
               Login here
             </Link>
           </div>

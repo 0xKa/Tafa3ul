@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { paths } from "@/paths";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router";
 
@@ -13,13 +14,13 @@ const CtaSection = () => {
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button size="lg" asChild>
-              <Link to="/register">
+              <Link to={paths.auth.register}>
                 Get Started
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link to="/">Back to Home</Link>
+              <Link to={paths.root}>Back to Home</Link>
             </Button>
           </div>
         </div>

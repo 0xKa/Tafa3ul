@@ -1,7 +1,9 @@
 import { Link } from "react-router";
 import { Separator } from "@/components/ui/separator";
+import { paths } from "@/paths";
 
 const footerLinks = {
+  //temp
   product: [
     { href: "/features", label: "Features" },
     { href: "/pricing", label: "Pricing" },
@@ -25,7 +27,7 @@ const Footer = () => {
         <div className="grid grid-cols-2 gap-20 md:grid-cols-4">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link to="/" className="flex items-center space-x-2">
+            <Link to={paths.root} className="flex items-center space-x-2">
               <span className="text-xl font-bold">Tafa3ul</span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground pr-8">
@@ -88,9 +90,7 @@ const Footer = () => {
         <Separator className="my-8" />
 
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Tafa3ul. All rights reserved.
-          </p>
+          <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} Tafa3ul. All rights reserved.</p>
           <div className="flex space-x-4">
             <a
               href="https://www.linkedin.com/in/0xReda/"

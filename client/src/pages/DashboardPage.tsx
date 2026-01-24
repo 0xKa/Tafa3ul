@@ -30,7 +30,7 @@ const DashboardPage = () => {
             <span className="text-sm text-muted-foreground">Authenticated</span>
           </div>
 
-          <LogoutButton variant="destructive" className="w-full"></LogoutButton>
+          <LogoutButton variant="destructive" className="w-full" />
         </CardContent>
       </Card>
     </div>

@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FeaturesGrid from "@/features/landing/FeaturesGrid";
 import CtaSection from "@/features/landing/CtaSection";
+import { paths } from "@/paths";
 
 const LandingPage = () => {
   return (
@@ -20,13 +21,13 @@ const LandingPage = () => {
             </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Button size="lg" asChild>
-                <Link to="/register">
+                <Link to={paths.auth.register}>
                   Join Tafa3ul
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link to="/about">Learn more about Tafa3ul</Link>
+                <Link to={paths.public.about}>Learn more about Tafa3ul</Link>
               </Button>
             </div>
           </div>

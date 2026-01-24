@@ -2,6 +2,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLogin } from "@/features/auth/hooks/useLogin";
+import { paths } from "@/paths";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, Check } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -23,7 +24,7 @@ const LoginPage = () => {
 
   // Get the page user was trying to access before being redirected to login
   // This is set by ProtectedRoute when redirecting unauthenticated users
-  const from = location.state?.from?.pathname || "/dashboard";
+  const from = location.state?.from?.pathname || paths.protected.dashboard;
 
   const {
     register,
@@ -42,12 +43,12 @@ const LoginPage = () => {
           // Redirect to the originally requested page, or dashboard by default
           navigate(from, { replace: true });
         },
-      }
+      },
     );
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12">
+    <div className="flex min-h-[calc(90vh)] items-center justify-center px-4 py-12">
       <Card className="w-full max-w-md lg:max-w-lg">
         <CardHeader className="space-y-2 text-center">
           <CardTitle className="text-2xl">Login</CardTitle>
@@ -106,7 +107,7 @@ const LoginPage = () => {
 
           <div className="mt-6 text-center text-sm">
             <span className="text-muted-foreground">Don't have an account? </span>
-            <Link to="/register" className="font-medium text-primary hover:underline">
+            <Link to={paths.auth.register} className="font-medium text-primary hover:underline">
               Register here
             </Link>
           </div>

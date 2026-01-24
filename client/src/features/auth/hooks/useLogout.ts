@@ -2,6 +2,7 @@ import { api } from "@/services/api";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { useAuthStore } from "../authStore";
+import { paths } from "@/paths";
 
 type LogoutRequest = {
   refreshToken: string;
@@ -27,7 +28,7 @@ export const useLogout = () => {
     },
   });
 
-  const logout = (redirectTo: string = "/") => {
+  const logout = (redirectTo: string = paths.root) => {
     if (tokens?.refreshToken) {
       mutation.mutate(
         {
@@ -38,7 +39,7 @@ export const useLogout = () => {
           onSettled: () => {
             navigate(redirectTo);
           },
-        }
+        },
       );
     } else {
       logoutFromStore();

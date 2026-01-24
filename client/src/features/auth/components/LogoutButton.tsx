@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useLogout } from "../hooks/useLogout";
 import { cn } from "@/lib/utils";
+import { paths } from "@/paths";
 
 interface LogoutButtonProps {
   className?: string;
@@ -10,7 +11,12 @@ interface LogoutButtonProps {
 const LogoutButton = ({ variant, className }: LogoutButtonProps) => {
   const { logout, isPending } = useLogout();
   return (
-    <Button onClick={() => logout("/login")} disabled={isPending} variant={variant || null} className={cn(className)}>
+    <Button
+      onClick={() => logout(paths.auth.login)}
+      disabled={isPending}
+      variant={variant || null}
+      className={cn(className)}
+    >
       {isPending ? "Logging out..." : "Logout"}
     </Button>
   );

@@ -1,6 +1,7 @@
 import { isRouteErrorResponse, Link, useRouteError } from "react-router";
 import { Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { paths } from "@/paths";
 
 const ErrorPage = () => {
   const error = useRouteError();
@@ -40,7 +41,7 @@ const ErrorPage = () => {
         <p className="mt-4 text-muted-foreground">{pMessage}</p>
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Button asChild>
-            <Link to="/">
+            <Link to={paths.root}>
               <Home className="mr-2 h-4 w-4" />
               Go Home
             </Link>
