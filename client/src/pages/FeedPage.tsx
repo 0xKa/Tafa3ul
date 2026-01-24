@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { CustomSpinner } from "@/components/ui/spinner";
-
+import CreatePostDialog from "@/features/feed/components/CreatePostDialog";
 import { usePosts } from "@/features/feed/hooks/usePosts";
 import ErrorState from "@/shared/components/ErrorState";
 import { Loader2, Newspaper } from "lucide-react";
 import { useEffect, useRef, useCallback } from "react";
+import { useAuthStore } from "@/features/auth/authStore";
 
 const FeedPage = () => {
+  const { isAuthenticated } = useAuthStore();
   const { data, isLoading, isError, error, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } = usePosts(10);
 
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -62,7 +64,7 @@ const FeedPage = () => {
             <p className="text-muted-foreground">{totalCount ? `${totalCount} posts` : "See what's happening"}</p>
           </div>
         </div>
-        {/* {isAuthenticated && <CreatePostDialog />} */}
+        {isAuthenticated && <CreatePostDialog />}
       </div>
 
       {/* Posts */}

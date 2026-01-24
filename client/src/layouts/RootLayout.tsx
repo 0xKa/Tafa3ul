@@ -14,7 +14,7 @@ const RootLayout = () => {
     <div className="relative flex min-h-svh flex-col">
       <Navbar />
       <main className="flex-1">
-        <Toaster position="top-center" duration={4000} />
+        <Toaster position="top-left" duration={4000} />
         <Outlet />
       </main>
       {shouldShowFooter && <Footer />}

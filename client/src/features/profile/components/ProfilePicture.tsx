@@ -6,8 +6,9 @@ import { useRef, useState, type ChangeEvent } from "react";
 import { useUploadProfilePicture } from "../hooks/useUploadProfilePicture";
 
 interface ProfilePictureProps {
-  imgUrl?: string;
   fullName: string;
+  imgUrl?: string;
+  size?: number;
   allowEdit?: boolean;
 }
 
@@ -17,7 +18,7 @@ const withCacheBuster = (url: string, value: number) => {
   return url.includes("?") ? `${url}&v=${value}` : `${url}?v=${value}`;
 };
 
-const ProfilePicture = ({ imgUrl, fullName, allowEdit }: ProfilePictureProps) => {
+const ProfilePicture = ({ imgUrl, fullName, size = 20, allowEdit }: ProfilePictureProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [cacheBuster, setCacheBuster] = useState(0);
   const { mutateAsync: uploadAsync, isPending: isUploading } = useUploadProfilePicture();
@@ -40,7 +41,7 @@ const ProfilePicture = ({ imgUrl, fullName, allowEdit }: ProfilePictureProps) =>
 
   return (
     <div className="relative inline-block">
-      <Avatar className="size-20">
+      <Avatar className={`size-${size}`}>
         <AvatarImage
           src={imgUrl ? withCacheBuster(imgUrl, cacheBuster) : undefined}
           alt="Profile Picture"
