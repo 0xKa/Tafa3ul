@@ -90,8 +90,8 @@ const ProfilesGrid = ({ profiles, totalPages, currentPage, handlePageChange }: P
   };
 
   return (
-    <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="flex flex-col min-h-180">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 flex-1">
         {profiles.map((profile) => (
           <UserCard key={profile.id} profile={profile} />
         ))}
@@ -118,7 +118,7 @@ const ProfilesGrid = ({ profiles, totalPages, currentPage, handlePageChange }: P
           </PaginationContent>
         </Pagination>
       )}
-    </>
+    </div>
   );
 };
 

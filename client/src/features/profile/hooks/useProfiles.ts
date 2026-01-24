@@ -24,7 +24,7 @@ const fetchProfiles = async (page: number = 1, pageSize: number = 20): Promise<P
 
 export const useProfiles = (page: number = 1, pageSize: number = 20) => {
   return useQuery({
-    queryKey: ["profiles", page, pageSize],
+    queryKey: ["profiles", page * pageSize - pageSize + 1, pageSize * page],
     queryFn: () => fetchProfiles(page, pageSize),
     staleTime: 30000, // 30 seconds
   });
