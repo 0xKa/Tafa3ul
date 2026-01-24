@@ -7,7 +7,7 @@ import { useUploadProfilePicture } from "../hooks/useUploadProfilePicture";
 
 interface ProfilePictureProps {
   imgUrl?: string;
-  fullName?: string;
+  fullName: string;
   allowEdit?: boolean;
 }
 
@@ -46,9 +46,7 @@ const ProfilePicture = ({ imgUrl, fullName, allowEdit }: ProfilePictureProps) =>
           alt="Profile Picture"
           className="object-fill"
         />
-        <AvatarFallback className="text-xl bg-primary/20 text-primary">
-          {getInitials(fullName ?? null, "User")}
-        </AvatarFallback>
+        <AvatarFallback className="text-xl bg-primary/20 text-primary">{getInitials(fullName)}</AvatarFallback>
       </Avatar>
 
       {allowEdit && (

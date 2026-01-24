@@ -9,7 +9,7 @@ export function GetDefaultDate() {
   return new Date().toISOString().split("T")[0];
 }
 
-export function getInitials(fullName: string | null, username: string): string {
+export function getInitials(fullName: string, username?: string): string {
   if (fullName) {
     return fullName
       .split(" ")
@@ -18,7 +18,7 @@ export function getInitials(fullName: string | null, username: string): string {
       .toUpperCase()
       .slice(0, 2);
   }
-  return username.slice(0, 2).toUpperCase();
+  return username ? username.slice(0, 2).toUpperCase() : "User";
 }
 
 export function formatDate(dateString: string | null): string {
