@@ -76,3 +76,10 @@ export function GetProfilePicUrl(userId: string): string {
 export function GetCacheBustedProfilePicUrl(userId: string): string {
   return `${import.meta.env.VITE_PROFILE_PIC_BASE_URL}/${userId}.webp?v=${Date.now()}`;
 }
+
+export function GetPostImageUrl(postId: string): string {
+  return `${import.meta.env.VITE_POST_IMAGE_BASE_URL}/${postId}`;
+}
+export function GetCacheBustedPostImageUrl(postId: string): string {
+  return `${import.meta.env.VITE_POST_IMAGE_BASE_URL}/${postId}?v=${Date.now()}`;
+}

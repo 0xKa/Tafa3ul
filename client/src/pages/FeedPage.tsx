@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { CustomSpinner } from "@/components/ui/spinner";
 import CreatePostDialog from "@/features/feed/components/CreatePostDialog";
+import PostCard from "@/features/feed/components/PostCard";
 import { usePosts } from "@/features/feed/hooks/usePosts";
 import ErrorState from "@/shared/components/ErrorState";
 import { Loader2, Newspaper } from "lucide-react";
@@ -76,9 +77,9 @@ const FeedPage = () => {
         </div>
       ) : (
         <div className="space-y-4">
-          {/* {posts.map((post) => (
+          {posts.map((post) => (
             <PostCard key={post.id} post={post} />
-          ))} */}
+          ))}
 
           {/* Infinite scroll trigger */}
           <div ref={loadMoreRef} className="py-4 flex justify-center">
