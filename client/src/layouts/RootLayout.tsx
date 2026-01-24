@@ -7,7 +7,7 @@ import { paths } from "@/paths";
 const RootLayout = () => {
   const location = useLocation();
 
-  const showFooterPaths: string[] = [paths.root, ...Object.values(paths.public)];
+  const showFooterPaths: string[] = [paths.root, paths.public.about];
   const shouldShowFooter = showFooterPaths.includes(location.pathname);
 
   return (

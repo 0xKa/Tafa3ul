@@ -28,6 +28,7 @@ import { Link, NavLink } from "react-router";
 
 const publicNavLinks = [
   { href: paths.root, label: "Home" },
+  { href: paths.public.users, label: "Users" },
   { href: paths.public.about, label: "About" },
 ];
 
@@ -35,6 +36,7 @@ const authenticatedNavLinks = [
   { href: paths.root, label: "Home" },
   { href: paths.protected.dashboard, label: "Dashboard" },
   { href: paths.protected.feed, label: "Feed" },
+  { href: paths.public.users, label: "Users" },
   { href: paths.protected.settings, label: "Settings" },
 ];
 

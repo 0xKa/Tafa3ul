@@ -4,8 +4,12 @@ import AccountInfoTab from "@/features/profile/components/AccountInfoTab";
 import ProfileHeaderCard from "@/features/profile/components/ProfileHeaderCard";
 import { useProfile } from "@/features/profile/hooks/useProfile";
 
-const ProfilePage = () => {
-  const { data: profile, isLoading, isError, error, refetch, isRefetching } = useProfile();
+interface ProfilePageProps {
+  userId?: string;
+}
+
+const ProfilePage = ({ userId }: ProfilePageProps) => {
+  const { data: profile, isLoading, isError, error, refetch, isRefetching } = useProfile(userId);
 
   if (isLoading) {
     return <CustomSpinner />;
