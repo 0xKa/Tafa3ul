@@ -1,11 +1,14 @@
-import ErrorState from "@/shared/components/ErrorState";
 import { CustomSpinner } from "@/components/ui/spinner";
+import ProfilesGrid from "@/features/profile/components/ProfilesGird";
 import { useProfiles } from "@/features/profile/hooks/useProfiles";
-import UserCard from "@/features/profile/components/UserCard";
+import ErrorState from "@/shared/components/ErrorState";
 import { Users } from "lucide-react";
+import { useState } from "react";
 
 const UsersPage = () => {
-  const { data, isLoading, isError, error, refetch } = useProfiles();
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 8;
+  const { data, isLoading, isError, error, refetch } = useProfiles(currentPage, pageSize);
 
   if (isLoading) {
     return <CustomSpinner />;
@@ -15,7 +18,13 @@ const UsersPage = () => {
     return <ErrorState description="Failed to load users" error={error} onRetry={refetch} />;
   }
 
-  const profiles = data?.data ?? [];
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const profiles = data?.data.sort((a, b) => a.firstName.localeCompare(b.firstName)) ?? [];
+  const totalPages = data?.totalPages ?? 0;
 
   return (
     <div className="container max-w-6xl mx-auto px-4 py-8">
@@ -36,11 +45,12 @@ const UsersPage = () => {
           <p className="text-muted-foreground mt-2">Be the first to create a profile!</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {profiles.map((profile) => (
-            <UserCard key={profile.id} profile={profile} />
-          ))}
-        </div>
+        <ProfilesGrid
+          profiles={profiles}
+          totalPages={totalPages}
+          currentPage={currentPage}
+          handlePageChange={handlePageChange}
+        />
       )}
     </div>
   );
