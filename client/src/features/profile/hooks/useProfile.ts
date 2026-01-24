@@ -3,19 +3,19 @@ import { api } from "@/services/api";
 import { handleApiError } from "@/lib/error-handler";
 import type { Profile } from "../types";
 
-const fetchProfile = async (userId?: string): Promise<Profile> => {
+const fetchProfile = async (username?: string): Promise<Profile> => {
   try {
-    const res = await api.get<Profile>(`/Profile/${userId ? `user/${userId}` : "me"}`);
+    const res = await api.get<Profile>(`/Profile/${username ? `user/${username}` : "me"}`);
     return res.data;
   } catch (error) {
     return handleApiError(error);
   }
 };
 
-export const useProfile = (userId?: string) => {
+export const useProfile = (username?: string) => {
   return useQuery({
-    queryKey: ["profile", userId ?? "me"],
-    queryFn: () => fetchProfile(userId),
+    queryKey: ["profile", username ?? "me"],
+    queryFn: () => fetchProfile(username),
     staleTime: 5000,
   });
 };

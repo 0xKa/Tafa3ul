@@ -14,7 +14,7 @@ const UserCard = ({ profile }: UserCardProps) => {
   const profilePicUrl = `${import.meta.env.VITE_PROFILE_PIC_BASE_URL}/${profile.userId}.webp`;
 
   return (
-    <Link to={paths.public.userProfile(profile.userId)}>
+    <Link to={paths.public.userProfile(profile.user.username)}>
       <Card className="hover:shadow-md transition-shadow cursor-pointer h-full min-h-75">
         <CardContent className="pt-6 flex flex-col items-center text-center space-y-3">
           <Avatar className="size-20">

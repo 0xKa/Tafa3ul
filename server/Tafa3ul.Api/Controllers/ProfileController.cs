@@ -62,7 +62,7 @@ public class ProfileController
         return Ok(ProfileResponseDto.FromEntity(profile));
     }
 
-    [HttpGet("user/{user_id}")]
+    [HttpGet("user/{user_id:guid}")]
     [AllowAnonymous]
     public async Task<ActionResult<ProfileResponseDto>> GetProfileByUserId(Guid user_id)
     {
@@ -72,6 +72,18 @@ public class ProfileController
 
         return Ok(ProfileResponseDto.FromEntity(profile));
     }
+
+    [HttpGet("user/{username}")]
+    [AllowAnonymous]
+    public async Task<ActionResult<ProfileResponseDto>> GetProfileByUsername(string username)
+    {
+        var profile = await profileService.GetProfileByUsernameAsync(username);
+        if (profile == null)
+            return NotFound(new { message = "Profile not found" });
+
+        return Ok(ProfileResponseDto.FromEntity(profile));
+    }
+
 
     [HttpGet("user/{user_id}/posts")]
     [AllowAnonymous]

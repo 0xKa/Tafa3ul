@@ -16,7 +16,7 @@ export const router = createBrowserRouter([
       // Public Routes
       { index: true, element: <LandingPage /> },
       { path: paths.public.users, element: <UsersPage /> },
-      { path: paths.public.userProfile(":id"), element: <ProfilePage /> },
+      { path: paths.public.userProfile(":username"), element: <ProfilePage /> },
       { path: paths.public.about, element: <AboutPage /> },
 
       // Public-Only Routes

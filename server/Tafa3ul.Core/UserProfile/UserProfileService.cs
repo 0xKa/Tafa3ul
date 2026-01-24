@@ -43,6 +43,17 @@ public class UserProfileService(Tafa3ulDbContext context, LocalFileStorageServic
             .FirstOrDefaultAsync(p => p.UserId == userId);
     }
 
+    public async Task<Profile?> GetProfileByUsernameAsync(string username)
+    {
+        return await context.Profiles
+            .Include(p => p.User)
+            .Include(p => p.Social)
+            .Include(p => p.Skills).ThenInclude(ps => ps.Skill)
+            .Include(p => p.Experiences)
+            .Include(p => p.Educations)
+            .FirstOrDefaultAsync(p => p.User.Username == username);
+    }
+
     public async Task<(List<Profile> Profiles, int TotalCount)>
         GetAllProfilesAsync(int page, int pageSize)
     {

@@ -3,7 +3,7 @@ export const paths = {
 
   public: {
     users: "/users",
-    userProfile: (id: string) => `/users/${id}`,
+    userProfile: (username: string) => `/users/${username}`,
     about: "/about",
   },
 

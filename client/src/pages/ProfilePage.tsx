@@ -6,8 +6,8 @@ import { useProfile } from "@/features/profile/hooks/useProfile";
 import { useParams } from "react-router";
 
 const ProfilePage = () => {
-  const { id } = useParams();
-  const { data: profile, isLoading, isError, error, refetch, isRefetching } = useProfile(id);
+  const { username } = useParams();
+  const { data: profile, isLoading, isError, error, refetch, isRefetching } = useProfile(username);
 
   if (isLoading) {
     return <CustomSpinner />;
@@ -23,9 +23,9 @@ const ProfilePage = () => {
         profile={profile!}
         isRefetching={isRefetching}
         onRefetch={() => refetch()}
-        editDisabled={!!id}
+        editDisabled={!!username}
       />
-      <AccountInfoTab profile={profile!} editDisabled={!!id} />
+      <AccountInfoTab profile={profile!} editDisabled={!!username} />
     </div>
   );
 };
