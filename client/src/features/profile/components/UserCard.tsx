@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
-import { getInitials } from "@/lib/utils";
+import { getInitials, GetProfilePicUrl } from "@/lib/utils";
 import { MapPin, Building2 } from "lucide-react";
 import type { Profile } from "../types";
 import { Link } from "react-router-dom";
@@ -11,15 +11,13 @@ interface UserCardProps {
 }
 
 const UserCard = ({ profile }: UserCardProps) => {
-  const profilePicUrl = `${import.meta.env.VITE_PROFILE_PIC_BASE_URL}/${profile.userId}.webp`;
-
   return (
     <Link to={paths.public.userProfile(profile.user.username)}>
       <Card className="hover:shadow-md transition-shadow cursor-pointer h-full min-h-70 max-h-70">
         <CardContent className="pt-6 flex flex-col items-center text-center h-full">
           <div className="flex flex-col items-center space-y-3">
             <Avatar className="size-20">
-              <AvatarImage src={profilePicUrl} alt={profile.fullName} className="object-cover" />
+              <AvatarImage src={GetProfilePicUrl(profile.userId)} alt={profile.fullName} className="object-cover" />
               <AvatarFallback className="text-xl bg-primary/20 text-primary">
                 {getInitials(profile.fullName)}
               </AvatarFallback>

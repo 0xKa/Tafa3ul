@@ -69,3 +69,10 @@ export function sortByDate<T>(
     return order === "desc" ? dateB - dateA : dateA - dateB;
   });
 }
+
+export function GetProfilePicUrl(userId: string): string {
+  return `${import.meta.env.VITE_PROFILE_PIC_BASE_URL}/${userId}.webp`;
+}
+export function GetCacheBustedProfilePicUrl(userId: string): string {
+  return `${import.meta.env.VITE_PROFILE_PIC_BASE_URL}/${userId}.webp?v=${Date.now()}`;
+}

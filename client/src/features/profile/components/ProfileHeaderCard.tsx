@@ -6,6 +6,7 @@ import type { Profile } from "../types";
 import EditProfileDialogButton from "./EditProfileDialogButton";
 import ProfilePicture from "./ProfilePicture";
 import SocialLinks from "./social/SocialLinks";
+import { GetProfilePicUrl } from "@/lib/utils";
 
 interface ProfileHeaderProps {
   profile: Profile;
@@ -21,7 +22,7 @@ const ProfileHeaderCard = ({ profile, isRefetching, onRefetch, editDisabled }: P
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4 ">
             <ProfilePicture
-              imgUrl={`${import.meta.env.VITE_PROFILE_PIC_BASE_URL}/${profile.user.id}.webp`}
+              imgUrl={GetProfilePicUrl(profile.userId)}
               fullName={profile?.fullName}
               allowEdit={!editDisabled}
             />
