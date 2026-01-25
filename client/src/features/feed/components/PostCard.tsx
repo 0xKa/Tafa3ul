@@ -12,11 +12,13 @@ import { GetPostImageUrl, GetProfilePicUrl } from "@/lib/utils";
 import { paths } from "@/paths";
 import { formatDistanceToNow } from "date-fns";
 import { Heart, MessageCircle, MoreHorizontal, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { useDeletePost } from "../hooks/useDeletePost";
 import { useLikePost, useUnlikePost } from "../hooks/useLikePost";
 import type { Post } from "../types";
+import PostComments from "./PostComments";
 
 interface PostCardProps {
   post: Post;
@@ -24,6 +26,7 @@ interface PostCardProps {
 
 const PostCard = ({ post }: PostCardProps) => {
   const { user } = useAuthStore();
+  const [showComments, setShowComments] = useState(false);
 
   const { mutate: likePost, isPending: isLiking } = useLikePost();
   const { mutate: unlikePost, isPending: isUnliking } = useUnlikePost();
@@ -113,11 +116,13 @@ const PostCard = ({ post }: PostCardProps) => {
             <Heart className={`size-4 mr-1.5 ${hasLiked ? "fill-current" : ""}`} />
             {post.likesCount}
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => {}}>
+          <Button variant="ghost" size="sm" onClick={() => setShowComments(!showComments)}>
             <MessageCircle className="size-4 mr-1.5" />
             {post.commentsCount}
           </Button>
         </div>
+
+        {showComments && <PostComments post={post} />}
       </CardFooter>
     </Card>
   );
