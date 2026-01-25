@@ -5,3 +5,6 @@ export { default as ProfilePage } from "./ProfilePage";
 export { default as DashboardPage } from "./DashboardPage";
 export { default as ErrorPage } from "./ErrorPage";
 export { default as AboutPage } from "./AboutPage";
+export { default as FeedPage } from "./FeedPage";
+export { default as UsersPage } from "./UsersPage";
+export { default as SettingsPage } from "./SettingsPage";

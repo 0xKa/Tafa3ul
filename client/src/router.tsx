@@ -2,9 +2,18 @@ import { createBrowserRouter } from "react-router";
 import ProtectedRoute from "./layouts/ProtectedRoute";
 import PublicOnlyRoute from "./layouts/PublicOnlyRoute";
 import RootLayout from "./layouts/RootLayout";
-import { AboutPage, DashboardPage, ErrorPage, LandingPage, LoginPage, ProfilePage, RegisterPage } from "./pages";
-import FeedPage from "./pages/FeedPage";
-import UsersPage from "./pages/UsersPage";
+import {
+  AboutPage,
+  DashboardPage,
+  ErrorPage,
+  FeedPage,
+  LandingPage,
+  LoginPage,
+  ProfilePage,
+  RegisterPage,
+  SettingsPage,
+  UsersPage,
+} from "./pages";
 import { paths } from "./paths";
 
 export const router = createBrowserRouter([
@@ -35,7 +44,7 @@ export const router = createBrowserRouter([
           { path: paths.protected.dashboard, element: <DashboardPage /> },
           { path: paths.protected.feed, element: <FeedPage /> },
           { path: paths.protected.profile, element: <ProfilePage /> },
-          { path: paths.protected.settings, element: <h1>SettingsPage</h1> },
+          { path: paths.protected.settings, element: <SettingsPage /> },
         ],
       },
 
