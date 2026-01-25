@@ -90,7 +90,7 @@ const CreatePostDialog = () => {
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogTrigger asChild>
-        <Button className="gap-2">
+        <Button className="gap-2" size="sm">
           <Plus className="size-4" />
           Create Post
         </Button>
