@@ -85,10 +85,9 @@ public class UserProfileService(Tafa3ulDbContext context, LocalFileStorageServic
 
         context.Users.Remove(user);
         await context.SaveChangesAsync();
+        await fileStorageService.DeleteProfileImageAsync(userId);
         return true;
     }
-
-
 
     public async Task<string> UpdateProfileImageAsync(Stream file, Guid userId)
     {

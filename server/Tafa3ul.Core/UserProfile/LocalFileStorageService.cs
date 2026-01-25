@@ -66,4 +66,35 @@ public class LocalFileStorageService(IWebHostEnvironment env)
 
         return $"/post-images/{fileName}";
     }
+
+    public Task<bool> DeleteProfileImageAsync(Guid userId)
+    {
+        if (string.IsNullOrEmpty(_env.WebRootPath))
+            throw new InvalidOperationException("wwwroot is not configured.");
+
+        var folderName = "profile-images";
+        var folder = Path.Combine(_env.WebRootPath, folderName);
+        var fileName = $"{userId}.webp";
+        var path = Path.Combine(folder, fileName);
+
+        if (!File.Exists(path))
+            return Task.FromResult(false);
+
+        File.Delete(path);
+        return Task.FromResult(true);
+    }
+
+    public Task<bool> DeletePostImageAsync(Guid postId)
+    {
+        if (string.IsNullOrEmpty(_env.WebRootPath))
+            throw new InvalidOperationException("wwwroot is not configured.");
+        var folder = Path.Combine(_env.WebRootPath, "post-images");
+        var fileName = $"{postId}.jpg";
+        var path = Path.Combine(folder, fileName);
+        if (!File.Exists(path))
+            return Task.FromResult(false);
+        File.Delete(path);
+        return Task.FromResult(true);
+    }
+
 }
