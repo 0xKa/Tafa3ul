@@ -70,22 +70,25 @@ public class UserProfileService(Tafa3ulDbContext context, LocalFileStorageServic
         return (profiles, totalCount);
     }
 
-    public async Task<bool> DeleteProfileAsync(Guid userId)
+    public async Task<bool> DeleteProfileAndUserAsync(Guid userId)
     {
         var profile = await context.Profiles
-            .Include(p => p.Skills)
-            .Include(p => p.Experiences)
-            .Include(p => p.Educations)
-            .Include(p => p.Social)
             .FirstOrDefaultAsync(p => p.UserId == userId);
 
-        if (profile == null)
+        var user = await context.Users.FindAsync(userId);
+
+        if (user == null)
             return false;
 
-        context.Profiles.Remove(profile);
+        if (profile != null)
+            context.Profiles.Remove(profile);
+
+        context.Users.Remove(user);
         await context.SaveChangesAsync();
         return true;
     }
+
+
 
     public async Task<string> UpdateProfileImageAsync(Stream file, Guid userId)
     {

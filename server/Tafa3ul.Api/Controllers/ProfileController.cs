@@ -130,7 +130,7 @@ public class ProfileController
         if (userId == Guid.Empty)
             return Unauthorized(new { message = "User not authenticated" });
 
-        var deleted = await profileService.DeleteProfileAsync(userId);
+        var deleted = await profileService.DeleteProfileAndUserAsync(userId);
         if (!deleted)
             return NotFound(new { message = "Profile not found" });
 
