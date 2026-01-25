@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuthStore } from "@/features/auth/authStore";
 import { useTheme } from "@/components/theme/theme-provider";
+import { useDeleteAccount } from "@/features/settings/useDeleteAccount";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -21,11 +22,13 @@ import { Separator } from "@/components/ui/separator";
 import { Settings, Bell, Lock, Palette, Shield, Trash2, Eye } from "lucide-react";
 import { useNavigate } from "react-router";
 import { paths } from "@/paths";
+import { toast } from "sonner";
 
 const SettingsPage = () => {
   const { user, logout } = useAuthStore();
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
+  const { mutate: deleteAccount, isPending } = useDeleteAccount();
 
   // Notification Settings
   const [emailNotifications, setEmailNotifications] = useState(true);
@@ -39,15 +42,14 @@ const SettingsPage = () => {
   const [showEmail, setShowEmail] = useState(false);
   const [showActivity, setShowActivity] = useState(true);
 
-  const handleDeleteAccount = async () => {
-    try {
-      // TODO: Call API to delete account
-      // await api.delete('/profile');
-      logout();
-      navigate(paths.root);
-    } catch (error) {
-      console.error("Failed to delete account:", error);
-    }
+  const handleDeleteAccount = () => {
+    deleteAccount(undefined, {
+      onSuccess: () => {
+        logout();
+        navigate(paths.root);
+        toast.success("Your account has been deleted successfully.");
+      },
+    });
   };
 
   return (
@@ -270,9 +272,10 @@ const SettingsPage = () => {
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleDeleteAccount}
-                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      disabled={isPending}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Yes, delete my account
+                      {isPending ? "Deleting..." : "Yes, delete my account"}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
