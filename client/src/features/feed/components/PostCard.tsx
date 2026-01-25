@@ -11,10 +11,11 @@ import ProfilePicture from "@/features/profile/components/ProfilePicture";
 import { GetPostImageUrl, GetProfilePicUrl } from "@/lib/utils";
 import { paths } from "@/paths";
 import { formatDistanceToNow } from "date-fns";
-import { MoreHorizontal, Trash2 } from "lucide-react";
-import { useEffect } from "react";
+import { Heart, MessageCircle, MoreHorizontal, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import { useDeletePost } from "../hooks/useDeletePost";
+import { useLikePost, useUnlikePost } from "../hooks/useLikePost";
 import type { Post } from "../types";
 
 interface PostCardProps {
@@ -24,17 +25,26 @@ interface PostCardProps {
 const PostCard = ({ post }: PostCardProps) => {
   const { user } = useAuthStore();
 
+  const { mutate: likePost, isPending: isLiking } = useLikePost();
+  const { mutate: unlikePost, isPending: isUnliking } = useUnlikePost();
   const { mutate: deletePost, isPending: isDeleting } = useDeletePost();
 
   const isOwnPost = user?.id === post.userId;
+  const hasLiked = post.likes.some((like) => like.userId === user?.id);
 
-  useEffect(() => {
-    console.log(post.imageUrl);
-  });
+  const handleLikeToggle = () => {
+    if (isLiking || isUnliking) return;
+    if (hasLiked) {
+      unlikePost(post.id);
+    } else {
+      likePost(post.id);
+    }
+  };
 
   const handleDelete = () => {
     if (isDeleting) return;
     deletePost(post.id);
+    toast.success("Post deleted successfully.");
   };
 
   return (
@@ -91,7 +101,24 @@ const PostCard = ({ post }: PostCardProps) => {
         )}
       </CardContent>
 
-      <CardFooter className="flex flex-col gap-3 pt-0"></CardFooter>
+      <CardFooter className="flex flex-col gap-3 pt-0">
+        <div className="flex items-center gap-4 w-full">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleLikeToggle}
+            disabled={isLiking || isUnliking || !user}
+            className={hasLiked ? "text-red-500 hover:text-red-600" : ""}
+          >
+            <Heart className={`size-4 mr-1.5 ${hasLiked ? "fill-current" : ""}`} />
+            {post.likesCount}
+          </Button>
+          <Button variant="ghost" size="sm" onClick={() => {}}>
+            <MessageCircle className="size-4 mr-1.5" />
+            {post.commentsCount}
+          </Button>
+        </div>
+      </CardFooter>
     </Card>
   );
 };
