@@ -3,6 +3,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
@@ -16,7 +17,7 @@ import { usePosts } from "@/features/feed/hooks/usePosts";
 import ErrorState from "@/shared/components/ErrorState";
 import SearchBar from "@/shared/components/SearchBar";
 import { useDebounce } from "@/shared/hooks/useDebounce";
-import { ArrowUpDown, Newspaper, Search } from "lucide-react";
+import { ArrowUpDown, Menu, Newspaper, Search } from "lucide-react";
 import { useState } from "react";
 import { GoHeartFill } from "react-icons/go";
 import { GrNew } from "react-icons/gr";
@@ -76,7 +77,12 @@ const FeedPage = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" onClick={() => setIsSearchOpen((prev) => !prev)}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsSearchOpen((prev) => !prev)}
+            className="hidden md:inline-flex"
+          >
             <Search />
             Search
           </Button>
@@ -113,7 +119,27 @@ const FeedPage = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {isAuthenticated && <CreatePostDialog />}
+          {isAuthenticated && (
+            <div className="hidden md:block">
+              <CreatePostDialog />
+            </div>
+          )}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild className="md:hidden">
+              <Button variant="ghost" size="icon">
+                <Menu className="size-5" />
+                <span className="sr-only">Toggle actions</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem onSelect={() => setIsSearchOpen((prev) => !prev)}>
+                <Search className="size-4" />
+                {isSearchOpen ? "Hide Search" : "Search"}
+              </DropdownMenuItem>
+              {isAuthenticated && <CreatePostDialog triggerInMenu />}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 

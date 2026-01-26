@@ -10,14 +10,18 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuthStore } from "@/features/auth/authStore";
+import ProfilePicture from "@/features/profile/components/ProfilePicture";
 import { GetProfilePicUrl } from "@/lib/utils";
 import { ImagePlus, Loader2, Plus, X } from "lucide-react";
 import { useRef, useState, type ChangeEvent } from "react";
-import { useCreatePost } from "../hooks/useCreatePost";
 import { toast } from "sonner";
-import ProfilePicture from "@/features/profile/components/ProfilePicture";
+import { useCreatePost } from "../hooks/useCreatePost";
 
-const CreatePostDialog = () => {
+type CreatePostDialogProps = {
+  triggerInMenu?: boolean;
+};
+
+const CreatePostDialog = ({ triggerInMenu = false }: CreatePostDialogProps) => {
   const { user } = useAuthStore();
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState("");
@@ -90,7 +94,7 @@ const CreatePostDialog = () => {
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogTrigger asChild>
-        <Button className="gap-2" size="sm">
+        <Button className="gap-2 w-full justify-start" variant={triggerInMenu ? "ghost" : "default"} size="sm">
           <Plus className="size-4" />
           Create Post
         </Button>
