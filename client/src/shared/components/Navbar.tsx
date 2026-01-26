@@ -33,7 +33,6 @@ const publicNavLinks = [
 ];
 
 const authenticatedNavLinks = [
-  { href: paths.root, label: "Home" },
   { href: paths.protected.dashboard, label: "Dashboard" },
   { href: paths.protected.feed, label: "Feed" },
   { href: paths.public.users, label: "Users" },
