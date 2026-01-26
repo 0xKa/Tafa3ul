@@ -47,11 +47,11 @@ export const useLogin = () => {
       // Store in Zustand (also persists to localStorage via middleware)
       login(user, tokens);
 
-      console.log("Login successful - user authenticated:", user.username);
+      // console.log("Login successful - user authenticated:", user.username);
     },
 
-    onError: (error) => {
-      console.log("Login failed:", error.message);
-    },
+    // onError: (error) => {
+    //   console.log("Login failed:", error.message);
+    // },
   });
 };

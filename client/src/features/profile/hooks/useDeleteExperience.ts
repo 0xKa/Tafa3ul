@@ -45,11 +45,11 @@ export const useDeleteExperience = () => {
       return { cachedProfile };
     },
 
-    onError: (error, _variables, context) => {
+    onError: (_error, _variables, context) => {
       if (context?.cachedProfile) {
         queryClient.setQueryData(["profile"], context.cachedProfile);
       }
-      console.error("Failed to delete experience:", error);
+      // console.error("Failed to delete experience:", error);
     },
 
     onSettled: () => {
