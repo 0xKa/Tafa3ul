@@ -14,7 +14,8 @@ import CreatePostDialog from "@/features/feed/components/CreatePostDialog";
 import PostsList from "@/features/feed/components/PostsList";
 import { usePosts } from "@/features/feed/hooks/usePosts";
 import ErrorState from "@/shared/components/ErrorState";
-import { ArrowUpDown, Newspaper } from "lucide-react";
+import SearchBar from "@/shared/components/SearchBar";
+import { ArrowUpDown, Newspaper, Search } from "lucide-react";
 import { useState } from "react";
 import { GoHeartFill } from "react-icons/go";
 import { GrNew } from "react-icons/gr";
@@ -25,6 +26,8 @@ type SortByOption = "newest" | "oldest" | "mostLiked" | "mostCommented";
 
 const FeedPage = () => {
   const [sortBy, setSortBy] = useState<SortByOption>("newest");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const { isAuthenticated } = useAuthStore();
 
   const { data, isLoading, isError, error, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } = usePosts(10);
@@ -67,6 +70,10 @@ const FeedPage = () => {
         </div>
 
         <div className="flex items-center gap-3">
+          <Button variant="outline" size="sm" onClick={() => setIsSearchOpen((prev) => !prev)}>
+            <Search />
+            Search
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm" className="gap-2">
@@ -103,6 +110,19 @@ const FeedPage = () => {
           {isAuthenticated && <CreatePostDialog />}
         </div>
       </div>
+
+      {isSearchOpen && (
+        <div className="mb-6">
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search posts..."
+            leadingIcon={<Search className="size-4" />}
+            showClear
+            onClear={() => setSearchQuery("")}
+          />
+        </div>
+      )}
 
       {/* Posts */}
       <PostsList

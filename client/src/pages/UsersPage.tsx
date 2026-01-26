@@ -1,19 +1,18 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { CustomSpinner } from "@/components/ui/spinner";
 import ProfilesGrid from "@/features/profile/components/ProfilesGird";
 import { useProfiles } from "@/features/profile/hooks/useProfiles";
 import ErrorState from "@/shared/components/ErrorState";
+import SearchBar from "@/shared/components/SearchBar";
 import { useDebounce } from "@/shared/hooks/useDebounce";
-import { Search, Users, X } from "lucide-react";
+import { Search, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const UsersPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 8;
 
-  const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 400);
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearch = useDebounce(searchQuery, 400);
 
   useEffect(() => {
     setCurrentPage(1); // reset to first page on new search
@@ -47,26 +46,15 @@ const UsersPage = () => {
         </div>
       </div>
 
-      <div className="mb-6 flex items-center gap-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by username or name..."
-            className="pl-9"
-          />
-        </div>
-
-        {search.trim().length > 0 && (
-          <Button
-            onClick={() => setSearch("")}
-            className="inline-flex items-center justify-center rounded-md border px-3 py-2 text-sm bg-primary hover:bg-primary/50"
-            aria-label="Clear search"
-          >
-            <X className="size-4" />
-          </Button>
-        )}
+      <div className="mb-6">
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search by username or name..."
+          leadingIcon={<Search className="size-4" />}
+          showClear
+          onClear={() => setSearchQuery("")}
+        />
       </div>
 
       {profiles.length === 0 ? (
