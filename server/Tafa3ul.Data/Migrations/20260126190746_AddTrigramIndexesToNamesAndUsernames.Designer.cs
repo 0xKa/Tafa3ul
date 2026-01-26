@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Tafa3ul.Data.Persistence;
@@ -11,9 +12,11 @@ using Tafa3ul.Data.Persistence;
 namespace Tafa3ul.Data.Migrations
 {
     [DbContext(typeof(Tafa3ulDbContext))]
-    partial class Tafa3ulDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260126190746_AddTrigramIndexesToNamesAndUsernames")]
+    partial class AddTrigramIndexesToNamesAndUsernames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -15,6 +15,15 @@ internal class ProfileConfig : IEntityTypeConfiguration<Profile>
                .IsRequired();
 
 
+        builder.HasIndex(p => p.FirstName)
+            .HasMethod("GIN")
+            .HasOperators("gin_trgm_ops");
+
+        builder.HasIndex(p => p.LastName)
+            .HasMethod("GIN")
+            .HasOperators("gin_trgm_ops");
+
+
         builder.Property(x => x.FirstName).HasMaxLength(100);
         builder.Property(x => x.LastName).HasMaxLength(100);
         builder.Property(x => x.Company).HasMaxLength(150);

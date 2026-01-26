@@ -12,8 +12,13 @@ internal class UserConfig : IEntityTypeConfiguration<User>
         builder.Property(x => x.Username).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Email).IsRequired().HasMaxLength(100);
 
-        builder.HasIndex(x => x.Username).IsUnique();
         builder.HasIndex(x => x.Email).IsUnique();
+
+        builder.HasIndex(p => p.Username)
+            .IsUnique()
+            .HasMethod("GIN")
+            .HasOperators("gin_trgm_ops");
+
 
     }
 }
