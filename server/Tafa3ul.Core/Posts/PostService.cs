@@ -41,9 +41,27 @@ public class PostService(Tafa3ulDbContext context, LocalFileStorageService fileS
             .FirstOrDefaultAsync(p => p.Id == postId);
     }
 
-    public async Task<(List<Post> Posts, int TotalCount)> GetAllPostsAsync(int page, int pageSize)
+    public async Task<(List<Post> Posts, int TotalCount)> GetAllPostsAsync(
+        int page,
+        int pageSize,
+        string? search = null)
     {
-        var posts = await context.Posts
+        IQueryable<Post> query = context.Posts;
+
+        // apply search first
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            search = search.Trim();
+
+            query = query.Where(p =>
+                EF.Functions.ILike(p.Content, $"%{search}%")
+            );
+        }
+
+        var totalCount = await query.CountAsync();
+
+        // includes, ordering, pagination
+        var posts = await query
             .Include(p => p.User)
             .Include(p => p.Likes).ThenInclude(l => l.User)
             .Include(p => p.Comments).ThenInclude(c => c.User)
@@ -52,7 +70,6 @@ public class PostService(Tafa3ulDbContext context, LocalFileStorageService fileS
             .Take(pageSize)
             .ToListAsync();
 
-        var totalCount = await context.Posts.CountAsync();
         return (posts, totalCount);
     }
 

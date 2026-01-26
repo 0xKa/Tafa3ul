@@ -56,7 +56,6 @@ public class PostsController(PostService postService) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [AllowAnonymous]
     public async Task<IActionResult> GetPostById(Guid id)
     {
         var post = await postService.GetPostByIdAsync(id);
@@ -68,12 +67,15 @@ public class PostsController(PostService postService) : ControllerBase
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> GetAllPosts([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    public async Task<IActionResult> GetAllPosts(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? search = null)
     {
         if (page < 1) page = 1;
         if (pageSize < 1 || pageSize > 100) pageSize = 10;
 
-        var (posts, totalCount) = await postService.GetAllPostsAsync(page, pageSize);
+        var (posts, totalCount) = await postService.GetAllPostsAsync(page, pageSize, search);
 
         return Ok(new
         {
@@ -84,6 +86,7 @@ public class PostsController(PostService postService) : ControllerBase
             totalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
         });
     }
+
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePost(Guid id)
