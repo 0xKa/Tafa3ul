@@ -1,12 +1,12 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import { api } from "@/services/api";
 import { handleApiError } from "@/lib/error-handler";
 import type { PostsResponse } from "../types";
 
-const fetchPosts = async (page: number = 1, pageSize: number = 10): Promise<PostsResponse> => {
+const fetchPosts = async (page: number = 1, pageSize: number = 10, search?: string): Promise<PostsResponse> => {
   try {
     const res = await api.get<PostsResponse>("/Posts", {
-      params: { page, pageSize },
+      params: { page, pageSize, search },
     });
     return res.data;
   } catch (error) {
@@ -14,10 +14,11 @@ const fetchPosts = async (page: number = 1, pageSize: number = 10): Promise<Post
   }
 };
 
-export const usePosts = (pageSize: number = 10) => {
+export const usePosts = (pageSize: number = 10, search?: string) => {
+  search = search?.trim();
   return useInfiniteQuery({
-    queryKey: ["posts", pageSize],
-    queryFn: ({ pageParam }) => fetchPosts(pageParam, pageSize),
+    queryKey: ["posts", pageSize, search],
+    queryFn: ({ pageParam }) => fetchPosts(pageParam, pageSize, search),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       if (lastPage.page < lastPage.totalPages) {
@@ -26,5 +27,6 @@ export const usePosts = (pageSize: number = 10) => {
       return undefined;
     },
     staleTime: 60000, // 1 minute
+    placeholderData: keepPreviousData,
   });
 };

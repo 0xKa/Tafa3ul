@@ -15,6 +15,7 @@ import PostsList from "@/features/feed/components/PostsList";
 import { usePosts } from "@/features/feed/hooks/usePosts";
 import ErrorState from "@/shared/components/ErrorState";
 import SearchBar from "@/shared/components/SearchBar";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 import { ArrowUpDown, Newspaper, Search } from "lucide-react";
 import { useState } from "react";
 import { GoHeartFill } from "react-icons/go";
@@ -30,7 +31,12 @@ const FeedPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { isAuthenticated } = useAuthStore();
 
-  const { data, isLoading, isError, error, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } = usePosts(10);
+  const debouncedSearch = useDebounce(searchQuery, 400);
+
+  const { data, isLoading, isError, error, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } = usePosts(
+    10,
+    debouncedSearch,
+  );
 
   if (isLoading) {
     return <CustomSpinner />;
