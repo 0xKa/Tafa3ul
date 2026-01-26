@@ -55,18 +55,45 @@ public class UserProfileService(Tafa3ulDbContext context, LocalFileStorageServic
     }
 
     public async Task<(List<Profile> Profiles, int TotalCount)>
-        GetAllProfilesAsync(int page, int pageSize)
+        GetAllProfilesAsync(int page, int pageSize, string? search = null)
     {
+        IQueryable<Profile> query = context.Profiles
+            .Include(p => p.User);
 
-        var profiles = await context.Profiles
+        //apply search first
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            search = search.Trim();
+
+            query = query.Where(p =>
+                EF.Functions.ILike(p.User.Username, $"%{search}%") ||
+                EF.Functions.ILike(
+                    p.FirstName + " " + p.LastName,
+                    $"%{search}%"
+                ));
+
+            //exact username matches first
+            query = query
+                .OrderByDescending(p => p.User.Username == search)
+                .ThenBy(p => p.User.Username);
+        }
+        else
+        {
+            query = query.OrderBy(p => p.User.Username);
+        }
+
+        // count total before pagination
+        var totalCount = await query.CountAsync();
+
+        // apply pagination
+        var profiles = await query
             .Include(p => p.User)
-            .Include(p => p.Social)
-            .Include(p => p.Skills).ThenInclude(ps => ps.Skill)
+            // .Include(p => p.Social)
+            // .Include(p => p.Skills).ThenInclude(ps => ps.Skill)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
 
-        var totalCount = await context.Profiles.CountAsync();
         return (profiles, totalCount);
     }
 
