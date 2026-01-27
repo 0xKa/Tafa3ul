@@ -113,6 +113,7 @@ public class PostService(Tafa3ulDbContext context, LocalFileStorageService fileS
 
         context.Posts.Remove(post);
         await context.SaveChangesAsync();
+        await fileStorageService.DeletePostImageAsync(postId);
         return true;
     }
 
