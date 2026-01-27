@@ -6,6 +6,7 @@ using System.Text;
 using Tafa3ul.Core;
 using Tafa3ul.Core.Security;
 using Tafa3ul.Data;
+using Tafa3ul.Data.Persistence;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -37,18 +38,44 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// CORS Policy
+// CORS Policy (development only)
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy("AllowFrontend", policy =>
+//     {
+//         policy
+//             .WithOrigins("http://localhost:5173", "https://localhost:5173")
+//             .AllowAnyHeader()
+//             .AllowAnyMethod()
+//             .AllowCredentials();
+//     });
+// });
+
+// CORS Policy (production)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy
-            .WithOrigins("http://localhost:5173", "https://localhost:5173")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+        var allowedOrigins = builder.Configuration
+            .GetSection("Cors:AllowedOrigins")
+            .Get<string[]>();
+
+        if (allowedOrigins is { Length: > 0 })
+        {
+            policy.WithOrigins(allowedOrigins)
+                  .AllowCredentials();
+        }
+        else
+        {
+            policy.SetIsOriginAllowed(_ => true)
+                  .AllowCredentials();
+        }
+
+        policy.AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
+
 
 var app = builder.Build();
 
@@ -62,6 +89,15 @@ if (app.Environment.IsDevelopment())
 
     });
 }
+
+// Apply migrations automatically
+try
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<Tafa3ulDbContext>();
+    db.Database.Migrate();
+}
+catch { }
 
 app.UseCors("AllowFrontend");
 
