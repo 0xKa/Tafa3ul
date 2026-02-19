@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useIsAuthenticated } from "@/features/auth/authStore";
 import CtaSection from "@/features/landing/CtaSection";
 import FeaturesGrid from "@/features/landing/FeaturesGrid";
+import OfflineBanner from "@/features/landing/OfflineBanner";
 import { paths } from "@/paths";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router";
@@ -10,6 +11,9 @@ const LandingPage = () => {
   const isAuthenticated = useIsAuthenticated();
   return (
     <div className="flex flex-col">
+      <div className="container mx-auto px-4 pt-6">
+        <OfflineBanner />
+      </div>
       {/* hero */}
       <section className="relative overflow-hidden py-20 md:py-32">
         <div className="container mx-auto px-4">
