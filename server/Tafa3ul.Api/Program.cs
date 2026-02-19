@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Text;
 using Tafa3ul.Core;
 using Tafa3ul.Core.Security;
 using Tafa3ul.Data;
-using Tafa3ul.Data.Persistence;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -38,41 +36,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// CORS Policy (development only)
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy("AllowFrontend", policy =>
-//     {
-//         policy
-//             .WithOrigins("http://localhost:5173", "https://localhost:5173")
-//             .AllowAnyHeader()
-//             .AllowAnyMethod()
-//             .AllowCredentials();
-//     });
-// });
 
-// CORS Policy (production)
+// gets localhost if in development, otherwise gets the production URL from configuration
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+
+// CORS configuration
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        var allowedOrigins = builder.Configuration
-            .GetSection("Cors:AllowedOrigins")
-            .Get<string[]>();
-
-        if (allowedOrigins is { Length: > 0 })
-        {
-            policy.WithOrigins(allowedOrigins)
-                  .AllowCredentials();
-        }
-        else
-        {
-            policy.SetIsOriginAllowed(_ => true)
-                  .AllowCredentials();
-        }
-
-        policy.AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins(allowedOrigins)
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
@@ -90,14 +66,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// Apply migrations automatically
-try
-{
-    using var scope = app.Services.CreateScope();
-    var db = scope.ServiceProvider.GetRequiredService<Tafa3ulDbContext>();
-    db.Database.Migrate();
-}
-catch { }
+app.UseStaticFiles(); // serve wwwroot folder
 
 app.UseCors("AllowFrontend");
 
@@ -108,7 +77,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseStaticFiles(); // serve wwwroot folder
-
 app.Run();
-
