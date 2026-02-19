@@ -39,7 +39,7 @@ Tafa3ul is a social media app built for developers to share posts, showcase thei
 
 ## Project Structure
 
-```
+```bash
 .
 ├─ client/                 # React frontend
 ├─ server/                 # .NET backend
@@ -54,14 +54,42 @@ Tafa3ul is a social media app built for developers to share posts, showcase thei
 
 ### Client (`client/.env`)
 
+Check [`client/.env.example`](./client/.env.example)
+
 - `VITE_BASE_URL`: Base URL of the backend (used for absolute links)
 - `VITE_API_BASE_URL`: API base path for HTTP calls
 - `VITE_PROFILE_PIC_BASE_URL`: Static profile image base URL
 
 ### Server (`server/Tafa3ul.Api/appsettings.json`)
 
+Check [`server/Tafa3ul.Api/appsettings.Development.json`](./server/Tafa3ul.Api/appsettings.Development.json)
+
 - `ConnectionStrings:DefaultConnection`: PostgreSQL connection string
 - `Jwt:Key`, `Jwt:Issuer`, `Jwt:Audience`, `Jwt:ExpirationMinutes`, `Jwt:RefreshTokenExpirationDays`
+
+To connect to a managed PostgreSQL instance like Neon, you can use the connection string provided by the service. make sure to set the env in terminal before running the server:
+
+Windows PowerShell:
+
+```powershell
+$env:ConnectionStrings__DefaultConnection='****'
+```
+
+Linux/MacOS:
+
+```bash
+export ConnectionStrings__DefaultConnection="****"
+```
+
+## `wwwroot` folder
+
+wwwroot is used to serve static files (profile pictures and post images). In production, these should be stored in a cloud storage service like AWS S3 or Azure Blob Storage.
+
+```bash
+wwwroot/
+├─ profile-images/
+├─ post-images/
+```
 
 ## API Overview
 
