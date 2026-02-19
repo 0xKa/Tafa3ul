@@ -91,6 +91,30 @@ wwwroot/
 ├─ post-images/
 ```
 
+## Docker
+
+Dockerfile for the backend API is included in the root. To build and run the API in a container:
+
+```bash
+docker build -t tafa3ul-api .
+```
+
+Choose `ASPNETCORE_ENVIRONMENT` to Production or Development command based on your needs.
+
+```powershell
+docker run --rm -p 8080:8080 `
+  -e ASPNETCORE_ENVIRONMENT=Production `
+  -e ConnectionStrings__DefaultConnection="LOCAL_OR_EXTERNAL_DB_CONNECTION_STRING" `
+  -e Jwt__Key="KEY_LENGTH_MUST_BE_32_CHARACTERS_OR_MORE" `
+  -e Jwt__Issuer="Tafa3ul" `
+  -e Jwt__Audience="Tafa3ulClient" `
+  -e Jwt__ExpirationMinutes=60 `
+  -e Jwt__RefreshTokenExpirationDays=7 `
+  tafa3ul-api
+```
+
+(Use backslashes \ instead of ` on macOS/Linux.)
+
 ## API Overview
 
 The API is organized around three main areas:
