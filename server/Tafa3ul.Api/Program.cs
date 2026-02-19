@@ -66,11 +66,12 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseStaticFiles(); // serve wwwroot folder
 
 app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles(); // serve wwwroot folder
 
 app.UseAuthentication();
 app.UseAuthorization();
