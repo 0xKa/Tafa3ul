@@ -13,7 +13,7 @@ import { paths } from "@/paths";
 import { formatDistanceToNow } from "date-fns";
 import { Heart, MessageCircle, MoreHorizontal, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { toast } from "sonner";
 import { useDeletePost } from "../hooks/useDeletePost";
 import { useLikePost, useUnlikePost } from "../hooks/useLikePost";

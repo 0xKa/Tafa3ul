@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { getInitials, GetProfilePicUrl } from "@/lib/utils";
 import { MapPin, Building2 } from "lucide-react";
 import type { Profile } from "../types";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { paths } from "@/paths";
 
 interface UserCardProps {

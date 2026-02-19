@@ -7,11 +7,11 @@ import { paths } from "@/paths";
 import { formatDistanceToNow } from "date-fns";
 import { Send, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { useAddComment } from "../hooks/useAddComment";
 import { useDeleteComment } from "../hooks/useDeleteComment";
 import type { Post } from "../types";
 import { toast } from "sonner";
+import { Link } from "react-router";
 
 interface PostCommentsProps {
   post: Post;
