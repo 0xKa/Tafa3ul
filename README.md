@@ -63,6 +63,7 @@ Check [`client/.env.example`](./client/.env.example)
 ### Server (`server/Tafa3ul.Api/appsettings.json`)
 
 Check [`server/Tafa3ul.Api/appsettings.Development.json`](./server/Tafa3ul.Api/appsettings.Development.json)
+or [`server/.env.example`](./server/.env.example)
 
 - `ConnectionStrings:DefaultConnection`: PostgreSQL connection string
 - `Jwt:Key`, `Jwt:Issuer`, `Jwt:Audience`, `Jwt:ExpirationMinutes`, `Jwt:RefreshTokenExpirationDays`
