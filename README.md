@@ -1,8 +1,8 @@
 # Tafa3ul
 
-Tafa3ul is a social media app built for developers to share posts, showcase their profiles, and connect with peers.
+Tafa3ul is a social media app built for developers to share posts, showcase their profiles, connect with peers, and find opportunities. The name "Tafa3ul" means "interaction" in Arabic, reflecting the app's focus on fostering engagement and collaboration among developers.
 
-![About Page](./showcase/about.png)
+![Showcase 1](./showcase/test4.gif)
 
 ## Features
 
@@ -13,6 +13,8 @@ Tafa3ul is a social media app built for developers to share posts, showcase thei
 - Post and profile search (server-backed)
 - Role-based authorization
 - Responsive UI with light/dark mode support
+
+![Showcase 2](./showcase/test1.gif)
 
 ## Tech Stack
 
